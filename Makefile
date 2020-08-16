@@ -1,8 +1,14 @@
+SHELL=/bin/bash
+PYTHON=venv/bin/python
+
 make-migrations:
-	DJANGO_SETTINGS_MODULE=backend.settings django-admin makemigrations $(APP)
+	$(PYTHON) makemigrations $(APP)
 
 migrate:
-	DJANGO_SETTINGS_MODULE=backend.settings django-admin migrate
+	$(PYTHON) django-admin migrate
 
 serve:
-	DJANGO_SETTINGS_MODULE=backend.settings django-admin runserver
+	$(PYTHON) manage.py runserver
+
+createsuperuser:
+	$(PYTHON) manage.py createsuperuser

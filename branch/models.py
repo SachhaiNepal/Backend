@@ -102,7 +102,7 @@ DISTRICT_CHOICES = (
 class MemberManager(BaseUserManager):
     use_in_migrations = True
 
-    def __create_user(self, email, password, state, is_admin, **kwargs):
+    def __create_user(self, email, password, is_staff, **kwargs):
         if not email:
             raise ValueError("email address field is required!")
         if not password:
@@ -111,8 +111,7 @@ class MemberManager(BaseUserManager):
         email = self.normalize_email(email)
         member = self.model(
             email=email,
-            is_admin=is_admin,
-            state=state,
+            is_staff=is_staff,
             **kwargs
         )
         member.set_password(password)
@@ -120,8 +119,7 @@ class MemberManager(BaseUserManager):
         return member
 
     def create_superuser(self, email, password=None, **extra_fields):
-        user = self.__create_user(email, password, True, True, **extra_fields)
-        user.save()
+        user = self.__create_user(email, password, True, **extra_fields)
         return user
 
 
@@ -131,19 +129,17 @@ class Member(AbstractBaseUser):
     address = models.CharField(max_length=512, blank=True, null=True)
     country = models.CharField(max_length=3, choices=COUNTRY_CHOICES, null=True, blank=True)
     district = models.CharField(max_length=14, choices=DISTRICT_CHOICES, null=True)
-    phone = models.BigIntegerField(unique=True, blank=True, null=True)
+    phone = models.PositiveBigIntegerField(unique=True, blank=True, null=True)
 
-    is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False, verbose_name="Is Admin")
     is_active = models.BooleanField(default=True)
-    state = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
 
-    created_by = models.ForeignKey("self", null=True, blank=True, on_delete=models.DO_NOTHING, related_name="Creator")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_by = models.ForeignKey("self", null=True, blank=True, on_delete=models.DO_NOTHING, related_name="Modifier")
-    updated_at = models.DateTimeField(auto_now_add=True)
     approved_by = models.ForeignKey("self", null=True, blank=True, on_delete=models.DO_NOTHING, related_name="Approver")
-    approved_at = models.DateTimeField(auto_now_add=True)
+    approved_at = models.DateTimeField(default=None, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = MemberManager()
 
@@ -159,11 +155,30 @@ class Member(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        """Does the user have a specific permission?"""
-        # Simplest possible answer: Yes, always
-        return True
+        if self.is_staff and self.is_active:
+            if not perm:
+                return True
+        return False
 
     def has_module_perms(self, package_name):
-        """Does the user have permissions to view the app `app_label`?"""
-        # Simplest possible answer: Yes, always
-        return True
+        if self.is_staff and self.is_active:
+            return True
+        return False
+
+
+class Branch(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    address = models.CharField(max_length=512, unique=True)
+    country = models.CharField(max_length=3, choices=COUNTRY_CHOICES)
+    district = models.CharField(max_length=14, choices=DISTRICT_CHOICES, unique=True)
+    phone = models.PositiveBigIntegerField(unique=True)
+    is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
+
+    created_by = models.ForeignKey(Member, on_delete=models.DO_NOTHING, related_name="Creator")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_by = models.ForeignKey(Member, on_delete=models.DO_NOTHING, related_name="Modifier", null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
