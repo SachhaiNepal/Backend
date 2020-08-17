@@ -155,15 +155,10 @@ class Member(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        if self.is_staff and self.is_active:
-            if not perm:
-                return True
-        return False
+        return True
 
     def has_module_perms(self, package_name):
-        if self.is_staff and self.is_active:
-            return True
-        return False
+        return True
 
 
 class Branch(models.Model):
