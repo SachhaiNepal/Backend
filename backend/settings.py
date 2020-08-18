@@ -27,12 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'branch.Member'
+AUTH_USER_MODEL = 'accounts.Member'
 
 # Application definition
 
 INSTALLED_APPS = [
     # apps for the project
+    'accounts',
     'branch',
 
     # default django apps
