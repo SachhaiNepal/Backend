@@ -133,3 +133,8 @@ STATIC_URL = "/static/"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 
 PHONENUMBER_DEFAULT_REGION = "NP"
+
+# Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
+MEDIA_URL = "/media/"
