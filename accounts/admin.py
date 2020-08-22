@@ -16,16 +16,16 @@ class MemberAdmin(UserAdmin):
     # update form for admin site
     fieldsets = (
         ("Authentication Information", {
-            "classes": ("wide",),
+            "classes": ("wide", "extrapretty"),
             "fields": ("email", "password")
         }),
         ("Personal Information.", {
-            "classes": ("wide",),
+            "classes": ("wide", "extrapretty"),
             "fields": ("name", "address", "phone", "country", "district")
         }),
 
         ("Business Details", {
-            "classes": ("wide",),
+            "classes": ("wide", "extrapretty"),
             "fields": ("branch", "is_staff", "is_approved", "is_active")
         })
     )
@@ -33,15 +33,15 @@ class MemberAdmin(UserAdmin):
     # create form for admin site
     add_fieldsets = (
         ("Authentication Information", {
-            "classes": ("wide",),
+            "classes": ("wide", "extrapretty"),
             "fields": ("email", "password1", "password2"),
         }),
         ("Personal Information", {
-            "classes": ("wide",),
+            "classes": ("wide", "extrapretty"),
             "fields": ("name", "address", "phone", "country", "district")
         }),
         ("Business Information", {
-            "classes": ("wide",),
+            "classes": ("wide", "extrapretty"),
             "fields": ("branch", "is_staff",)
         })
     )
