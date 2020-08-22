@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from branch.models import Branch
 from utils.choices import COUNTRY_CHOICES, DISTRICT_CHOICES
@@ -35,7 +36,7 @@ class Member(AbstractBaseUser):
     address = models.CharField(max_length=512, blank=True, null=True)
     country = models.CharField(max_length=3, choices=COUNTRY_CHOICES, null=True, blank=True)
     district = models.CharField(max_length=14, choices=DISTRICT_CHOICES, null=True)
-    phone = models.BigIntegerField(unique=True, blank=True, null=True)
+    phone = PhoneNumberField(unique=True, blank=True, null=True)
 
     branch = models.ForeignKey(
         Branch,

@@ -7,8 +7,8 @@ from accounts.models import Member
 
 class MemberAdmin(UserAdmin):
     list_display = (
-        "name", "branch", "email", "address", "phone",
-        "country", "district", "is_staff", "is_approved",
+        "name", "branch",
+        "district", "is_staff", "is_approved",
         "approved_by", "created_at", "updated_at"
     )
     list_filter = ("address", "is_active", "is_approved", "country", "branch")
@@ -49,8 +49,8 @@ class MemberAdmin(UserAdmin):
     search_fields = ("email", "name", "address", "country", "district")
     date_hierarchy = "created_at"
     ordering = (
-        "name", "email", "address", "phone",
-        "country", "district", "is_staff", "is_approved",
+        "name", "branch",
+        "district", "is_staff", "is_approved",
         "approved_by", "created_at", "updated_at"
     )
 
