@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'accounts',
     'branch',
 
+    # dependent apps
+    'phonenumber_field',
+
     # default django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,3 +127,8 @@ TIME_ZONE = 'Asia/Kathmandu'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# DJANGO PHONE NUMBER FIELD
+PHONENUMBER_DB_FORMAT = "NATIONAL"
+
+PHONENUMBER_DEFAULT_REGION = "NP"
