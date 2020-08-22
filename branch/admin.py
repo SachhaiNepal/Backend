@@ -11,7 +11,7 @@ class BranchAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Branch Information", {
-            "classes": ("wide",),
+            "classes": ("wide", "extrapretty"),
             "fields": ("name", "address", "phone", "country", "district", "is_main")
         }),
     )
