@@ -26,7 +26,7 @@ class MemberAdmin(UserAdmin):
 
         ("Business Details", {
             "classes": ("wide",),
-            "fields": ("branch", "is_staff", "is_approved", "is_active", "approved_by")
+            "fields": ("branch", "is_staff", "is_approved", "is_active")
         })
     )
 
@@ -55,6 +55,21 @@ class MemberAdmin(UserAdmin):
     )
 
     filter_horizontal = ()
+
+    def save_model(self, request, obj, form, change):
+        if obj.is_approved:
+            obj.approved_by = request.user
+        obj.save()
+
+    def save_formset(self, request, form, formset, change):
+        if formset.model == Member:
+            instances = formset.save(commit=False)
+            for instance in instances:
+                if instance.is_approved:
+                    instance.approved_by = request.user
+                instance.save()
+        else:
+            formset.save()
 
 
 admin.site.register(Member, MemberAdmin)
