@@ -1,21 +1,52 @@
 from django.contrib import admin
-from django.db.models.functions import datetime
+from django.utils import timezone
 
-from multimedia.models import Multimedia, ArticleImage, Article
+from multimedia.models import Multimedia, ArticleImage, Article, MultimediaVideo, MultimediaAudio
+
+
+class MultimediaVideoAdmin(admin.StackedInline):
+    model = MultimediaVideo
+    fk_name = "multimedia"
+    extra = 0
+    min_num = 1
+    max_num = 10
+    can_delete = True
+    verbose_name_plural = "Add Multimedia Video"
+
+
+class MultimediaAudioAdmin(admin.StackedInline):
+    model = MultimediaAudio
+    fk_name = "multimedia"
+    extra = 0
+    min_num = 1
+    max_num = 10
+    can_delete = True
+    verbose_name_plural = "Add Multimedia Audio"
+
+
+def save_form_set(self, request, form, formset, change):
+    if formset.model == Multimedia:
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.updated_by = request.user
+            if instance.is_approved:
+                instance.approved_by = request.user
+                instance.approved_at = timezone.now()
+            instance.save()
+    else:
+        formset.save()
 
 
 @admin.register(Multimedia)
 class MultimediaAdmin(admin.ModelAdmin):
+    inlines = [MultimediaVideoAdmin, MultimediaAudioAdmin]
+
     list_display = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
 
     fieldsets = (
         ("Media Information", {
             "classes": ("wide", "extrapretty"),
             "fields": ("title", "description")
-        }),
-        ("Media Files", {
-            "classes": ("wide", "extrapretty"),
-            "fields": ("video", "audio")
         }),
         ("Business Information", {
             "classes": ("wide",),
@@ -32,23 +63,21 @@ class MultimediaAdmin(admin.ModelAdmin):
         obj.uploaded_by = request.user
         if obj.is_approved:
             obj.approved_by = request.user
+            obj.approved_at = timezone.now()
         obj.save()
 
     def save_formset(self, request, form, formset, change):
-        if formset.model == Multimedia:
-            instances = formset.save(commit=False)
-            for instance in instances:
-                instance.updated_by = request.user
-                if instance.is_approved:
-                    instance.approved_by = request.user
-                instance.save()
-        else:
-            formset.save()
+        save_form_set(self, request, form, formset, change)
 
 
 class ArticleImageAdmin(admin.StackedInline):
     model = ArticleImage
     fk_name = "article"
+    extra = 0
+    min_num = 1
+    max_num = 10
+    can_delete = True
+    verbose_name_plural = "Add Article Image"
 
 
 @admin.register(Article)
@@ -77,17 +106,8 @@ class ArticleAdmin(admin.ModelAdmin):
         obj.uploaded_by = request.user
         if obj.is_approved:
             obj.approved_by = request.user
-            obj.approved_at = datetime.datetime.now()
+            obj.approved_at = timezone.now()
         obj.save()
 
     def save_formset(self, request, form, formset, change):
-        if formset.model == Article:
-            instances = formset.save(commit=False)
-            for instance in instances:
-                instance.updated_by = request.user
-                if instance.is_approved:
-                    instance.approved_by = request.user
-                    instance.approved_at = datetime.datetime.now()
-                instance.save()
-        else:
-            formset.save()
+        save_form_set(self, request, form, formset, change)
