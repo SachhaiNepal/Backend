@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -14,14 +15,14 @@ class Branch(models.Model):
     is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
 
     created_by = models.ForeignKey(
-        "accounts.Member",
+        User,
         on_delete=models.DO_NOTHING,
         related_name="Creator"
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_by = models.ForeignKey(
-        "accounts.Member",
+        User,
         on_delete=models.DO_NOTHING,
         related_name="Modifier",
         null=True,
