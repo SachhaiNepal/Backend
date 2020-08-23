@@ -12,14 +12,15 @@ cd <project-directory>
 make virtual-env
 ```
 - Activate just created `virtual environment`
-For `windows` user
-```sh
-source venv\Scripts\activate.bat
-```
-For `linux` user
-```sh
-source venv/bin/activate
-```
+
+    - For `windows` user
+        ```sh
+        source venv\Scripts\activate.bat
+        ```
+    - For `linux` user
+        ```sh
+        source venv/bin/activate
+        ```
 - Install requirements
 ```sh
 make install
