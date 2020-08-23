@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from accounts.models import Member
 
@@ -23,6 +24,18 @@ class MemberInline(admin.StackedInline):
     )
 
 
+def save_form_set(self, request, form, formset, change):
+    if formset.model == Member:
+        instances = formset.save(commit=False)
+        for instance in instances:
+            if instance.is_approved:
+                instance.approved_by = request.user
+                instance.approved_at = timezone.now()
+            instance.save()
+    else:
+        formset.save()
+
+
 class UserAdmin(BaseUserAdmin):
     inlines = (MemberInline,)
 
@@ -32,14 +45,7 @@ class UserAdmin(BaseUserAdmin):
     )
 
     def save_formset(self, request, form, formset, change):
-        if formset.model == Member:
-            instances = formset.save(commit=False)
-            for instance in instances:
-                if instance.is_approved:
-                    instance.approved_by = request.user
-                instance.save()
-        else:
-            formset.save()
+        save_form_set(self, request, form, formset, change)
 
 
 class MemberAdmin(admin.ModelAdmin):
@@ -76,17 +82,11 @@ class MemberAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if obj.is_approved:
             obj.approved_by = request.user
+            obj.approved_at = timezone.now()
         obj.save()
 
     def save_formset(self, request, form, formset, change):
-        if formset.model == Member:
-            instances = formset.save(commit=False)
-            for instance in instances:
-                if instance.is_approved:
-                    instance.approved_by = request.user
-                instance.save()
-        else:
-            formset.save()
+        save_form_set(self, request, form, formset, change)
 
 
 admin.site.unregister(User)
