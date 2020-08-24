@@ -22,23 +22,6 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
-    # apps for the project
-    "accounts",
-    "branch",
-    "multimedia",
-
-    # dependent apps
-    "phonenumber_field",
-
-    # default django apps
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -71,6 +54,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
+INSTALLED_APPS = [
+    # apps for the project
+    "accounts",
+    "branch",
+    "multimedia",
+
+    # dependent apps
+    "phonenumber_field",
+
+    # default django apps
+    "backend.apps.MyAdminConfig",
+    # "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

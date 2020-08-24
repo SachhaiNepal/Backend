@@ -2,7 +2,7 @@ SHELL=/bin/bash
 PYTHON=venv/bin/python3.8
 PIP=venv/bin/pip3.8
 
-virtual-env:
+create-env:
 	python3.8 -m venv venv
 
 install:
