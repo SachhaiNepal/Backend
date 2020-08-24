@@ -15,6 +15,8 @@ class MemberInline(admin.StackedInline):
 
     exclude = ("approved_by", "approved_at")
 
+    autocomplete_fields = ["branch"]
+
     # update form for admin site
     fieldsets = (
         ("Business Info", {
@@ -58,6 +60,8 @@ class MemberAdmin(admin.ModelAdmin):
         ("branch", admin.RelatedFieldListFilter),
     )
     search_fields = ("user", "address", "phone")
+
+    autocomplete_fields = ["branch"]
 
     fieldsets = (
         ("Personal Info", {
