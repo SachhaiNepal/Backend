@@ -19,13 +19,13 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
-from accounts.views import load_countries, load_districts_of_nepal, load_provinces
+from accounts.views.load_country_province_and_district import load_countries, load_provinces, load_districts_of_nepal
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("select2/", include("django_select2.urls")),
-    path("api/v1/branch", include("branch.urls")),
     url(r"^api-auth/", include("rest_framework.urls")),
+    path("api/v1/", include("accounts.urls")),
     path("load-countries", load_countries),
     path("load-provinces", load_provinces),
     path("load-districts", load_districts_of_nepal)
