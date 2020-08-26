@@ -6,6 +6,7 @@ django-appconf==1.0.4
 django-phonenumber-field==5.0.0
 django-redis==4.12.1
 django-select2==7.4.2
+djangorestframework==3.11.1
 filelock==3.0.12
 phonenumbers==8.12.8
 Pillow==7.2.0

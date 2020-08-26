@@ -15,15 +15,17 @@ Examples:
         1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
 from accounts.views import load_countries, load_districts_of_nepal, load_provinces
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     path("select2/", include("django_select2.urls")),
-    path('api/v1/branch', include('branch.urls')),
+    path("api/v1/branch", include("branch.urls")),
+    url(r"^api-auth/", include("rest_framework.urls")),
     path("load-countries", load_countries),
     path("load-provinces", load_provinces),
     path("load-districts", load_districts_of_nepal)
