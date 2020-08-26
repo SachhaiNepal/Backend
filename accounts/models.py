@@ -92,9 +92,10 @@ class Member(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name="Approver"
+        related_name="Approver",
+        editable=False
     )
-    approved_at = models.DateTimeField(default=None, null=True, blank=True)
+    approved_at = models.DateTimeField(default=None, null=True, blank=True, editable=False)
 
     class Meta:
         verbose_name_plural = "Members"
