@@ -2,14 +2,27 @@ from django.contrib.auth.models import User
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from utils.choices import COUNTRY_CHOICES, DISTRICT_CHOICES
+from utils.choices import COUNTRIES, DISTRICTS
 
 
 class Branch(models.Model):
     name = models.CharField(max_length=255, unique=True)
     address = models.CharField(max_length=512, unique=True)
-    country = models.CharField(max_length=3, choices=COUNTRY_CHOICES)
-    district = models.CharField(max_length=14, choices=DISTRICT_CHOICES, unique=True)
+    country = models.ForeignKey(
+        "accounts.Country",
+        on_delete=models.DO_NOTHING,
+        related_name="BranchCountry"
+    )
+    province = models.ForeignKey(
+        "accounts.Province",
+        on_delete=models.DO_NOTHING,
+        related_name="BranchProvince"
+    )
+    district = models.ForeignKey(
+        "accounts.District",
+        on_delete=models.DO_NOTHING,
+        related_name="BranchDistrict"
+    )
     phone = PhoneNumberField(unique=True, max_length=15)
 
     is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
