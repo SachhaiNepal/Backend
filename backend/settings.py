@@ -62,6 +62,7 @@ INSTALLED_APPS = [
 
     # dependent apps
     "phonenumber_field",
+    "rest_framework",
 
     # default django apps
     "backend.apps.MyAdminConfig",
@@ -151,3 +152,12 @@ CACHES = {
 
 # Tell select2 which cache configuration to use:
 SELECT2_CACHE_BACKEND = "select2"
+
+# Rest framework settings
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
