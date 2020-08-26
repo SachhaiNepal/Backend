@@ -7,7 +7,7 @@ from multimedia.models import Multimedia, ArticleImage, Article, MultimediaVideo
 class MultimediaVideoAdmin(admin.StackedInline):
     model = MultimediaVideo
     fk_name = "multimedia"
-    extra = 0
+    extra = 1
     min_num = 1
     max_num = 10
     can_delete = True
@@ -17,7 +17,7 @@ class MultimediaVideoAdmin(admin.StackedInline):
 class MultimediaAudioAdmin(admin.StackedInline):
     model = MultimediaAudio
     fk_name = "multimedia"
-    extra = 0
+    extra = 1
     min_num = 1
     max_num = 10
     can_delete = True
@@ -73,7 +73,7 @@ class MultimediaAdmin(admin.ModelAdmin):
 class ArticleImageAdmin(admin.StackedInline):
     model = ArticleImage
     fk_name = "article"
-    extra = 0
+    extra = 1
     min_num = 1
     max_num = 10
     can_delete = True
