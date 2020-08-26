@@ -2,8 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from utils.choices import COUNTRIES, DISTRICTS
-
 
 class Branch(models.Model):
     name = models.CharField(max_length=255, unique=True)

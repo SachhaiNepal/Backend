@@ -4,7 +4,6 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from branch.models import Branch
-from utils.choices import COUNTRIES, DISTRICTS
 
 
 class Country(models.Model):
