@@ -5,21 +5,23 @@ from branch.models import Branch
 
 class BranchAdmin(admin.ModelAdmin):
     list_display = (
-        "name", "address", "phone", "country", "district", "is_main",
-        "created_by", "created_at", "updated_by", "updated_at"
+        "name", "address", "phone", "country", "province", "district",
+        "is_main", "created_by", "created_at", "updated_by", "updated_at"
     )
-
+    autocomplete_fields = ("country", "province", "district")
+    search_fields = ("name", "address", "phone", "district__name")
+    list_filter = ("is_main", "country", "province", "created_at",)
+    date_hierarchy = "created_at"
     fieldsets = (
         ("Branch Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("name", "address", "phone", "country", "district", "is_main")
+            "fields": ("name", "address", "phone", "country", "province", "district", "is_main")
         }),
     )
-
-    search_fields = ("name", "address", "phone", "district")
-    list_filter = ("is_main", "country")
-    date_hierarchy = "created_at"
-    ordering = ("name", "address", "phone", "country", "district", "is_main")
+    ordering = (
+        "name", "address", "phone", "country", "province", "district",
+        "is_main", "created_by", "created_at", "updated_by", "updated_at"
+    )
 
     def save_model(self, request, obj, form, change):
         obj.created_by = request.user
