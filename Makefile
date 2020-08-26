@@ -34,7 +34,6 @@ clean-env:
 clean: clean-db clean-env clean-migrations
 
 build:
-	$(PYTHON) manage.py makemigrations
 	$(PYTHON) manage.py migrate
 
 shell:
