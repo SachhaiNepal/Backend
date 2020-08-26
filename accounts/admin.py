@@ -3,25 +3,29 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from accounts.models import Member
+from accounts.models import Member, Country, Province, District
 
 
 class MemberInline(admin.StackedInline):
     model = Member
     fk_name = "user"
     can_delete = False
-    extra = 0
+    extra = 1
     verbose_name_plural = "Add Branch Member Detail"
 
     exclude = ("approved_by", "approved_at")
 
-    autocomplete_fields = ["branch"]
+    autocomplete_fields = ["branch", "country", "province", "district"]
 
     # update form for admin site
     fieldsets = (
+        ("Personal Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": ("temporary_address", "permanent_address", "phone", "country", "province", "district",)
+        }),
         ("Business Info", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("address", "phone", "country", "district", "branch", "is_approved")
+            "fields": ("branch", "is_approved")
         }),
     )
 
@@ -52,22 +56,23 @@ class UserAdmin(BaseUserAdmin):
 
 class MemberAdmin(admin.ModelAdmin):
     list_display = (
-        "user", "address", "country", "district", "phone",
+        "user", "country", "province", "district", "phone",
         "branch", "is_approved", "approved_by", "approved_at",
     )
     list_filter = (
         ("is_approved", admin.BooleanFieldListFilter),
         ("branch", admin.RelatedFieldListFilter),
+        ("approved_at", admin.DateFieldListFilter)
     )
-    search_fields = ("user", "address", "phone")
+    search_fields = ("user", "phone")
 
-    autocomplete_fields = ["branch"]
+    autocomplete_fields = ["branch", "country", "province", "district"]
 
     fieldsets = (
         ("Personal Info", {
             "classes": ("wide", "extrapretty"),
             "fields": (
-                "user", "address", "phone", "country", "district"
+                "user", "temporary_address", "permanent_address", "phone", "country", "province", "district"
             )
         }),
         ("Business Info", {
@@ -79,7 +84,7 @@ class MemberAdmin(admin.ModelAdmin):
     )
 
     ordering = (
-        "user", "address", "country", "district", "phone",
+        "user", "country", "province", "district", "phone",
         "branch", "is_approved", "approved_by", "approved_at",
     )
 
@@ -93,6 +98,57 @@ class MemberAdmin(admin.ModelAdmin):
         save_form_set(self, request, form, formset, change)
 
 
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ("name", "created_at", "updated_at")
+    list_filter = ("created_at", "updated_at")
+    search_fields = ("name",)
+    ordering = ("name", "created_at", "updated_at")
+    fieldsets = (
+        ("Country Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name",
+            )
+        }),
+    )
+
+
+class ProvinceAdmin(admin.ModelAdmin):
+    list_display = ("name", "number", "country", "created_at", "updated_at")
+    list_filter = ("country", "created_at", "updated_at")
+    autocomplete_fields = ["country"]
+    search_fields = ("name",)
+    ordering = ("name", "country", "country", "created_at", "updated_at")
+    fieldsets = (
+        ("District Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name", "number", "country"
+            )
+        }),
+    )
+
+
+class DistrictAdmin(admin.ModelAdmin):
+    list_display = ("name", "country", "province", "created_at", "updated_at")
+    list_filter = ("country", "province", "created_at", "updated_at")
+    autocomplete_fields = ["country", "province"]
+    search_fields = ("name",)
+    ordering = ("name", "country", "province", "created_at", "updated_at")
+    fieldsets = (
+        ("District Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name", "country", "province"
+            )
+        }),
+    )
+    list_per_page = 10
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Member, MemberAdmin)
+admin.site.register(Country, CountryAdmin)
+admin.site.register(Province, ProvinceAdmin)
+admin.site.register(District, DistrictAdmin)
