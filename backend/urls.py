@@ -25,7 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("select2/", include("django_select2.urls")),
     url(r"^api-auth/", include("rest_framework.urls")),
-    path("api/v1/", include("accounts.urls")),
+    path("api/", include("accounts.urls")),
     path("load-countries", load_countries),
     path("load-provinces", load_provinces),
     path("load-districts", load_districts_of_nepal)
