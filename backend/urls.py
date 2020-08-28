@@ -15,9 +15,11 @@ Examples:
         1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from django.views.static import serve
 
 from accounts.views.load_country_province_and_district import load_countries, load_provinces, load_districts_of_nepal
 
@@ -27,7 +29,9 @@ urlpatterns = [
     url(r"^api-auth/", include("rest_framework.urls")),
     path("api/", include("accounts.urls")),
     path("api/", include("branch.urls")),
+    path("api/", include("multimedia.urls")),
     path("load-countries", load_countries),
     path("load-provinces", load_provinces),
-    path("load-districts", load_districts_of_nepal)
+    path("load-districts", load_districts_of_nepal),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,})
 ]
