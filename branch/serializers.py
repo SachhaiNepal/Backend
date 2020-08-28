@@ -1,17 +1,19 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from branch.models import Branch
 
-class BranchSerializer(serializers.ModelSerializer):
 
+class BranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
         fields = "__all__"
 
-class BranchCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Branch
-                
-    
-  
+    def create(self, validated_data):
+        validated_data["created_by"] = self.context["request"].user
+        branch = Branch.objects.create(**validated_data)
+        return branch
+
+    def update(self, instance, validated_data):
+        instance.updated_by = self.context["request"].user
+        instance.save()
+        return instance
