@@ -1,5 +1,4 @@
-from rest_framework import permissions, viewsets, status
-from rest_framework.response import Response
+from rest_framework import permissions, viewsets
 
 from branch.models import Branch
 from branch.serializers import BranchSerializer
