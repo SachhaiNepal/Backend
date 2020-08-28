@@ -25,7 +25,11 @@ class ListUser(APIView):
 
     @staticmethod
     def post(request):
+        """
+        Creates a brand new user-member(x)
+        """
         serializer = UserCreateSerializer(data=request.data, context={"request": request})
+
         if serializer.is_valid():
             user = serializer.save()
             user.set_password(serializer.validated_data["password"])
@@ -46,10 +50,16 @@ class UserDetail(APIView):
         return get_object_or_404(User, pk=pk)
 
     def get(self, request, pk):
+        """
+        Returns single user by pk
+        """
         user = self.get_object(pk)
         return Response(UserCreateSerializer(user).data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
+        """
+        Updates user by pk
+        """
         user = self.get_object(pk)
         serializer = UserUpdateSerializer(
             user, data=request.data,
@@ -64,6 +74,9 @@ class UserDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk):
+        """
+        Modifies user by pk
+        """
         user = self.get_object(pk)
         serializer = UserUpdateSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
@@ -92,10 +105,16 @@ class MemberDetail(APIView):
         return get_object_or_404(Member, pk=pk)
 
     def get(self, request, pk):
+        """
+        Returns list of all members
+        """
         member = self.get_object(pk)
         return Response(MemberSerializer(member).data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
+        """
+        Updates provided member by pk
+        """
         member = self.get_object(pk)
         serializer = MemberUpdateSerializer(member, data=request.data)
         if serializer.is_valid():
@@ -107,6 +126,9 @@ class MemberDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk):
+        """
+        Modifies provided member by pk
+        """
         member = self.get_object(pk)
         serializer = MemberUpdateSerializer(member, data=request.data, partial=True)
         if serializer.is_valid():
