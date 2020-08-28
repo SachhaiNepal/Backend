@@ -28,7 +28,8 @@ class Branch(models.Model):
     created_by = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
-        related_name="Creator"
+        related_name="Creator",
+        editable=False
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -37,7 +38,8 @@ class Branch(models.Model):
         on_delete=models.DO_NOTHING,
         related_name="Modifier",
         null=True,
-        blank=True
+        blank=True,
+        editable=False
     )
     updated_at = models.DateTimeField(auto_now=True)
 
