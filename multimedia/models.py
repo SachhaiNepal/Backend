@@ -12,18 +12,25 @@ class Media(models.Model):
         on_delete=models.DO_NOTHING,
         related_name="MultimediaApprover",
         null=True,
-        blank=True
+        blank=True,
+        editable=False
     )
-    approved_at = models.DateTimeField(default=None, null=True, blank=True)
+    approved_at = models.DateTimeField(
+        default=None,
+        null=True,
+        blank=True,
+        editable=False
+    )
 
     uploaded_by = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
-        related_name="MediaUploader"
+        related_name="MediaUploader",
+        editable=False
     )
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True, editable=False)
 
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
 
 
 class Multimedia(Media):
