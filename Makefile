@@ -38,3 +38,6 @@ build:
 
 shell:
 	$(PYTHON) manage.py shell
+
+collect-static:
+	$(PYTHON) manage.py collectstatic
