@@ -15,7 +15,7 @@ make virtual-env
 
     - For `windows` user
         ```sh
-        source venv\Scripts\activate.bat
+        venv\Scripts\activate.bat
         ```
     - For `linux` user
         ```sh
@@ -29,6 +29,12 @@ make install
 ```sh
 make build
 ```
+
+- Collect static files
+```sh
+make collect-static
+```
+
 - Serve
 ```sh
 make serve
