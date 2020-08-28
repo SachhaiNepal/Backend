@@ -25,7 +25,7 @@ class ListUser(APIView):
 
     @staticmethod
     def post(request):
-        serializer = UserCreateSerializer(data=request.data)
+        serializer = UserCreateSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             user = serializer.save()
             user.set_password(serializer.validated_data["password"])

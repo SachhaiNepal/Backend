@@ -62,9 +62,11 @@ class MemberAdmin(admin.ModelAdmin):
     list_filter = (
         ("is_approved", admin.BooleanFieldListFilter),
         ("branch", admin.RelatedFieldListFilter),
-        ("approved_at", admin.DateFieldListFilter)
+        ("approved_at", admin.DateFieldListFilter),
+        ("province", admin.RelatedFieldListFilter),
+        ("country", admin.RelatedFieldListFilter)
     )
-    search_fields = ("user", "phone")
+    search_fields = ("user__username", "phone", "district__name")
 
     autocomplete_fields = ["branch", "country", "province", "district"]
 
