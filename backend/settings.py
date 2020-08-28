@@ -122,6 +122,8 @@ TIME_ZONE = os.getenv("TIME_ZONE")
 
 STATIC_URL = "/static/"
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
 # DJANGO PHONE NUMBER FIELD
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 
@@ -155,6 +157,10 @@ SELECT2_CACHE_BACKEND = "select2"
 
 # Rest framework settings
 REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
