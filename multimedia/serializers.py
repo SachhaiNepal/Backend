@@ -19,9 +19,10 @@ class MultimediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Multimedia
         fields = "__all__"
+        read_only_fields = ("is_approved",)
 
     def create(self, validated_data):
-        validated_data["created_by"] = self.context["request"].user
+        validated_data["uploaded_by"] = self.context["request"].user
         branch = Multimedia.objects.create(**validated_data)
         return branch
 
@@ -47,9 +48,10 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = "__all__"
+        read_only_fields = ("is_approved",)
 
     def create(self, validated_data):
-        validated_data["created_by"] = self.context["request"].user
+        validated_data["uploaded_by"] = self.context["request"].user
         branch = Article.objects.create(**validated_data)
         return branch
 
