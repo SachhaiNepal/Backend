@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from accounts.models import Member, Country, Province, District
+from accounts.models import Member, Country, Province, District, ResetPasswordCode
 
 
 class MemberInline(admin.StackedInline):
@@ -50,6 +50,8 @@ class UserAdmin(BaseUserAdmin):
         "is_superuser", "is_staff", "date_joined"
     )
 
+    list_per_page = 10
+
     def save_formset(self, request, form, formset, change):
         save_form_set(self, request, form, formset, change)
 
@@ -89,6 +91,8 @@ class MemberAdmin(admin.ModelAdmin):
         "user", "country", "province", "district", "phone",
         "branch", "is_approved", "approved_by", "approved_at",
     )
+
+    list_per_page = 10
 
     def save_model(self, request, obj, form, change):
         if obj.is_approved:
@@ -148,9 +152,15 @@ class DistrictAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+class ResetPasswordCodeAdmin(admin.ModelAdmin):
+    list_display = ("user", "code")
+    list_per_page = 10
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Province, ProvinceAdmin)
 admin.site.register(District, DistrictAdmin)
+admin.site.register(ResetPasswordCode, ResetPasswordCodeAdmin)

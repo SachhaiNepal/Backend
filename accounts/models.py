@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -10,6 +12,9 @@ class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Countries"
 
     def __str__(self):
         return self.name
@@ -102,3 +107,14 @@ class Member(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class ResetPasswordCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+
+    class Meta:
+        verbose_name_plural = "Reset Password Codes"
+
+    def __str__(self):
+        return "{} - {}".format(self.user.username, self.code)
