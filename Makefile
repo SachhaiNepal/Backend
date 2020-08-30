@@ -41,3 +41,6 @@ shell:
 
 collect-static:
 	$(PYTHON) manage.py collectstatic
+
+get-token:
+	$(PYTHON) manage.py  drf_create_token $(USER)
