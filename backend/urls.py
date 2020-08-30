@@ -23,11 +23,9 @@ from django.urls import path, include
 from django.views.static import serve
 
 from accounts.views.load_country_province_and_district import load_countries, load_provinces, load_districts_of_nepal
-from backend.views import index
 
 urlpatterns = [
-    path("", index),
-    path("admin/", admin.site.urls),
+    path("", admin.site.urls),
     path("select2/", include("django_select2.urls")),
     url(r"^api-auth/", include("rest_framework.urls")),
     path("api/", include("accounts.urls")),
