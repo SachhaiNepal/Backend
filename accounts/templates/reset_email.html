@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+{% autoescape off %}
+    <h2 id="greet">Hi! <span>{{ user }}</span>&nbsp;<i class="fas fa-hand-paper"></i></h2>
+    <p id="question"><span>Are you sure you want to <b class="red">reset</b> your <b>password</b></span><i class="red fas fa-question"></i></p>
+
+    <a href="{% if request.is_secure %}https{% else %}http{% endif %}://localhost:8000{% url 'accounts:reset-password-confirm' code=code %}"><b>Click here to proceed</b></a>
+    <hr>
+    <p id="foot-note"><b>P.S.</b>If you didn't request for resetting a password, please ignore this email.</p>
+{% endautoescape %}
+
+<style>
+    #question {
+        font-size: 18px;
+    }
+    .red {
+        color: red;
+    }
+    #question i {
+        font-size: 35px;
+    }
+    #foot-note {
+        font-size: 14px;
+        color: #2e353d;
+    }
+    #greet span {
+        color: #748d31
+    }
+    #greet i {
+        color: #bf9c51;
+        font-size: 25px;
+    }
+    #foot-note b {
+        font-size: 14px;
+    }
+</style>
+
