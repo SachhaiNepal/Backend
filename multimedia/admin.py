@@ -58,6 +58,7 @@ class MultimediaAdmin(admin.ModelAdmin):
     search_fields = ("approved_by", "uploaded_by", "title", "description", "audio", "video")
     date_hierarchy = "uploaded_at"
     ordering = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
+    list_per_page = 10
 
     def save_model(self, request, obj, form, change):
         obj.uploaded_by = request.user
@@ -88,6 +89,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = (
         ("is_approved", admin.BooleanFieldListFilter),
     )
+    list_per_page = 10
 
     # update form for admin site
     fieldsets = (
