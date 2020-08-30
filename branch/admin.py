@@ -23,6 +23,8 @@ class BranchAdmin(admin.ModelAdmin):
         "is_main", "created_by", "created_at", "updated_by", "updated_at"
     )
 
+    list_per_page = 10
+
     def save_model(self, request, obj, form, change):
         obj.created_by = request.user
         obj.updated_by = request.user
