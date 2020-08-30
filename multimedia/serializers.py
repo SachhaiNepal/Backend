@@ -8,12 +8,14 @@ class MultimediaVideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = MultimediaVideo
         fields = "__all__"
+        depth = 1
 
 
 class MultimediaAudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = MultimediaAudio
         fields = "__all__"
+        depth = 1
 
 
 class MultimediaSerializer(serializers.ModelSerializer):
@@ -37,6 +39,7 @@ class ArticleImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleImage
         fields = "__all__"
+        depth = 1
 
 
 class ArticleImageCreateSerializer(serializers.ModelSerializer):
