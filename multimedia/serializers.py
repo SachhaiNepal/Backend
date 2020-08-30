@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from django.db import IntegrityError
+from rest_framework import serializers, status
 
 from multimedia.models import Multimedia, MultimediaVideo, MultimediaAudio, Article, ArticleImage
 
@@ -76,13 +77,20 @@ class ArticleWithImageListSerializer(serializers.Serializer):
         user = self.context["request"].user
         title = validated_data.pop("title")
         description = validated_data.pop("description")
-        article, created = Article.objects.get_or_create(
-            title=title,
-            description=description,
-            uploaded_by=user
-        )
+        try:
+            article, created = Article.objects.get_or_create(
+                title=title,
+                description=description,
+                uploaded_by=user
+            )
+        except IntegrityError:
+            raise serializers.ValidationError({
+                "detail": "UNIQUE constraint failed: multimedia_media.title, multimedia_media.uploaded_by_id",
+                "status": status.HTTP_400_BAD_REQUEST
+            })
+
         if not created:
-            raise serializers.ValidationError("Blog already exists.")
+            raise serializers.ValidationError({"detail": "Article already exists.", "status": status.HTTP_400_BAD_REQUEST},)
         images = validated_data.pop('image')
         for image in images:
             ArticleImage.objects.create(
@@ -91,3 +99,61 @@ class ArticleWithImageListSerializer(serializers.Serializer):
                 **validated_data
             )
         return ArticleWithImageListSerializer(**validated_data)
+
+
+class MultimediaWithMultimediaListSerializer(serializers.Serializer):
+    video = serializers.ListField(
+        child=serializers.FileField(
+            max_length=100000,
+            allow_empty_file=False,
+            use_url=False
+        )
+    )
+    audio = serializers.ListField(
+        child=serializers.FileField(
+            max_length=100000,
+            allow_empty_file=False,
+            use_url=False,
+        )
+    )
+    title = serializers.CharField(required=True, max_length=512)
+    description = serializers.CharField(required=True, max_length=1024)
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        title = validated_data.pop("title")
+        description = validated_data.pop("description")
+        try:
+            multimedia, created = Multimedia.objects.get_or_create(
+                title=title,
+                description=description,
+                uploaded_by=user
+            )
+        except IntegrityError:
+            raise serializers.ValidationError({
+                "detail": "UNIQUE constraint failed: multimedia_media.title, multimedia_media.uploaded_by_id",
+                "status": status.HTTP_400_BAD_REQUEST
+            })
+
+        if not created:
+            raise serializers.ValidationError({
+                "detail": "Multimedia already exists.",
+                "status": status.HTTP_400_BAD_REQUEST
+            })
+
+        videos = validated_data.pop('video')
+        audios = validated_data.pop('audio')
+
+        for video in videos:
+            MultimediaVideo.objects.create(
+                video=video,
+                multimedia=multimedia,
+                **validated_data
+            )
+        for audio in audios:
+            MultimediaAudio.objects.create(
+                audio=audio,
+                multimedia=multimedia,
+                **validated_data
+            )
+        return MultimediaWithMultimediaListSerializer(**validated_data)

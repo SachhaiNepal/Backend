@@ -4,8 +4,8 @@ from django.db import models
 
 
 class Media(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
+    title = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True, null=True, unique=True)
 
     approved_by = models.ForeignKey(
         User,
@@ -32,6 +32,9 @@ class Media(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
 
+    class Meta:
+        unique_together = [["title", "uploaded_by"]]
+
 
 class Multimedia(Media):
     is_approved = models.BooleanField(default=False)
@@ -44,6 +47,7 @@ class MultimediaVideo(models.Model):
     video = models.FileField(
         upload_to="multimedia/videos",
         validators=[FileExtensionValidator(["webm", "mp4", "mpeg", "flv"])],
+        unique=True,
         verbose_name="Multimedia Video File"
     )
     multimedia = models.ForeignKey(
@@ -60,8 +64,7 @@ class MultimediaAudio(models.Model):
     audio = models.FileField(
         upload_to="multimedia/audios",
         validators=[FileExtensionValidator(["mp3", "wav"])],
-        blank=True,
-        null=True,
+        unique=True,
         verbose_name="Multimedia Audio File"
     )
     multimedia = models.ForeignKey(
