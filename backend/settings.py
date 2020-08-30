@@ -173,3 +173,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+# EMAIL_CONFIGURATION
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "127.0.0.1"
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = 'foo@bar.com'
