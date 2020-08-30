@@ -51,3 +51,50 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ("username", "first_name", "last_name", "email", "is_staff")
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=64)
+    password = serializers.CharField(max_length=64)
+
+
+class LogoutSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=64)
+
+
+class UpdatePasswordSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    @staticmethod
+    def validate_new_password(password):
+        validate_password(password)
+        return password
+
+    def validate(self, data):
+        if data["new_password"] != data["confirm_password"]:
+            raise serializers.ValidationError("New password must match with confirm password.")
+        if data["confirm_password"] == data["password"]:
+            raise serializers.ValidationError("New and old password must not be same.")
+        return data
+
+
+class ResetPasswordEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ResetNewPasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    @staticmethod
+    def validate_new_password(new_password):
+        validate_password(new_password)
+        return new_password
+
+    def validate(self, data):
+        if data["new_password"] != data["confirm_password"]:
+            raise serializers.ValidationError("New password must match with confirm password.")
+        return data
