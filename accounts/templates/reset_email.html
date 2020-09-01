@@ -1,36 +1,195 @@
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-{% autoescape off %}
-    <h2 id="greet">Hi! <span>{{ user }}</span>&nbsp;<i class="fas fa-hand-paper"></i></h2>
-    <p id="question"><span>Are you sure you want to <b class="red">reset</b> your <b>password</b></span><i class="red fas fa-question"></i></p>
-
-    <a href="{% if request.is_secure %}https{% else %}http{% endif %}://localhost:8000{% url 'accounts:reset-password-confirm' code=code %}"><b>Click here to proceed</b></a>
+<html lang="en">
+<head>
+    <title>Reset Your Password</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="email-container">
+    <div class="space"></div>
+    {% autoescape off %}
+    <p id="greet">
+        Hi,&nbsp;
+        <span class="font-weight-bold">{{ user }}</span>&nbsp;!</p>
+    <p id="question">
+        Are you sure you want to&nbsp;
+        <span id="magic" class="font-weight-bold" onclick="toggleForm()">
+                    reset your password
+                </span>
+        ?
+    </p>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-6">
+            <form
+                    id="reset-form"
+                    method="post"
+                    action="{% if request.is_secure %}https{% else %}http{% endif %}://localhost:8000{% url 'accounts:reset-password-confirm' code=code %}"
+            >
+                <!--                        <div class="md-form"> input-with-post-icon">-->
+                <!--                            <i class="fas fa-eye input-prefix show-password"></i>-->
+                <!--                        <i class="fas fa-eye-slash input-prefix hide-password"></i>-->
+                <input
+                        id="new-password"
+                        class="form-control form-control-lg pass"
+                        type="password"
+                        placeholder="New Password"
+                        required
+                />
+                <br>
+                <!--                            <label for="new-password">New Password</label>-->
+                <!--                        </div>-->
+                <!--                        <div class="md-form input-with-post-icon">-->
+                <!--                            <i class="fas fa-eye input-prefix show-password eye"></i>-->
+                <!--                        <i class="fas fa-eye-slash input-prefix hide-password eye"></i>-->
+                <input
+                        id="confirm-new-password"
+                        class="form-control form-control-lg pass"
+                        type="password"
+                        placeholder="Confirm New Password"
+                        required
+                        onblur="checkError()"
+                />
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-6">
+                        <ul>
+                            <li id="password-miss-match">New password do not match with confirm password.</li>
+                            <li id="password-strength">Password must be more than 8 characters containing small, capital letters with numbers.</li>
+                        </ul>
+                    </div>
+                </div>
+                <!--                            <label for="confirm-new-password">Confirm New Password</label>-->
+                <!--                        </div>-->
+                <button type="submit" class="btn btn-primary text-capitalize btn-lg">reset password</button>
+            </form>
+        </div>
+    </div>
     <hr>
-    <p id="foot-note"><b>P.S.</b>If you didn't request for resetting a password, please ignore this email.</p>
-{% endautoescape %}
+    <p id="foot-note"><i class="caution fas fa-exclamation-triangle"></i>&nbsp;&nbsp;<span>Ignore this message if its not you.</span>
+    </p>
+    {% endautoescape %}
+    <div class="space"></div>
+</div>
 
 <style>
+    .email-container {
+        padding-left: 30px;
+    }
+
+    .space {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
     #question {
         font-size: 18px;
     }
-    .red {
+
+    #magic {
+        cursor: pointer;
         color: red;
+        border-bottom: 1px solid red;
     }
-    #question i {
-        font-size: 35px;
-    }
+
     #foot-note {
         font-size: 14px;
         color: #2e353d;
     }
+
     #greet span {
-        color: #748d31
+        color: #519122
     }
-    #greet i {
-        color: #bf9c51;
-        font-size: 25px;
+
+    #greet {
+        font-size: 18px;
     }
-    #foot-note b {
-        font-size: 14px;
+
+    #foot-note i {
+        font-size: 12px;
+        padding-top: -1px;
+    }
+
+    #reset-form {
+        display: none;
+    }
+
+    .eye {
+        margin-top: -10px;
+    }
+
+    .hide-password {
+        display: none;
+    }
+
+    button[type="submit"] {
+        font-size: 20px;
+    }
+
+    #password-miss-match {
+        display: none;
+    }
+
+    #password-strength {
+        display: none;
+    }
+    .error-messages {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        background-color: #eaa4a4;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 5px;
+    }
+    li {
+        color: darkred;
     }
 </style>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+<script>
+    function toggleForm() {
+        $("#reset-form").toggle()
+    }
 
+    // $(".show-password").on("click", function () {
+    //     $(this).hide()
+    //     $(this).parent().find(".hide-password").show()
+    //     $(this).parent().find(".pass").attr("type", "text")
+    // })
+    // $(".hide-password").on("click", function () {
+    //     $(this).hide()
+    //     $(this).parent().find(".show-password").show()
+    //     $(this).parent().find(".pass").attr("type", "password")
+    // })
+
+    function checkError() {
+        const password = $("#new-password").val()
+        const newPassword = $("#confirm-new-password").val()
+        if (password !== newPassword) {
+            $("ul").addClass("error-messages")
+            $("#password-miss-match").show()
+            $("#password-strength").hide()
+        } else {
+            $("ul").removeClass("error-messages")
+            $("#password-miss-match").hide()
+            if (newPassword.length > 8 && /\d/.test(newPassword) && /[A-Z]/.test(newPassword)) {
+                $("ul").removeClass("error-messages")
+                $("#password-strength").hide()
+            } else {
+                $("ul").addClass("error-messages")
+                $("#password-strength").show()
+            }
+        }
+    }
+</script>
+</body>
+</html>
