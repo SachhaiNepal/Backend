@@ -35,9 +35,6 @@
                     method="post"
                     action="{% if request.is_secure %}https{% else %}http{% endif %}://localhost:8000{% url 'accounts:reset-password-confirm' code=code %}"
             >
-                <!--                        <div class="md-form"> input-with-post-icon">-->
-                <!--                            <i class="fas fa-eye input-prefix show-password"></i>-->
-                <!--                        <i class="fas fa-eye-slash input-prefix hide-password"></i>-->
                 <input
                         id="new-password"
                         class="form-control form-control-lg pass"
@@ -46,11 +43,6 @@
                         required
                 />
                 <br>
-                <!--                            <label for="new-password">New Password</label>-->
-                <!--                        </div>-->
-                <!--                        <div class="md-form input-with-post-icon">-->
-                <!--                            <i class="fas fa-eye input-prefix show-password eye"></i>-->
-                <!--                        <i class="fas fa-eye-slash input-prefix hide-password eye"></i>-->
                 <input
                         id="confirm-new-password"
                         class="form-control form-control-lg pass"
@@ -67,17 +59,17 @@
                         </ul>
                     </div>
                 </div>
-                <!--                            <label for="confirm-new-password">Confirm New Password</label>-->
-                <!--                        </div>-->
                 <button type="submit" class="btn btn-primary text-capitalize btn-lg">reset password</button>
             </form>
         </div>
     </div>
     <hr>
-    <p id="foot-note"><i class="caution fas fa-exclamation-triangle"></i>&nbsp;&nbsp;<span>Ignore this message if its not you.</span>
+    <p id="foot-note">
+        <i class="fas fa-exclamation-triangle"></i>
+        &nbsp;&nbsp;
+        <span>Ignore this message if its not you.</span>
     </p>
     {% endautoescape %}
-    <div class="space"></div>
 </div>
 
 <style>
@@ -160,33 +152,30 @@
         $("#reset-form").toggle()
     }
 
-    // $(".show-password").on("click", function () {
-    //     $(this).hide()
-    //     $(this).parent().find(".hide-password").show()
-    //     $(this).parent().find(".pass").attr("type", "text")
-    // })
-    // $(".hide-password").on("click", function () {
-    //     $(this).hide()
-    //     $(this).parent().find(".show-password").show()
-    //     $(this).parent().find(".pass").attr("type", "password")
-    // })
-
     function checkError() {
         const password = $("#new-password").val()
         const newPassword = $("#confirm-new-password").val()
+        const errorList = $("ul")
+        const passwordMissMatchError = $("#password-miss-match")
+        const passwordStrengthError = $("#password-strength")
+        const submitButton = $("button[type='submit']")
         if (password !== newPassword) {
-            $("ul").addClass("error-messages")
-            $("#password-miss-match").show()
-            $("#password-strength").hide()
+            errorList.addClass("error-messages")
+            passwordMissMatchError.show()
+            passwordStrengthError.hide()
+            submitButton.attr("disabled", "disabled")
         } else {
-            $("ul").removeClass("error-messages")
-            $("#password-miss-match").hide()
+            errorList.removeClass("error-messages")
+            submitButton.removeAttr("disabled")
+            passwordMissMatchError.hide()
             if (newPassword.length > 8 && /\d/.test(newPassword) && /[A-Z]/.test(newPassword)) {
-                $("ul").removeClass("error-messages")
-                $("#password-strength").hide()
+                errorList.removeClass("error-messages")
+                passwordStrengthError.hide()
+                submitButton.removeAttr("disabled")
             } else {
-                $("ul").addClass("error-messages")
-                $("#password-strength").show()
+                errorList.addClass("error-messages")
+                passwordStrengthError.show()
+                submitButton.attr("disabled", "disabled")
             }
         }
     }
