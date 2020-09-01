@@ -1,63 +1,10 @@
 import uuid
 
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from branch.models import Branch
-
-
-class Country(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name_plural = "Countries"
-
-    def __str__(self):
-        return self.name
-
-
-class Province(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    number = models.IntegerField(
-        unique=True,
-        validators=[
-            MaxValueValidator(7),
-            MinValueValidator(1)
-        ]
-    )
-    country = models.ForeignKey(
-        "Country",
-        on_delete=models.CASCADE,
-        related_name="RelatedCountryForProvince"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-class District(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    province = models.ForeignKey(
-        "Province",
-        on_delete=models.CASCADE,
-        related_name="RelatedProvince"
-    )
-    country = models.ForeignKey(
-        "Country",
-        on_delete=models.CASCADE,
-        related_name="RelatedCountryForDistrict"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
 
 
 class Member(models.Model):
@@ -65,17 +12,17 @@ class Member(models.Model):
     temporary_address = models.CharField(max_length=512, blank=True, null=True)
     permanent_address = models.CharField(max_length=512, blank=True, null=True)
     country = models.ForeignKey(
-        "Country",
+        "location.Country",
         on_delete=models.DO_NOTHING,
         related_name="MemberCountry"
     )
     province = models.ForeignKey(
-        "Province",
+        "location.Province",
         on_delete=models.DO_NOTHING,
         related_name="MemberProvince"
     )
     district = models.ForeignKey(
-        "District",
+        "location.District",
         on_delete=models.DO_NOTHING,
         related_name="MemberDistrict"
     )

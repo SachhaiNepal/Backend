@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
@@ -7,17 +8,17 @@ class Branch(models.Model):
     name = models.CharField(max_length=255, unique=True)
     address = models.CharField(max_length=512, unique=True)
     country = models.ForeignKey(
-        "accounts.Country",
+        "location.Country",
         on_delete=models.DO_NOTHING,
         related_name="BranchCountry"
     )
     province = models.ForeignKey(
-        "accounts.Province",
+        "location.Province",
         on_delete=models.DO_NOTHING,
         related_name="BranchProvince"
     )
     district = models.ForeignKey(
-        "accounts.District",
+        "location.District",
         on_delete=models.DO_NOTHING,
         related_name="BranchDistrict"
     )
@@ -26,7 +27,7 @@ class Branch(models.Model):
     is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
 
     created_by = models.ForeignKey(
-        User,
+        get_user_model(),
         on_delete=models.DO_NOTHING,
         related_name="Creator",
         editable=False
@@ -34,7 +35,7 @@ class Branch(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_by = models.ForeignKey(
-        User,
+        get_user_model(),
         on_delete=models.DO_NOTHING,
         related_name="Modifier",
         null=True,
