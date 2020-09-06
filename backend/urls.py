@@ -22,7 +22,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.static import serve
 
-from accounts.views.load_country_province_and_district import load_countries, load_provinces, load_districts_of_nepal
+from location.views import load_countries, load_provinces, load_districts_of_nepal
 
 urlpatterns = [
     path("", admin.site.urls),

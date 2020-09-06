@@ -24,7 +24,10 @@ clean-db:
 	rm -rf db.sqlite3
 
 clean-migrations:
+	rm -rf accounts/migrations
 	rm -rf branch/migrations
+	rm -rf multimedia/migrations
+	rm -rf location/migrations
 
 clean-db-with-migration: clean-db clean-migrations
 
