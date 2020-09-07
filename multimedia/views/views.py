@@ -25,6 +25,13 @@ class MultimediaAudioViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser)
 
 
+class MultimediaImageViewSet(viewsets.ModelViewSet):
+    queryset = models.MultimediaImage.objects.all()
+    serializer_class = serializers.MultimediaImageSerializer
+    # permission_classes = [permissions.IsAdminUser]
+    parser_classes = (MultiPartParser, FormParser)
+
+
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = models.Article.objects.all()
     serializer_class = serializers.ArticleSerializer

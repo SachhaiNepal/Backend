@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from rest_framework import serializers, status
 
-from multimedia.models import Multimedia, MultimediaVideo, MultimediaAudio, Article, ArticleImage
+from multimedia.models import Multimedia, MultimediaVideo, MultimediaAudio, Article, ArticleImage, MultimediaImage
 
 
 class MultimediaVideoSerializer(serializers.ModelSerializer):
@@ -14,6 +14,13 @@ class MultimediaVideoSerializer(serializers.ModelSerializer):
 class MultimediaAudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = MultimediaAudio
+        fields = "__all__"
+        depth = 1
+
+
+class MultimediaImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MultimediaImage
         fields = "__all__"
         depth = 1
 
@@ -119,6 +126,13 @@ class MultimediaWithMultimediaListSerializer(serializers.Serializer):
             use_url=False,
         )
     )
+    image = serializers.ListField(
+        child=serializers.ImageField(
+            max_length=2048,
+            allow_empty_file=False,
+            use_url=False
+        )
+    )
     title = serializers.CharField(required=True, max_length=512)
     description = serializers.CharField(required=True, max_length=1024)
 
@@ -146,6 +160,7 @@ class MultimediaWithMultimediaListSerializer(serializers.Serializer):
 
         videos = validated_data.pop('video')
         audios = validated_data.pop('audio')
+        images = validated_data.pop('image')
 
         for video in videos:
             MultimediaVideo.objects.create(
@@ -156,6 +171,12 @@ class MultimediaWithMultimediaListSerializer(serializers.Serializer):
         for audio in audios:
             MultimediaAudio.objects.create(
                 audio=audio,
+                multimedia=multimedia,
+                **validated_data
+            )
+        for image in images:
+            MultimediaImage.objects.create(
+                image=image,
                 multimedia=multimedia,
                 **validated_data
             )
