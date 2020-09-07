@@ -22,7 +22,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.static import serve
 
-from location.views import load_countries, load_provinces, load_districts_of_nepal
 
 urlpatterns = [
     path("", admin.site.urls),
@@ -31,9 +30,7 @@ urlpatterns = [
     path("api/", include("accounts.urls")),
     path("api/", include("branch.urls")),
     path("api/", include("multimedia.urls")),
-    path("load-countries", load_countries),
-    path("load-provinces", load_provinces),
-    path("load-districts", load_districts_of_nepal),
+    path("api/", include("location.urls")),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
