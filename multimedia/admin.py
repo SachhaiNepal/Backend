@@ -1,7 +1,20 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from multimedia.models import Multimedia, ArticleImage, Article, MultimediaVideo, MultimediaAudio
+from multimedia.models import Multimedia, ArticleImage, Article, MultimediaVideo, MultimediaAudio, MultimediaImage
+
+
+def save_form_set(self, request, form, formset, change):
+    if formset.model == Multimedia:
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.updated_by = request.user
+            if instance.is_approved:
+                instance.approved_by = request.user
+                instance.approved_at = timezone.now()
+            instance.save()
+    else:
+        formset.save()
 
 
 class MultimediaVideoAdmin(admin.StackedInline):
@@ -24,22 +37,19 @@ class MultimediaAudioAdmin(admin.StackedInline):
     verbose_name_plural = "Add Multimedia Audio"
 
 
-def save_form_set(self, request, form, formset, change):
-    if formset.model == Multimedia:
-        instances = formset.save(commit=False)
-        for instance in instances:
-            instance.updated_by = request.user
-            if instance.is_approved:
-                instance.approved_by = request.user
-                instance.approved_at = timezone.now()
-            instance.save()
-    else:
-        formset.save()
+class MultimediaImageAdmin(admin.StackedInline):
+    model = MultimediaImage
+    fk_name = "multimedia"
+    extra = 0
+    min_num = 1
+    max_num = 10
+    can_delete = True
+    verbose_name_plural = "Add Multimedia Image"
 
 
 @admin.register(Multimedia)
 class MultimediaAdmin(admin.ModelAdmin):
-    inlines = [MultimediaVideoAdmin, MultimediaAudioAdmin]
+    inlines = [MultimediaVideoAdmin, MultimediaAudioAdmin, MultimediaImageAdmin]
 
     list_display = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
 
