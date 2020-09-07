@@ -23,9 +23,9 @@ class ProvinceAdmin(admin.ModelAdmin):
     list_filter = ("country", "created_at", "updated_at")
     autocomplete_fields = ["country"]
     search_fields = ("name",)
-    ordering = ("name", "country", "country", "created_at", "updated_at")
+    ordering = ("name", "number", "country", "created_at", "updated_at")
     fieldsets = (
-        ("District Info", {
+        ("Province Info", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "number", "country"
@@ -58,7 +58,7 @@ class MunicipalityAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name", "district", "created_at", "updated_at")
     fieldsets = (
-        ("District Info", {
+        ("Municipality Info", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "district"
@@ -75,7 +75,7 @@ class MunicipalityWardNumberAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name", "municipality", "number", "created_at", "updated_at")
     fieldsets = (
-        ("District Info", {
+        ("Municipality Ward Info", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "municipality", "number"
@@ -92,24 +92,7 @@ class VDCAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name", "district", "created_at", "updated_at")
     fieldsets = (
-        ("District Info", {
-            "classes": ("wide", "extrapretty"),
-            "fields": (
-                "name", "district"
-            )
-        }),
-    )
-    list_per_page = 10
-
-
-class VDCAdmin(admin.ModelAdmin):
-    list_display = ("name", "district", "created_at", "updated_at")
-    list_filter = ("district", "created_at", "updated_at")
-    autocomplete_fields = ["district"]
-    search_fields = ("name",)
-    ordering = ("name", "district", "created_at", "updated_at")
-    fieldsets = (
-        ("District Info", {
+        ("VDC Info", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "district"
