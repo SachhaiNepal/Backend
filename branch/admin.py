@@ -5,22 +5,43 @@ from branch.models import Branch
 
 class BranchAdmin(admin.ModelAdmin):
     list_display = (
-        "name", "address", "phone", "country", "province", "district",
-        "is_main", "created_by", "created_at", "updated_by", "updated_at"
+        "name", "phone", "is_main",
+        "country", "province", "district", "municipality", "municipality_ward_no", "vdc", "vdc_ward_no",
+        "created_by", "created_at", "updated_by", "updated_at"
     )
-    autocomplete_fields = ("country", "province", "district")
-    search_fields = ("name", "address", "phone", "district__name")
+    autocomplete_fields = (
+        "country", "province", "district",
+        "municipality", "municipality_ward_no", "vdc", "vdc_ward_no",
+    )
+    search_fields = (
+        "name", "phone", "district__name",
+        "municipality__name", "municipality_ward_no__name",
+        "vdc__name", "vdc_ward_no__name",
+    )
     list_filter = ("is_main", "country", "province", "created_at",)
     date_hierarchy = "created_at"
     fieldsets = (
         ("Branch Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("name", "address", "phone", "country", "province", "district", "is_main")
+            "fields": ("name", "phone", "image", "is_main")
         }),
+        ("Location Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "country",
+                "province",
+                "district",
+                "municipality",
+                "municipality_ward_no",
+                "vdc",
+                "vdc_ward_no"
+            )
+        })
     )
     ordering = (
-        "name", "address", "phone", "country", "province", "district",
-        "is_main", "created_by", "created_at", "updated_by", "updated_at"
+        "name", "phone", "is_main",
+        "country", "province", "district", "municipality", "municipality_ward_no", "vdc", "vdc_ward_no",
+        "created_by", "created_at", "updated_by", "updated_at"
     )
 
     list_per_page = 10

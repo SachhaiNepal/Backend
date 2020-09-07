@@ -6,7 +6,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Branch(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    address = models.CharField(max_length=512, unique=True)
+
+    image = models.ImageField(upload_to="branch", null=True, blank=True)
+
     country = models.ForeignKey(
         "location.Country",
         on_delete=models.DO_NOTHING,
@@ -22,6 +24,35 @@ class Branch(models.Model):
         on_delete=models.DO_NOTHING,
         related_name="BranchDistrict"
     )
+    municipality = models.ForeignKey(
+        "location.Municipality",
+        on_delete=models.DO_NOTHING,
+        related_name="BranchMunicipality",
+        null=True,
+        blank=True
+    )
+    municipality_ward_no = models.ForeignKey(
+        "location.MunicipalityWardNumber",
+        on_delete=models.DO_NOTHING,
+        related_name="BranchMunicipalityWardNo",
+        null=True,
+        blank=True
+    )
+    vdc = models.ForeignKey(
+        "location.VDC",
+        on_delete=models.DO_NOTHING,
+        related_name="BranchVdc",
+        null=True,
+        blank=True
+    )
+    vdc_ward_no = models.ForeignKey(
+        "location.VDCWardNumber",
+        on_delete=models.DO_NOTHING,
+        related_name="BranchVdcWardNo",
+        null=True,
+        blank=True
+    )
+
     phone = PhoneNumberField(unique=True, max_length=15)
 
     is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
@@ -43,6 +74,9 @@ class Branch(models.Model):
         editable=False
     )
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Branches"
 
     def __str__(self):
         return self.name
