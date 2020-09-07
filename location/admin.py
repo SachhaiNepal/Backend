@@ -51,10 +51,95 @@ class DistrictAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+class MunicipalityAdmin(admin.ModelAdmin):
+    list_display = ("name", "district", "created_at", "updated_at")
+    list_filter = ("district", "created_at", "updated_at")
+    autocomplete_fields = ["district"]
+    search_fields = ("name",)
+    ordering = ("name", "district", "created_at", "updated_at")
+    fieldsets = (
+        ("District Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name", "district"
+            )
+        }),
+    )
+    list_per_page = 10
+
+
+class MunicipalityWardNumberAdmin(admin.ModelAdmin):
+    list_display = ("name", "municipality", "number", "created_at", "updated_at")
+    list_filter = ("municipality", "number", "created_at", "updated_at")
+    autocomplete_fields = ["municipality"]
+    search_fields = ("name",)
+    ordering = ("name", "municipality", "number", "created_at", "updated_at")
+    fieldsets = (
+        ("District Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name", "municipality", "number"
+            )
+        }),
+    )
+    list_per_page = 10
+
+
+class VDCAdmin(admin.ModelAdmin):
+    list_display = ("name", "district", "created_at", "updated_at")
+    list_filter = ("district", "created_at", "updated_at")
+    autocomplete_fields = ["district"]
+    search_fields = ("name",)
+    ordering = ("name", "district", "created_at", "updated_at")
+    fieldsets = (
+        ("District Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name", "district"
+            )
+        }),
+    )
+    list_per_page = 10
+
+
+class VDCAdmin(admin.ModelAdmin):
+    list_display = ("name", "district", "created_at", "updated_at")
+    list_filter = ("district", "created_at", "updated_at")
+    autocomplete_fields = ["district"]
+    search_fields = ("name",)
+    ordering = ("name", "district", "created_at", "updated_at")
+    fieldsets = (
+        ("District Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name", "district"
+            )
+        }),
+    )
+    list_per_page = 10
+
+
+class VDCWardNumberAdmin(admin.ModelAdmin):
+    list_display = ("name", "vdc", "number", "created_at", "updated_at")
+    list_filter = ("vdc", "number", "created_at", "updated_at")
+    autocomplete_fields = ["vdc"]
+    search_fields = ("name",)
+    ordering = ("name", "vdc", "number", "created_at", "updated_at")
+    fieldsets = (
+        ("District Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "name", "vdc", "number"
+            )
+        }),
+    )
+    list_per_page = 10
+
+
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Province, ProvinceAdmin)
 admin.site.register(District, DistrictAdmin)
-admin.site.register(Municipality)
-admin.site.register(VDC)
-admin.site.register(VDCWardNumber)
-admin.site.register(MunicipalityWardNumber)
+admin.site.register(Municipality, MunicipalityAdmin)
+admin.site.register(VDC, VDCAdmin)
+admin.site.register(VDCWardNumber, VDCWardNumberAdmin)
+admin.site.register(MunicipalityWardNumber, MunicipalityWardNumberAdmin)
