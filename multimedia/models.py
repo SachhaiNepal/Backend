@@ -77,6 +77,20 @@ class MultimediaAudio(models.Model):
         return self.multimedia.title
 
 
+class MultimediaImage(models.Model):
+    image = models.ImageField(
+        upload_to="multimedia/images"
+    )
+    multimedia = models.ForeignKey(
+        Multimedia,
+        on_delete=models.CASCADE,
+        related_name="MultimediaImage"
+    )
+
+    def __str__(self):
+        return self.multimedia.title
+
+
 class Article(Media):
     is_approved = models.BooleanField(default=False)
 
