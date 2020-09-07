@@ -15,7 +15,7 @@ def load_countries(request):
 
 
 @permission_required('accounts.countries.add_province', raise_exception=True)
-def load_provinces(request):
+def load_provinces_of_nepal(request):
     for country_name, province_name, province_number in PROVINCES:
         country = Country.objects.get(name=country_name)
         obj, created = Province.objects.get_or_create(
