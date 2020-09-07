@@ -76,7 +76,13 @@ class MemberAdmin(admin.ModelAdmin):
         ("Personal Info", {
             "classes": ("wide", "extrapretty"),
             "fields": (
-                "user", "temporary_address", "permanent_address", "phone", "country", "province", "district"
+                "user", "phone", "image"
+            )
+        }),
+        ("Location Info", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "temporary_address", "permanent_address", "country", "province", "district"
             )
         }),
         ("Business Info", {

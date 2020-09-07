@@ -9,8 +9,11 @@ from branch.models import Branch
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="branch", default="admin-avatar.png")
+
     temporary_address = models.CharField(max_length=512, blank=True, null=True)
     permanent_address = models.CharField(max_length=512, blank=True, null=True)
+
     country = models.ForeignKey(
         "location.Country",
         on_delete=models.DO_NOTHING,
