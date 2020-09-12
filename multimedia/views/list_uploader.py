@@ -4,7 +4,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.serializers import ArticleWithImageListSerializer, MultimediaWithMultimediaListSerializer
+from multimedia.serializers.article_list import ArticleWithImageListSerializer
+from multimedia.serializers.multimedia_list import MultimediaWithMultimediaListSerializer
 
 
 class CreateArticleWithImageList(APIView):
