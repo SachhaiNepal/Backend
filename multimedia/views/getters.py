@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from multimedia.models import Article, ArticleImage, Multimedia, MultimediaAudio, MultimediaVideo, MultimediaImage
-from multimedia.serializers import ArticleImageSerializer, MultimediaAudioSerializer, MultimediaVideoSerializer, \
-    MultimediaImageSerializer
+from multimedia.serializers.article_list import ArticleImageListCreateSerializer
+from multimedia.serializers.model_serializer import ArticleImageSerializer, \
+    MultimediaAudioSerializer, MultimediaImageSerializer, MultimediaVideoSerializer
 
 
 def generate_url_for_media_resource(serializer, param):
@@ -16,22 +17,41 @@ def generate_url_for_media_resource(serializer, param):
     return serializer
 
 
-class ListArticleImages(APIView):
-    @staticmethod
-    def get(request, pk):
+class ListArticleImages(APIView):\
+
+    def get(self, request, pk):
         try:
             article = Article.objects.get(pk=pk)
-            images = ArticleImage.objects.filter(article=article)
-            serializer = ArticleImageSerializer(images, many=True)
-            serializer = generate_url_for_media_resource(serializer, "image")
-            return Response({
-                "count": images.count(),
-                "data": serializer.data
-            }, status=status.HTTP_200_OK)
         except Article.DoesNotExist:
             return Response({
                 "details": "Article not found."
             }, status=status.HTTP_404_NOT_FOUND)
+        images = ArticleImage.objects.filter(article=article)
+        serializer = ArticleImageSerializer(images, many=True)
+        serializer = generate_url_for_media_resource(serializer, "image")
+        return Response({
+            "count": images.count(),
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
+
+    def post(self, request, pk):
+        try:
+            article = Article.objects.get(pk=pk)
+        except Article.DoesNotExist:
+            return Response({
+                "details": "Article not found."
+            }, status=status.HTTP_404_NOT_FOUND)
+        context = {
+            "article_id": article.pk
+        }
+        serializer = ArticleImageListCreateSerializer(data=request.data, context=context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "details": "Images added to article successfully."
+            }, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListMultimediaAudios(APIView):
