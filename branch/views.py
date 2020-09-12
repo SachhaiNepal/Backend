@@ -11,7 +11,7 @@ from branch.serializers import BranchSerializer
 class BranchViewSet(viewsets.ModelViewSet):
     queryset = Branch.objects.all()
     serializer_class = BranchSerializer
-    permission_classes = [permissions.IsAdminUser]
+    # permission_classes = [permissions.IsAdminUser]
 
 
 class BranchMembers(APIView):
