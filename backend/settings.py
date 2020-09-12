@@ -180,3 +180,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "127.0.0.1"
 EMAIL_PORT = 1025
 EMAIL_HOST_USER = 'foo@bar.com'
+
+# File size rule in KB
+MAX_UPLOAD_VIDEO_SIZE = 500000
+MAX_UPLOAD_AUDIO_SIZE = 100000
+MAX_UPLOAD_IMAGE_SIZE = 2000
