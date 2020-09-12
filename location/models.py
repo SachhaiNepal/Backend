@@ -88,7 +88,7 @@ class VDC(models.Model):
         return self.name
 
 
-class VDCWardNumber(models.Model):
+class VDCWard(models.Model):
     name = models.CharField(max_length=255, unique=True)
     number = models.IntegerField(
         unique=True,
@@ -100,7 +100,7 @@ class VDCWardNumber(models.Model):
     vdc = models.ForeignKey(
         "VDC",
         on_delete=models.CASCADE,
-        related_name="RelatedWardNumberForVDC"
+        related_name="RelatedWardForVDC"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -112,7 +112,7 @@ class VDCWardNumber(models.Model):
         return self.name
 
 
-class MunicipalityWardNumber(models.Model):
+class MunicipalityWard(models.Model):
     name = models.CharField(max_length=255, unique=True)
     number = models.IntegerField(
         unique=True,
@@ -124,7 +124,7 @@ class MunicipalityWardNumber(models.Model):
     municipality = models.ForeignKey(
         "Municipality",
         on_delete=models.CASCADE,
-        related_name="RelatedWardNumberForMunicipality"
+        related_name="RelatedWardForMunicipality"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

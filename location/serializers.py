@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from location.models import Country, VDCWardNumber, VDC, MunicipalityWardNumber, Municipality, District, Province
+from location.models import Country, VDCWard, VDC, MunicipalityWard, Municipality, District, Province
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -27,9 +27,9 @@ class MunicipalitySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MunicipalityWardNumberSerializer(serializers.ModelSerializer):
+class MunicipalityWardSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MunicipalityWardNumber
+        model = MunicipalityWard
         fields = "__all__"
 
 
@@ -39,7 +39,7 @@ class VDCSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class VDCWardNumberSerializer(serializers.ModelSerializer):
+class VDCWardSerializer(serializers.ModelSerializer):
     class Meta:
-        model = VDCWardNumber
+        model = VDCWard
         fields = "__all__"

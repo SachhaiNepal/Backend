@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from location.models import Country, Province, District, MunicipalityWardNumber, Municipality, VDC, VDCWardNumber
+from location.models import Country, Province, District, MunicipalityWard, Municipality, VDC, VDCWard
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -68,7 +68,7 @@ class MunicipalityAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
-class MunicipalityWardNumberAdmin(admin.ModelAdmin):
+class MunicipalityWardAdmin(admin.ModelAdmin):
     list_display = ("name", "municipality", "number", "created_at", "updated_at")
     list_filter = ("municipality", "number", "created_at", "updated_at")
     autocomplete_fields = ["municipality"]
@@ -102,7 +102,7 @@ class VDCAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
-class VDCWardNumberAdmin(admin.ModelAdmin):
+class VDCWardAdmin(admin.ModelAdmin):
     list_display = ("name", "vdc", "number", "created_at", "updated_at")
     list_filter = ("vdc", "number", "created_at", "updated_at")
     autocomplete_fields = ["vdc"]
@@ -124,5 +124,5 @@ admin.site.register(Province, ProvinceAdmin)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(Municipality, MunicipalityAdmin)
 admin.site.register(VDC, VDCAdmin)
-admin.site.register(VDCWardNumber, VDCWardNumberAdmin)
-admin.site.register(MunicipalityWardNumber, MunicipalityWardNumberAdmin)
+admin.site.register(VDCWard, VDCWardAdmin)
+admin.site.register(MunicipalityWard, MunicipalityWardAdmin)
