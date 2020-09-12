@@ -31,12 +31,12 @@ class Branch(models.Model):
         null=True,
         blank=True
     )
-    municipality_ward_no = models.ForeignKey(
-        "location.MunicipalityWardNumber",
+    municipality_ward = models.OneToOneField(
+        "location.MunicipalityWard",
         on_delete=models.DO_NOTHING,
         related_name="BranchMunicipalityWardNo",
         null=True,
-        blank=True
+        blank=True,
     )
     vdc = models.ForeignKey(
         "location.VDC",
@@ -45,12 +45,12 @@ class Branch(models.Model):
         null=True,
         blank=True
     )
-    vdc_ward_no = models.ForeignKey(
-        "location.VDCWardNumber",
+    vdc_ward = models.OneToOneField(
+        "location.VDCWard",
         on_delete=models.DO_NOTHING,
         related_name="BranchVdcWardNo",
         null=True,
-        blank=True
+        blank=True,
     )
 
     phone = PhoneNumberField(unique=True, max_length=15)

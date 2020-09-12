@@ -6,24 +6,36 @@ from branch.models import Branch
 class BranchAdmin(admin.ModelAdmin):
     list_display = (
         "name", "phone", "is_main",
-        "country", "province", "district", "municipality", "municipality_ward_no", "vdc", "vdc_ward_no",
+        "country", "province", "district",
+        "municipality", "municipality_ward", "vdc", "vdc_ward",
         "created_by", "created_at", "updated_by", "updated_at"
     )
     autocomplete_fields = (
         "country", "province", "district",
-        "municipality", "municipality_ward_no", "vdc", "vdc_ward_no",
+        "municipality", "municipality_ward",
+        "vdc", "vdc_ward",
     )
     search_fields = (
         "name", "phone", "district__name",
-        "municipality__name", "municipality_ward_no__name",
-        "vdc__name", "vdc_ward_no__name",
+        "municipality__name", "municipality_ward__name",
+        "vdc__name", "vdc_ward__name",
     )
-    list_filter = ("is_main", "country", "province", "created_at",)
+    list_filter = (
+        "is_main",
+        "country",
+        "province",
+        "created_at",
+    )
     date_hierarchy = "created_at"
     fieldsets = (
         ("Branch Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("name", "phone", "image", "is_main")
+            "fields": (
+                "name",
+                "phone",
+                "image",
+                "is_main"
+            )
         }),
         ("Location Information", {
             "classes": ("wide", "extrapretty"),
@@ -32,15 +44,16 @@ class BranchAdmin(admin.ModelAdmin):
                 "province",
                 "district",
                 "municipality",
-                "municipality_ward_no",
+                "municipality_ward",
                 "vdc",
-                "vdc_ward_no"
+                "vdc_ward"
             )
         })
     )
     ordering = (
         "name", "phone", "is_main",
-        "country", "province", "district", "municipality", "municipality_ward_no", "vdc", "vdc_ward_no",
+        "country", "province", "district",
+        "municipality", "municipality_ward", "vdc", "vdc_ward",
         "created_by", "created_at", "updated_by", "updated_at"
     )
 
