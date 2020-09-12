@@ -1,4 +1,4 @@
-from rest_framework import permissions, viewsets, status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -7,12 +7,6 @@ from accounts.serializers import MemberSerializer
 from branch.models import Branch
 from branch.serializers import BranchSerializer
 from location.models import Municipality, VDC, MunicipalityWard, VDCWard
-
-
-class BranchViewSet(viewsets.ModelViewSet):
-    queryset = Branch.objects.all()
-    serializer_class = BranchSerializer
-    # permission_classes = [permissions.IsAdminUser]
 
 
 class ListBranchMembers(APIView):
@@ -31,8 +25,6 @@ class ListBranchMembers(APIView):
                 "details": "Branch not found."
             }, status=status.HTTP_404_NOT_FOUND)
 
-
-# ------------> Filter APIs Below <-------------
 
 class ListMunicipalityBranches(APIView):
     @staticmethod
@@ -56,7 +48,7 @@ class ListVdcBranches(APIView):
     def get(request, pk):
         try:
             vdc = VDC.objects.get(pk=pk)
-            branches = Branch.objects.filter(branch=vdc)
+            branches = Branch.objects.filter(vdc=vdc)
             serializer = BranchSerializer(branches, many=True)
             return Response({
                 "count": branches.count(),
@@ -78,7 +70,7 @@ class ListMunicipalityWardBranch(APIView):
             return Response({
                 "data": serializer.data
             }, status=status.HTTP_200_OK)
-        except Branch.DoesNotExist:
+        except MunicipalityWard.DoesNotExist:
             return Response({
                 "details": "Municipality Ward not found."
             }, status=status.HTTP_404_NOT_FOUND)
@@ -90,7 +82,7 @@ class ListVdcWardBranch(APIView):
         try:
             vdc_ward = VDCWard.objects.get(pk=pk)
             branch = Branch.objects.filter(vdc_ward=vdc_ward)
-            serializer = MemberSerializer(branch)
+            serializer = BranchSerializer(branch)
             return Response({
                 "data": serializer.data
             }, status=status.HTTP_200_OK)
