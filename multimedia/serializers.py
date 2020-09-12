@@ -90,17 +90,20 @@ class ArticleWithImageListSerializer(serializers.Serializer):
         try:
             article, created = Article.objects.get_or_create(
                 title=title,
-                description=description,
                 uploaded_by=user
             )
+            if not created:
+                raise serializers.ValidationError({
+                    "detail": "Article already exists.",
+                    "status": status.HTTP_400_BAD_REQUEST
+                })
+            article.description = description
+            article.save()
         except IntegrityError:
             raise serializers.ValidationError({
-                "detail": "UNIQUE constraint failed: multimedia_media.title, multimedia_media.uploaded_by_id",
+                "detail": "UNIQUE constraint failed: article.title, article.uploaded_by_id",
                 "status": status.HTTP_400_BAD_REQUEST
             })
-
-        if not created:
-            raise serializers.ValidationError({"detail": "Article already exists.", "status": status.HTTP_400_BAD_REQUEST},)
         images = validated_data.pop('image')
         for image in images:
             ArticleImage.objects.create(
@@ -117,21 +120,24 @@ class MultimediaWithMultimediaListSerializer(serializers.Serializer):
             max_length=100000,
             allow_empty_file=False,
             use_url=False
-        )
+        ),
+        required=False
     )
     audio = serializers.ListField(
         child=serializers.FileField(
             max_length=100000,
             allow_empty_file=False,
             use_url=False,
-        )
+        ),
+        required=False
     )
     image = serializers.ListField(
         child=serializers.ImageField(
             max_length=2048,
             allow_empty_file=False,
-            use_url=False
-        )
+            use_url=False,
+        ),
+        required=False
     )
     title = serializers.CharField(required=True, max_length=512)
     description = serializers.CharField(required=True, max_length=1024)
@@ -141,20 +147,21 @@ class MultimediaWithMultimediaListSerializer(serializers.Serializer):
         title = validated_data.pop("title")
         description = validated_data.pop("description")
         try:
+            # Do not let same user to create a multimedia with same title
             multimedia, created = Multimedia.objects.get_or_create(
                 title=title,
-                description=description,
                 uploaded_by=user
             )
+            if not created:
+                raise serializers.ValidationError({
+                    "detail": "ACCESS denied: you've already added a multimedia with this title.",
+                    "status": status.HTTP_403_FORBIDDEN
+                })
+            multimedia.description = description
+            multimedia.save()
         except IntegrityError:
             raise serializers.ValidationError({
                 "detail": "UNIQUE constraint failed: multimedia_media.title, multimedia_media.uploaded_by_id",
-                "status": status.HTTP_400_BAD_REQUEST
-            })
-
-        if not created:
-            raise serializers.ValidationError({
-                "detail": "Multimedia already exists.",
                 "status": status.HTTP_400_BAD_REQUEST
             })
 
