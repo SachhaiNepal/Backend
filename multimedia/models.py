@@ -32,9 +32,6 @@ class Media(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
 
-    class Meta:
-        unique_together = [["title", "uploaded_by"]]
-
 
 class Multimedia(Media):
     is_approved = models.BooleanField(default=False)
