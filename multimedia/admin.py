@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from multimedia.models import Multimedia, ArticleImage, Article, MultimediaVideo, MultimediaAudio, MultimediaImage
+from multimedia.models import *
 
 
 def save_form_set(self, request, form, formset, change):
@@ -123,3 +123,44 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         save_form_set(self, request, form, formset, change)
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        "writer",
+        "comment",
+        "article",
+        "multimedia",
+        "created_at",
+        "updated_at",
+    )
+    list_filter = (
+        "writer",
+    )
+    list_per_page = 10
+    fieldsets = (
+        ("Media Information.", {
+            "classes": ("wide", "extrapretty"),
+            "fields": ("article", "multimedia")
+        }),
+
+        ("Comment Details", {
+            "classes": ("wide", "extrapretty"),
+            "fields": ("comment",)
+        })
+    )
+    search_fields = ("writer", "article", "multimedia", "comment",)
+    date_hierarchy = "created_at"
+    ordering = (
+        "writer",
+        "comment",
+        "article",
+        "multimedia",
+        "created_at",
+        "updated_at",
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.writer = request.user
+        obj.save()
