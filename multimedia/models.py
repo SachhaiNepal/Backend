@@ -133,6 +133,13 @@ class Comment(models.Model):
         editable=False
     )
     comment = models.TextField()
+    reply_to = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="CommentReplies"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -147,4 +154,44 @@ class Comment(models.Model):
 
     class Meta:
         verbose_name_plural = "Comments"
-        unique_together = [["article", "writer"], ["multimedia", "writer"]]
+
+    def __str__(self):
+        return self.comment
+
+
+class Love(models.Model):
+    article = models.ForeignKey(
+        "Article",
+        on_delete=models.CASCADE,
+        related_name="LoveArticle",
+        null=True,
+        blank=True,
+    )
+    multimedia = models.ForeignKey(
+        "Multimedia",
+        on_delete=models.CASCADE,
+        related_name="LoveMultimedia",
+        null=True,
+        blank=True,
+    )
+    is_loved = models.BooleanField(default=False)
+    lover = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="MediaLover",
+        editable=False
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        """
+        Require article or multimedia
+        """
+        if not (self.article or self.multimedia):
+            raise ValidationError("One of the media must be selected.")
+        if self.article and self.multimedia:
+            raise ValidationError("Both media cannot be selected.")
+
+    class Meta:
+        unique_together = [["article", "lover"], ["multimedia", "lover"]]
