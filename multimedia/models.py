@@ -195,3 +195,10 @@ class Love(models.Model):
 
     class Meta:
         unique_together = [["article", "lover"], ["multimedia", "lover"]]
+
+    def __str__(self):
+        return '"{}" {} "{}"'.format(
+            self.lover,
+            "loves" if self.is_loved else "does not love",
+            self.multimedia.title if self.multimedia else self.article.title
+        )
