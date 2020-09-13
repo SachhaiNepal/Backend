@@ -114,7 +114,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
     # update form for admin site
     fieldsets = (
-        ("Article Information.", {
+        ("Article Information", {
             "classes": ("wide", "extrapretty"),
             "fields": ("title", "description")
         }),
@@ -154,7 +154,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_per_page = 10
     autocomplete_fields = ("article", "multimedia")
     fieldsets = (
-        ("Media Information.", {
+        ("Media Information", {
             "classes": ("wide", "extrapretty"),
             "fields": ("article", "multimedia")
         }),
@@ -202,7 +202,7 @@ class LoveAdmin(admin.ModelAdmin):
     list_per_page = 10
     autocomplete_fields = ("article", "multimedia")
     fieldsets = (
-        ("Media Information.", {
+        ("Media Information", {
             "classes": ("wide", "extrapretty"),
             "fields": ("article", "multimedia")
         }),
