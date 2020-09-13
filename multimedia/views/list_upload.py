@@ -4,20 +4,21 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.serializers.article_list import ArticleWithImageListSerializer
-from multimedia.serializers.multimedia_list import MultimediaWithMultimediaListSerializer
+from multimedia.serializers.article_list import ArticleWithImageListCreateSerializer
+from multimedia.serializers.multimedia_list import MultimediaWithMultimediaListCreateSerializer
 
 
 class CreateArticleWithImageList(APIView):
     authentication_classes = [TokenAuthentication]
     parser_classes = (MultiPartParser, FormParser,)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         if request.user.is_anonymous:
             return Response({
                 "details": "User must be logged in.",
             }, status=status.HTTP_403_FORBIDDEN)
-        serializer = ArticleWithImageListSerializer(data=request.data, context={"request": request})
+        serializer = ArticleWithImageListCreateSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response({
@@ -30,12 +31,13 @@ class CreateMultimediaWithMultimediaList(APIView):
     authentication_classes = [TokenAuthentication]
     parser_classes = (MultiPartParser, FormParser,)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         if request.user.is_anonymous:
             return Response({
                 "details": "User must be logged in.",
             }, status=status.HTTP_403_FORBIDDEN)
-        serializer = MultimediaWithMultimediaListSerializer(data=request.data, context={"request": request})
+        serializer = MultimediaWithMultimediaListCreateSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response({
