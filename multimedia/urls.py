@@ -11,11 +11,7 @@ from multimedia.views import views
 
 router = DefaultRouter()
 router.register(r"multimedia", views.MultimediaViewSet, basename="multimedia")
-# router.register(r"multimedia/video", views.MultimediaVideoViewSet, basename="multimedia-video")
-# router.register(r"multimedia/audio", views.MultimediaAudioViewSet, basename="multimedia-audio")
-# router.register(r"multimedia/image", views.MultimediaImageViewSet, basename="multimedia-image")
 router.register(r"article", views.ArticleViewSet, basename="article")
-# router.register(r"article/image", views.ArticleImageViewSet, basename="article-image")
 urlpatterns = router.urls
 urlpatterns += [
     path("create/article", CreateArticleWithImageList.as_view()),
