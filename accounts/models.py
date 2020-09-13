@@ -1,9 +1,11 @@
 import uuid
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from backend.settings import MAX_UPLOAD_IMAGE_SIZE
 from branch.models import Branch
 
 
@@ -57,6 +59,10 @@ class Member(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def clean(self):
+        if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+            raise ValidationError("Image size exceeds max image upload size.")
 
 
 class ResetPasswordCode(models.Model):

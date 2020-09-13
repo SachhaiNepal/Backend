@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+
+from backend.settings import MAX_UPLOAD_IMAGE_SIZE
 
 
 class Branch(models.Model):
@@ -74,6 +76,25 @@ class Branch(models.Model):
         editable=False
     )
     updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        """
+        Require only vdc or municipality
+        """
+        if not (self.vdc or self.municipality):
+            raise ValidationError("One of the location field (municipality | vdc) must be selected.")
+        elif self.vdc and self.municipality:
+            raise ValidationError("Both municipality and vdc fields cannot be selected.")
+        elif not (self.vdc_ward or self.municipality_ward):
+            raise ValidationError("One of the location field (municipality | vdc) ward must be selected.")
+        elif self.municipality and self.vdc_ward:
+            raise ValidationError("Cannot assign vdc ward for a municipality.")
+        elif self.vdc_ward and self.municipality_ward:
+            raise ValidationError("Both municipality and vdc ward fields cannot be selected.")
+        elif self.vdc and self.municipality_ward:
+            raise ValidationError("Cannot assign municipality ward for a vdc.")
+        elif self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+            raise ValidationError("Image size exceeds max image upload size.")
 
     class Meta:
         verbose_name_plural = "Branches"
