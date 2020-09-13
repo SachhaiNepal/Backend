@@ -185,3 +185,8 @@ EMAIL_HOST_USER = 'foo@bar.com'
 MAX_UPLOAD_VIDEO_SIZE = 500000
 MAX_UPLOAD_AUDIO_SIZE = 100000
 MAX_UPLOAD_IMAGE_SIZE = 2000
+
+# File extension rule
+ALLOWED_IMAGES_EXTENSIONS = ["png", "jpg", "jpeg", "gif", "bmp", "tiff"]
+ALLOWED_AUDIO_EXTENSIONS = ["mp3", "wav"]
+ALLOWED_VIDEO_EXTENSIONS = ["webm", "mp4", "mpeg", "flv"]
