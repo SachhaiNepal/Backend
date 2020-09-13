@@ -1,8 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from branch.views.filter import ListBranchMembers, ListMunicipalityBranches, ListVdcBranches, \
-    ListMunicipalityWardBranch, ListVdcWardBranch
+from branch.views.filter import *
 from branch.views.views import BranchViewSet
 
 router = DefaultRouter()

@@ -1,4 +1,6 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
@@ -107,3 +109,42 @@ class ArticleImage(models.Model):
 
     def __str__(self):
         return self.article.title
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(
+        "Article",
+        on_delete=models.CASCADE,
+        related_name="ArticleComment",
+        null=True,
+        blank=True,
+    )
+    multimedia = models.ForeignKey(
+        "Multimedia",
+        on_delete=models.CASCADE,
+        related_name="MultimediaComment",
+        null=True,
+        blank=True,
+    )
+    writer = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="CommentWriter",
+        editable=False
+    )
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        """
+        Require article or multimedia
+        """
+        if not (self.article or self.multimedia):
+            raise ValidationError("One of the media must be selected.")
+        if self.article and self.multimedia:
+            raise ValidationError("Both media cannot be selected.")
+
+    class Meta:
+        verbose_name_plural = "Comments"
+        unique_together = [["article", "writer"], ["multimedia", "writer"]]
