@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
+from backend.settings import MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE, MAX_UPLOAD_AUDIO_SIZE
+
 
 class Media(models.Model):
     title = models.CharField(max_length=255, unique=True)
@@ -58,6 +60,10 @@ class MultimediaVideo(models.Model):
     def __str__(self):
         return self.multimedia.title
 
+    def clean(self):
+        if self.video.size / 1000 > MAX_UPLOAD_VIDEO_SIZE:
+            raise ValidationError("Video size exceeds max image upload size.")
+
 
 class MultimediaAudio(models.Model):
     audio = models.FileField(
@@ -75,6 +81,10 @@ class MultimediaAudio(models.Model):
     def __str__(self):
         return self.multimedia.title
 
+    def clean(self):
+        if self.audio.size / 1000 > MAX_UPLOAD_AUDIO_SIZE:
+            raise ValidationError("Audio size exceeds max image upload size.")
+
 
 class MultimediaImage(models.Model):
     image = models.ImageField(
@@ -88,6 +98,10 @@ class MultimediaImage(models.Model):
 
     def __str__(self):
         return self.multimedia.title
+
+    def clean(self):
+        if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+            raise ValidationError("Image size exceeds max image upload size.")
 
 
 class Article(Media):
@@ -109,6 +123,10 @@ class ArticleImage(models.Model):
 
     def __str__(self):
         return self.article.title
+
+    def clean(self):
+        if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+            raise ValidationError("Image size exceeds max image upload size.")
 
 
 class Comment(models.Model):
