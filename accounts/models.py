@@ -2,20 +2,23 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from backend.settings import MAX_UPLOAD_IMAGE_SIZE
+from backend.settings import MAX_UPLOAD_IMAGE_SIZE, ALLOWED_IMAGES_EXTENSIONS
 from branch.models import Branch
 
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="branch", default="admin-avatar.png")
-
-    temporary_address = models.CharField(max_length=512, blank=True, null=True)
-    permanent_address = models.CharField(max_length=512, blank=True, null=True)
-
+    image = models.ImageField(
+        upload_to="branch",
+        default="admin-avatar.png",
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+    )
+    temporary_address = models.CharField(max_length=512)
+    permanent_address = models.CharField(max_length=512)
     country = models.ForeignKey(
         "location.Country",
         on_delete=models.DO_NOTHING,
@@ -31,9 +34,7 @@ class Member(models.Model):
         on_delete=models.DO_NOTHING,
         related_name="MemberDistrict"
     )
-
     phone = PhoneNumberField(unique=True, blank=True, null=True)
-
     branch = models.ForeignKey(
         Branch,
         on_delete=models.DO_NOTHING,
@@ -41,9 +42,7 @@ class Member(models.Model):
         null=True,
         blank=True
     )
-
     is_approved = models.BooleanField(default=False)
-
     approved_by = models.ForeignKey(
         User,
         null=True,
@@ -63,6 +62,11 @@ class Member(models.Model):
     def clean(self):
         if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
+
+    def delete(self, using=None, keep_parents=False):
+        if self.image.name != "admin-avatar.png":
+            self.image.delete()
+        super().delete(using, keep_parents)
 
 
 class ResetPasswordCode(models.Model):
