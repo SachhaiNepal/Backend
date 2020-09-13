@@ -65,7 +65,11 @@ class MultimediaAdmin(admin.ModelAdmin):
     )
 
     list_filter = ("is_approved", "uploaded_at", "approved_at",)
-    search_fields = ("approved_by", "uploaded_by", "title", "description", "audio", "video")
+    search_fields = (
+        "approved_by__username", "approved_by__email",
+        "uploaded_by__username", "uploaded_by__email",
+        "title", "description",
+    )
     date_hierarchy = "uploaded_at"
     ordering = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
     list_per_page = 10
@@ -102,7 +106,11 @@ class ArticleAdmin(admin.ModelAdmin):
         "uploaded_at",
     )
     list_per_page = 10
-    search_fields = ("title", "approved_by__name", "uploaded_by__name")
+    search_fields = (
+        "title",
+        "approved_by__username", "approved_by__email",
+        "uploaded_by__username", "uploaded_by__email"
+    )
 
     # update form for admin site
     fieldsets = (
@@ -156,7 +164,11 @@ class CommentAdmin(admin.ModelAdmin):
             "fields": ("comment", "reply_to")
         })
     )
-    search_fields = ("writer", "article", "multimedia", "comment", "reply_to")
+    search_fields = (
+        "writer__username", "writer__email",
+        "article__title", "multimedia__title",
+        "comment", "reply_to__comment"
+    )
     date_hierarchy = "created_at"
     ordering = (
         "writer",
@@ -200,7 +212,10 @@ class LoveAdmin(admin.ModelAdmin):
             "fields": ("is_loved",)
         })
     )
-    search_fields = ("lover", "article", "multimedia", "is_loved")
+    search_fields = (
+        "lover__username", "lover__email",
+        "article__title", "multimedia__title",
+    )
     date_hierarchy = "created_at"
     ordering = (
         "lover",
