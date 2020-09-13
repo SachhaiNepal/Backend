@@ -42,11 +42,6 @@ class District(models.Model):
         on_delete=models.CASCADE,
         related_name="RelatedProvince"
     )
-    country = models.ForeignKey(
-        "Country",
-        on_delete=models.CASCADE,
-        related_name="RelatedCountryForDistrict"
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

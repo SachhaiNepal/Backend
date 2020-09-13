@@ -30,13 +30,11 @@ def load_provinces_of_nepal(request):
 
 @permission_required('accounts.countries.add_district', raise_exception=True)
 def load_districts_of_nepal(request):
-    country = Country.objects.get(name="Nepal")
     for province_number, district_name in DISTRICTS:
         province = Province.objects.get(number=province_number)
         obj, created = District.objects.get_or_create(
             name=district_name,
             province=province,
-            country=country
         )
         if created:
             obj.save()
