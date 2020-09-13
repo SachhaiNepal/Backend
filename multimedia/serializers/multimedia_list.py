@@ -151,7 +151,6 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError({
                 "message": "ACCESS DENIED",
                 "detail": "Multimedia already exists.",
-                "status": status.HTTP_403_FORBIDDEN
             })
 
         if "video" in keys:

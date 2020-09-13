@@ -1,4 +1,3 @@
-from django.db import IntegrityError
 from rest_framework import serializers, status
 
 from multimedia.models import Article, ArticleImage
@@ -66,21 +65,15 @@ class ArticleWithImageListCreateSerializer(serializers.Serializer):
         user = self.context["request"].user
         title = validated_data.pop("title")
         description = validated_data.pop("description")
-        try:
-            article, created = Article.objects.get_or_create(
-                title=title,
-                description=description,
-                uploaded_by=user
-            )
-            if not created:
-                raise serializers.ValidationError({
-                    "message": "ACCESS DENIED",
-                    "detail": "Article already exists.",
-                    "status": status.HTTP_400_BAD_REQUEST
-                })
-        except IntegrityError as e:
+        article, created = Article.objects.get_or_create(
+            title=title,
+            description=description,
+            uploaded_by=user
+        )
+        if not created:
             raise serializers.ValidationError({
-                "detail": e
+                "message": "ACCESS DENIED",
+                "detail": "Article already exists.",
             })
         if "image" in keys:
             images = validated_data.pop('image')
