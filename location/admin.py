@@ -9,7 +9,7 @@ class CountryAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name", "created_at", "updated_at")
     fieldsets = (
-        ("Country Info", {
+        ("Country Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name",
@@ -25,7 +25,7 @@ class ProvinceAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name", "number", "country", "created_at", "updated_at")
     fieldsets = (
-        ("Province Info", {
+        ("Province Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "number", "country"
@@ -43,7 +43,7 @@ class DistrictAdmin(admin.ModelAdmin):
     )
     ordering = ("name", "province", "created_at", "updated_at")
     fieldsets = (
-        ("District Info", {
+        ("District Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "province"
@@ -63,7 +63,7 @@ class MunicipalityAdmin(admin.ModelAdmin):
     )
     ordering = ("name", "district", "created_at", "updated_at")
     fieldsets = (
-        ("Municipality Info", {
+        ("Municipality Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "district"
@@ -84,7 +84,7 @@ class MunicipalityWardAdmin(admin.ModelAdmin):
     )
     ordering = ("name", "municipality", "number", "created_at", "updated_at")
     fieldsets = (
-        ("Municipality Ward Info", {
+        ("Municipality Ward Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "municipality", "number"
@@ -104,7 +104,7 @@ class VDCAdmin(admin.ModelAdmin):
     )
     ordering = ("name", "district", "created_at", "updated_at")
     fieldsets = (
-        ("VDC Info", {
+        ("VDC Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "district"
@@ -124,7 +124,7 @@ class VDCWardAdmin(admin.ModelAdmin):
     )
     ordering = ("name", "vdc", "number", "created_at", "updated_at")
     fieldsets = (
-        ("District Info", {
+        ("VDC Ward Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "name", "vdc", "number"

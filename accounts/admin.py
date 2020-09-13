@@ -19,11 +19,11 @@ class MemberInline(admin.StackedInline):
 
     # update form for admin site
     fieldsets = (
-        ("Personal Info", {
+        ("Personal Information", {
             "classes": ("wide", "extrapretty"),
             "fields": ("temporary_address", "permanent_address", "phone", "country", "province", "district",)
         }),
-        ("Business Info", {
+        ("Business Information", {
             "classes": ("wide", "extrapretty"),
             "fields": ("branch", "is_approved")
         }),
@@ -63,29 +63,33 @@ class MemberAdmin(admin.ModelAdmin):
     )
     list_filter = (
         ("is_approved", admin.BooleanFieldListFilter),
-        ("branch", admin.RelatedFieldListFilter),
+        ("branch__is_main", admin.BooleanFieldListFilter),
         ("approved_at", admin.DateFieldListFilter),
         ("province", admin.RelatedFieldListFilter),
         ("country", admin.RelatedFieldListFilter)
+
     )
-    search_fields = ("user__username", "phone", "district__name")
+    search_fields = (
+        "user__username", "phone", "district__name",
+        "branch__name"
+    )
 
     autocomplete_fields = ["branch", "country", "province", "district"]
 
     fieldsets = (
-        ("Personal Info", {
+        ("Personal Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "user", "phone", "image"
             )
         }),
-        ("Location Info", {
+        ("Location Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "temporary_address", "permanent_address", "country", "province", "district"
             )
         }),
-        ("Business Info", {
+        ("Business Information", {
             "classes": ("wide", "extrapretty"),
             "fields": (
                 "branch", "is_approved"
