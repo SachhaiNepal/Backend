@@ -1,5 +1,5 @@
-from rest_framework import permissions, viewsets
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework import permissions, viewsets, status
+from rest_framework.response import Response
 
 from multimedia import models
 from multimedia.serializers.model_serializer import MultimediaSerializer, ArticleSerializer
@@ -10,26 +10,11 @@ class MultimediaViewSet(viewsets.ModelViewSet):
     serializer_class = MultimediaSerializer
     # permission_classes = [permissions.IsAdminUser]
 
-
-# class MultimediaVideoViewSet(viewsets.ModelViewSet):
-#     queryset = models.MultimediaVideo.objects.all()
-#     serializer_class = MultimediaVideoSerializer
-#     permission_classes = [permissions.IsAdminUser]
-#     parser_classes = (MultiPartParser, FormParser)
-#
-#
-# class MultimediaAudioViewSet(viewsets.ModelViewSet):
-#     queryset = models.MultimediaAudio.objects.all()
-#     serializer_class = MultimediaAudioSerializer
-#     permission_classes = [permissions.IsAdminUser]
-#     parser_classes = (MultiPartParser, FormParser)
-#
-#
-# class MultimediaImageViewSet(viewsets.ModelViewSet):
-#     queryset = models.MultimediaImage.objects.all()
-#     serializer_class = MultimediaImageSerializer
-#     permission_classes = [permissions.IsAdminUser]
-#     parser_classes = (MultiPartParser, FormParser)
+    # def destroy(self, request, *args, **kwargs):
+    #     multimedia = self.get_object()
+    #     return Response({
+    #         "message": "Multimedia deleted successfully."
+    #     }, status=status.HTTP_204_NO_CONTENT)
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -37,9 +22,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     # permission_classes = [permissions.IsAdminUser]
 
-
-# class ArticleImageViewSet(viewsets.ModelViewSet):
-#     queryset = models.ArticleImage.objects.all()
-#     serializer_class = ArticleImageSerializer
-#     permission_classes = [permissions.IsAdminUser]
-#     parser_classes = (MultiPartParser, FormParser)
+    # def destroy(self, request, *args, **kwargs):
+    #     article = self.get_object()
+    #     return Response({
+    #         "message": "Article deleted successfully."
+    #     }, status=status.HTTP_204_NO_CONTENT)
