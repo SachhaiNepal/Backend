@@ -103,5 +103,6 @@ class Branch(models.Model):
         return self.name
 
     def delete(self, using=None, keep_parents=False):
-        self.image.delete()
+        if self.image:
+            self.image.delete()
         super().delete(using, keep_parents)

@@ -1,4 +1,4 @@
-from rest_framework import serializers, status
+from rest_framework import serializers
 
 from multimedia.models import Article, ArticleImage
 from utils.file import check_image_size_with_ext
