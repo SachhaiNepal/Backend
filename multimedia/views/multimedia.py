@@ -1,5 +1,7 @@
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -7,7 +9,7 @@ from multimedia.models import Multimedia, MultimediaAudio, MultimediaImage, Mult
 from multimedia.serializers.model_serializer import MultimediaAudioSerializer, MultimediaImageSerializer, \
     MultimediaVideoSerializer
 from multimedia.serializers.multimedia_list import AddMultimediaAudioListSerializer, AddMultimediaImageListSerializer, \
-    AddMultimediaVideoListSerializer
+    AddMultimediaVideoListSerializer, MultimediaWithMultimediaListCreateSerializer
 from utils.helper import generate_url_for_media_resources
 
 
@@ -110,4 +112,23 @@ class ListMultimediaVideos(APIView):
             return Response({
                 "details": "Videos added to multimedia successfully."
             }, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateMultimediaWithMultimediaList(APIView):
+    authentication_classes = [TokenAuthentication]
+    parser_classes = (MultiPartParser, FormParser,)
+
+    @staticmethod
+    def post(request):
+        if request.user.is_anonymous:
+            return Response({
+                "details": "User must be logged in.",
+            }, status=status.HTTP_403_FORBIDDEN)
+        serializer = MultimediaWithMultimediaListCreateSerializer(data=request.data, context={"request": request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "message": "Multimedia Created Successfully."
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

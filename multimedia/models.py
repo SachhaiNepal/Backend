@@ -56,7 +56,7 @@ class MultimediaVideo(models.Model):
     )
 
     def __str__(self):
-        return self.multimedia.title
+        return "{} {}".format(self.multimedia.title, self.video.name)
 
     def clean(self):
         if self.video.size / 1000 > MAX_UPLOAD_VIDEO_SIZE:
@@ -81,7 +81,7 @@ class MultimediaAudio(models.Model):
     )
 
     def __str__(self):
-        return self.multimedia.title
+        return "{} {}".format(self.multimedia.title, self.audio.name)
 
     def clean(self):
         if self.audio.size / 1000 > MAX_UPLOAD_AUDIO_SIZE:
@@ -104,7 +104,7 @@ class MultimediaImage(models.Model):
     )
 
     def __str__(self):
-        return self.multimedia.title
+        return "{} {}".format(self.multimedia.title, self.image.name)
 
     def clean(self):
         if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
@@ -134,7 +134,7 @@ class ArticleImage(models.Model):
     )
 
     def __str__(self):
-        return self.article.title
+        return "{} {}".format(self.article.title, self.image.name)
 
     def clean(self):
         if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:

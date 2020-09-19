@@ -84,6 +84,21 @@ class MultimediaAdmin(admin.ModelAdmin):
     def save_formset(self, request, form, formset, change):
         save_form_set(self, request, form, formset, change)
 
+    def delete_model(self, request, obj):
+        images = MultimediaImage.objects.filter(multimedia=obj)
+        if images.count() > 0:
+            for image in images:
+                image.delete()
+        audios = MultimediaAudio.objects.filter(multimedia=obj)
+        if audios.count() > 0:
+            for audio in audios:
+                audio.delete()
+        videos = MultimediaVideo.objects.filter(multimedia=obj)
+        if videos.count() > 1:
+            for video in videos:
+                video.delete()
+        obj.delete()
+
 
 class ArticleImageAdmin(admin.StackedInline):
     model = ArticleImage
@@ -134,6 +149,13 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         save_form_set(self, request, form, formset, change)
+
+    def delete_model(self, request, obj):
+        images = ArticleImage.objects.filter(article=obj)
+        if images.count() > 0:
+            for image in images:
+                image.delete()
+        obj.delete()
 
 
 @admin.register(Comment)
@@ -229,3 +251,9 @@ class LoveAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.lover = request.user
         obj.save()
+
+
+admin.site.register(MultimediaImage)
+admin.site.register(MultimediaVideo)
+admin.site.register(MultimediaAudio)
+admin.site.register(ArticleImage)

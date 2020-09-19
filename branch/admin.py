@@ -73,5 +73,9 @@ class BranchAdmin(admin.ModelAdmin):
         else:
             formset.save()
 
+    def delete_model(self, request, obj):
+        obj.image.delete()
+        obj.delete()
+
 
 admin.site.register(Branch, BranchAdmin)

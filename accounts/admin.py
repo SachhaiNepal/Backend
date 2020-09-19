@@ -21,7 +21,7 @@ class MemberInline(admin.StackedInline):
     fieldsets = (
         ("Personal Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("temporary_address", "permanent_address", "phone", "country", "province", "district",)
+            "fields": ("image", "temporary_address", "permanent_address", "phone", "country", "province", "district",)
         }),
         ("Business Information", {
             "classes": ("wide", "extrapretty"),
@@ -112,6 +112,10 @@ class MemberAdmin(admin.ModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         save_form_set(self, request, form, formset, change)
+
+    def delete_model(self, request, obj):
+        obj.image.delete()
+        obj.delete()
 
 
 class ResetPasswordCodeAdmin(admin.ModelAdmin):

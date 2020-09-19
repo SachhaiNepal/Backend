@@ -1,5 +1,6 @@
 import uuid
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
@@ -11,10 +12,11 @@ from branch.models import Branch
 
 
 class Member(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     image = models.ImageField(
-        upload_to="branch",
-        default="admin-avatar.png",
+        upload_to="member",
+        null=True,
+        blank=True,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
     )
     temporary_address = models.CharField(max_length=512)
@@ -64,8 +66,9 @@ class Member(models.Model):
             raise ValidationError("Image size exceeds max image upload size.")
 
     def delete(self, using=None, keep_parents=False):
-        if self.image.name != "admin-avatar.png":
+        if self.image:
             self.image.delete()
+        self.user.delete()
         super().delete(using, keep_parents)
 
 

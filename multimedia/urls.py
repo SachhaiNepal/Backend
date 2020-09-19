@@ -6,7 +6,6 @@ from rest_framework.routers import DefaultRouter
 from multimedia.views.media_detail import *
 from multimedia.views.multimedia import *
 from multimedia.views.article import *
-from multimedia.views.list_upload import *
 from multimedia.views import views
 
 router = DefaultRouter()
