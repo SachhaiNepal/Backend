@@ -12,6 +12,7 @@ class AdFileViewSet(viewsets.ModelViewSet):
     serializer_class = AdFileSerializer
     parser_classes = (MultiPartParser, FormParser,)
     authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def destroy(self, request, *args, **kwargs):
         ad = self.get_object()
