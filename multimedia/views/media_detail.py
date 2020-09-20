@@ -1,5 +1,6 @@
 from rest_framework import authentication, status
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,7 +12,7 @@ from utils.helper import generate_url_for_media_resource
 
 class ArticleImageDetailView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    # permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):
@@ -33,7 +34,7 @@ class ArticleImageDetailView(APIView):
 
 class MultimediaImageDetailView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    # permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):
@@ -55,7 +56,7 @@ class MultimediaImageDetailView(APIView):
 
 class MultimediaAudioDetailView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    # permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):
@@ -77,7 +78,7 @@ class MultimediaAudioDetailView(APIView):
 
 class MultimediaVideoDetailView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    # permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):
