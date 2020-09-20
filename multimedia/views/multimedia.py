@@ -1,7 +1,9 @@
+from django.utils import timezone
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -14,6 +16,8 @@ from utils.helper import generate_url_for_media_resources
 
 
 class ListMultimediaAudios(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     @staticmethod
     def get_object(pk):
         return get_object_or_404(Multimedia, pk=pk)
@@ -48,6 +52,9 @@ class ListMultimediaAudios(APIView):
 
 
 class ListMultimediaImages(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get_object(pk):
         return get_object_or_404(Multimedia, pk=pk)
@@ -82,6 +89,9 @@ class ListMultimediaImages(APIView):
 
 
 class ListMultimediaVideos(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get_object(pk):
         return get_object_or_404(Multimedia, pk=pk)
@@ -117,6 +127,7 @@ class ListMultimediaVideos(APIView):
 
 class CreateMultimediaWithMultimediaList(APIView):
     authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser,)
 
     @staticmethod
@@ -132,3 +143,28 @@ class CreateMultimediaWithMultimediaList(APIView):
                 "message": "Multimedia Created Successfully."
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ToggleMultimediaApprovalView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def post(request, pk):
+        try:
+            multimedia = Multimedia.objects.get(pk=pk)
+        except Multimedia.DoesNotExist:
+            return Response({
+                "detail": "Multimedia does not exist."
+            }, status=status.HTTP_404_NOT_FOUND)
+        multimedia.is_approved = not multimedia.is_approved
+        if multimedia.is_approved:
+            multimedia.approved_by = request.user
+            multimedia.approved_at = timezone.now()
+        else:
+            multimedia.approved_by = None
+            multimedia.approved_at = None
+        multimedia.save()
+        return Response({
+            "message": "Multimedia {} successfully.".format("approved" if multimedia.is_approved else "rejected")
+        }, status=status.HTTP_204_NO_CONTENT)
