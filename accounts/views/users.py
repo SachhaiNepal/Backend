@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
 
 from accounts.models import Member
 from accounts.serializers import UserCreateSerializer, UserUpdateSerializer, MemberUpdateSerializer, MemberSerializer
@@ -141,3 +142,21 @@ class MemberDetail(APIView):
                 "data": serializer.data,
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ToggleMemberApprovalView(APIView):
+    authentication_classes = [TokenAuthentication]
+     
+    def post(self, request, pk):
+        try:
+            member = Member.objects.get(pk=pk)
+        except Member.DoesNotExist:
+            return Response({
+                "detail": "Member does not exist."
+            }, status=status.HTTP_404_NOT_FOUND)
+        member.is_approved = not member.is_approved
+        # member.approved_by = Member.objects.get(user=request.user)
+        member.save()
+        return Response({
+            "message": "Member {} successfully.".format("approved" if member.is_approved else "rejected")
+        }, status=status.HTTP_204_NO_CONTENT)

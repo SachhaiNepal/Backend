@@ -23,5 +23,7 @@ urlpatterns += [
     path("multimedia/image/<int:pk>", MultimediaImageDetailView.as_view()),
     path("multimedia/audio/<int:pk>", MultimediaAudioDetailView.as_view()),
     path("multimedia/video/<int:pk>", MultimediaVideoDetailView.as_view()),
+    path("multimedia/<int:pk>/toggle-approval", views.ToggleMultimediaApprovalView.as_view())
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

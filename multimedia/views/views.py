@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from multimedia import models
 from multimedia.models import MultimediaImage, MultimediaVideo, MultimediaAudio
 from multimedia.serializers.model_serializer import MultimediaSerializer, ArticleSerializer
+from multimedia.models import Multimedia, Article
 
 
 class MultimediaViewSet(viewsets.ModelViewSet):
@@ -42,3 +43,40 @@ class ArticleViewSet(viewsets.ModelViewSet):
             "message": "Article deleted successfully."
         }, status=status.HTTP_204_NO_CONTENT)
 
+
+class ToggleArticleView(APIView):
+    authentication_classes = [TokenAuthentication]
+     
+    def post(self, request, pk):
+        try:
+            article = Article.objects.get(pk=pk)
+        except Article.DoesNotExist:
+            return Response({
+                "detail": "Member does not exist."
+            }, status=status.HTTP_404_NOT_FOUND)
+        article.is_approved = not article.is_approved
+        # article.approved_by = Article.objects.get(user=request.user)
+        article.save()
+        return Response({
+            "article": "Artticle {} successfully.".format("approved" if article.is_approved else "rejected")
+        }, status=status.HTTP_204_NO_CONTENT)
+
+    
+    
+
+class ToggleMultimediaApprovalView(APIView):
+    authentication_classes = [TokenAuthentication]
+     
+    def post(self, request, pk):
+        try:
+            multimedia = Multimedia.objects.get(pk=pk)
+        except Multimedia.DoesNotExist:
+            return Response({
+                "detail": "Member does not exist."
+            }, status=status.HTTP_404_NOT_FOUND)
+        multimedia.is_approved = not multimedia.is_approved
+        # multimedia.approved_by = Multimedia.objects.get(user=request.user)
+        multimedia.save()
+        return Response({
+            "message": "Multimedia {} successfully.".format("approved" if multimedia.is_approved else "rejected")
+        }, status=status.HTTP_204_NO_CONTENT)

@@ -2,7 +2,7 @@ from django.urls import path
 
 from accounts.views.login import LoginView, LogoutView
 from accounts.views.password import UpdatePassword, ResetPasswordRequestCode, ResetPasswordConfirm
-from accounts.views.users import ListUser, UserDetail, MemberDetail
+from accounts.views.users import ListUser, UserDetail, MemberDetail, ToggleMemberApprovalView
 
 app_name = "accounts"
 
@@ -14,5 +14,6 @@ urlpatterns = [
     path("logout", LogoutView.as_view(), name="s_logout"),
     path("user/update-password", UpdatePassword.as_view(), name="update-password"),
     path("user/reset-password", ResetPasswordRequestCode.as_view(), name="reset-password-request"),
-    path("user/reset/password/<str:code>/", ResetPasswordConfirm.as_view(), name="reset-password-confirm")
+    path("user/reset/password/<str:code>/", ResetPasswordConfirm.as_view(), name="reset-password-confirm"),
+    path("member/<int:pk>/toggle-approval", ToggleMemberApprovalView.as_view(), name="member-approval-toggler")
 ]

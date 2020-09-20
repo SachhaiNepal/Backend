@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "branch",
     "multimedia",
     "location",
+    "ad_file",
 
     # dependent apps
     "phonenumber_field",

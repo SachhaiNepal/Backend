@@ -31,6 +31,8 @@ urlpatterns = [
     path("api/", include("branch.urls")),
     path("api/", include("multimedia.urls")),
     path("api/", include("location.urls")),
+    path("api/", include("ad_file.urls")),
+
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
