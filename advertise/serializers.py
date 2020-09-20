@@ -1,13 +1,12 @@
 from rest_framework import serializers
 
-from ad_file.models import AdFile
+from advertise.models import Advertisement
 
 
 class AdFileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AdFile
+        model = Advertisement
         fields = "__all__"
-   
 
     # def create(self, validated_data):
     #     validated_data["created_by"] = self.context["request"].user
@@ -18,7 +17,7 @@ class AdFileSerializer(serializers.ModelSerializer):
     #     instance.updated_by = self.context["request"].user
     #     instance.save()
     #     return instance
-    
+
     # def delete(self, instance, validated_data):
     #     instance.image.delete()
     #     return instance
