@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import permissions, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
 
 from accounts.models import Member
 from accounts.serializers import UserCreateSerializer, UserUpdateSerializer, MemberUpdateSerializer, MemberSerializer
@@ -146,17 +148,23 @@ class MemberDetail(APIView):
 
 class ToggleMemberApprovalView(APIView):
     authentication_classes = [TokenAuthentication]
-     
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, pk):
         try:
             member = Member.objects.get(pk=pk)
+            member.is_approved = not member.is_approved
+            if member.is_approved:
+                member.approved_by = request.user
+                member.approved_at = timezone.now()
+            else:
+                member.approved_by = None
+                member.approved_at = None
+            member.save()
+            return Response({
+                "message": "Member {} successfully.".format("approved" if member.is_approved else "rejected")
+            }, status=status.HTTP_204_NO_CONTENT)
         except Member.DoesNotExist:
             return Response({
                 "detail": "Member does not exist."
             }, status=status.HTTP_404_NOT_FOUND)
-        member.is_approved = not member.is_approved
-        # member.approved_by = Member.objects.get(user=request.user)
-        member.save()
-        return Response({
-            "message": "Member {} successfully.".format("approved" if member.is_approved else "rejected")
-        }, status=status.HTTP_204_NO_CONTENT)

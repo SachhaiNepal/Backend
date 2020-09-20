@@ -8,9 +8,11 @@ from accounts.models import Member, ResetPasswordCode
 
 class MemberInline(admin.StackedInline):
     model = Member
+    extra = 0
+    min_num = 0
+    max_num = 1
     fk_name = "user"
     can_delete = False
-    extra = 1
     verbose_name_plural = "Add Branch Member Detail"
 
     exclude = ("approved_by", "approved_at")
@@ -30,19 +32,8 @@ class MemberInline(admin.StackedInline):
     )
 
 
-def save_form_set(self, request, form, formset, change):
-    if formset.model == Member:
-        instances = formset.save(commit=False)
-        for instance in instances:
-            if instance.is_approved:
-                instance.approved_by = request.user
-                instance.approved_at = timezone.now()
-            instance.save()
-    else:
-        formset.save()
-
-
 class UserAdmin(BaseUserAdmin):
+    save_on_top = True
     inlines = (MemberInline,)
 
     list_display = (
@@ -53,7 +44,25 @@ class UserAdmin(BaseUserAdmin):
     list_per_page = 10
 
     def save_formset(self, request, form, formset, change):
-        save_form_set(self, request, form, formset, change)
+        if formset.model == Member:
+            instances = formset.save(commit=False)
+            print(instances)
+            for instance in instances:
+                if change:
+                    this_record = Member.objects.get(pk=instance.pk)
+                    if this_record.is_approved and not instance.is_approved:
+                        instance.approved_by = None
+                        instance.approved_at = None
+                    if not this_record.is_approved and instance.is_approved:
+                        instance.approved_by = request.user
+                        instance.approved_at = timezone.now()
+                else:
+                    if instance.is_approved:
+                        instance.approved_by = request.user
+                        instance.approved_at = timezone.now()
+                instance.save()
+        else:
+            formset.save()
 
 
 class MemberAdmin(admin.ModelAdmin):
@@ -65,13 +74,12 @@ class MemberAdmin(admin.ModelAdmin):
         ("is_approved", admin.BooleanFieldListFilter),
         ("branch__is_main", admin.BooleanFieldListFilter),
         ("approved_at", admin.DateFieldListFilter),
-        ("province", admin.RelatedFieldListFilter),
-        ("country", admin.RelatedFieldListFilter)
 
     )
     search_fields = (
         "user__username", "phone", "district__name",
-        "branch__name"
+        "branch__name", "district__name", "district__province__name",
+        "district__province__country__name"
     )
 
     autocomplete_fields = ["branch", "country", "province", "district"]
@@ -105,13 +113,19 @@ class MemberAdmin(admin.ModelAdmin):
     list_per_page = 10
 
     def save_model(self, request, obj, form, change):
-        if obj.is_approved:
-            obj.approved_by = request.user
-            obj.approved_at = timezone.now()
-        obj.save()
-
-    def save_formset(self, request, form, formset, change):
-        save_form_set(self, request, form, formset, change)
+        if change:
+            this_record = Member.objects.get(pk=obj.pk)
+            if this_record.is_approved and not obj.is_approved:
+                obj.approved_by = None
+                obj.approved_at = None
+            if not this_record.is_approved and obj.is_approved:
+                obj.approved_by = request.user
+                obj.approved_at = timezone.now()
+        else:
+            if obj.is_approved:
+                obj.approved_by = request.user
+                obj.approved_at = timezone.now()
+        super(MemberAdmin, self).save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
         obj.image.delete()
