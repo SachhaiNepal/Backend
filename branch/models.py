@@ -93,7 +93,7 @@ class Branch(models.Model):
             raise ValidationError("Both municipality and vdc ward fields cannot be selected.")
         elif self.vdc and self.municipality_ward:
             raise ValidationError("Cannot assign municipality ward for a vdc.")
-        elif self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+        elif self.image and self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
 
     class Meta:
