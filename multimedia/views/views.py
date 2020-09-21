@@ -1,4 +1,5 @@
 from rest_framework import permissions, viewsets, status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
 from multimedia import models
@@ -9,7 +10,8 @@ from multimedia.serializers.model_serializer import MultimediaSerializer, Articl
 class MultimediaViewSet(viewsets.ModelViewSet):
     queryset = models.Multimedia.objects.all()
     serializer_class = MultimediaSerializer
-    # permission_classes = [permissions.IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def destroy(self, request, *args, **kwargs):
         multimedia = self.get_object()
@@ -31,7 +33,8 @@ class MultimediaViewSet(viewsets.ModelViewSet):
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = models.Article.objects.all()
     serializer_class = ArticleSerializer
-    # permission_classes = [permissions.IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def destroy(self, request, *args, **kwargs):
         article = self.get_object()
@@ -41,4 +44,3 @@ class ArticleViewSet(viewsets.ModelViewSet):
         return Response({
             "message": "Article deleted successfully."
         }, status=status.HTTP_204_NO_CONTENT)
-

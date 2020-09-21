@@ -4,25 +4,12 @@ from django.utils import timezone
 from multimedia.models import *
 
 
-def save_form_set(self, request, form, formset, change):
-    if formset.model == Multimedia:
-        instances = formset.save(commit=False)
-        for instance in instances:
-            instance.updated_by = request.user
-            if instance.is_approved:
-                instance.approved_by = request.user
-                instance.approved_at = timezone.now()
-            instance.save()
-    else:
-        formset.save()
-
-
 class MultimediaVideoAdmin(admin.StackedInline):
     model = MultimediaVideo
     fk_name = "multimedia"
-    extra = -1
-    min_num = 1
-    max_num = 10
+    extra = 0
+    min_num = 0
+    max_num = 5
     can_delete = True
     verbose_name_plural = "Add Multimedia Video"
 
@@ -30,9 +17,9 @@ class MultimediaVideoAdmin(admin.StackedInline):
 class MultimediaAudioAdmin(admin.StackedInline):
     model = MultimediaAudio
     fk_name = "multimedia"
-    extra = -1
-    min_num = 1
-    max_num = 10
+    extra = 0
+    min_num = 0
+    max_num = 5
     can_delete = True
     verbose_name_plural = "Add Multimedia Audio"
 
@@ -40,8 +27,8 @@ class MultimediaAudioAdmin(admin.StackedInline):
 class MultimediaImageAdmin(admin.StackedInline):
     model = MultimediaImage
     fk_name = "multimedia"
-    extra = -1
-    min_num = 1
+    extra = 0
+    min_num = 0
     max_num = 10
     can_delete = True
     verbose_name_plural = "Add Multimedia Image"
@@ -74,15 +61,22 @@ class MultimediaAdmin(admin.ModelAdmin):
     ordering = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
     list_per_page = 10
 
-    def save_model(self, request, obj, form, change):
-        obj.uploaded_by = request.user
-        if obj.is_approved:
-            obj.approved_by = request.user
-            obj.approved_at = timezone.now()
-        obj.save()
 
-    def save_formset(self, request, form, formset, change):
-        save_form_set(self, request, form, formset, change)
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.uploaded_by = request.user
+            if obj.is_approved:
+                obj.approved_by = request.user
+                obj.approved_at = timezone.now()
+        if change:
+            this_record = Multimedia.objects.get(pk=obj.pk)
+            if this_record.is_approved and not obj.is_approved:
+                obj.approved_by = None
+                obj.approved_at = None
+            if not this_record.is_approved and obj.is_approved:
+                obj.approved_by = request.user
+                obj.approved_at = timezone.now()
+        super().save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
         images = MultimediaImage.objects.filter(multimedia=obj)
@@ -94,7 +88,7 @@ class MultimediaAdmin(admin.ModelAdmin):
             for audio in audios:
                 audio.delete()
         videos = MultimediaVideo.objects.filter(multimedia=obj)
-        if videos.count() > 1:
+        if videos.count() > 0:
             for video in videos:
                 video.delete()
         obj.delete()
@@ -103,8 +97,8 @@ class MultimediaAdmin(admin.ModelAdmin):
 class ArticleImageAdmin(admin.StackedInline):
     model = ArticleImage
     fk_name = "article"
-    extra = -1
-    min_num = 1
+    extra = 0
+    min_num = 0
     max_num = 10
     can_delete = True
     verbose_name_plural = "Add Article Image"
@@ -141,14 +135,20 @@ class ArticleAdmin(admin.ModelAdmin):
     )
 
     def save_model(self, request, obj, form, change):
-        obj.uploaded_by = request.user
-        if obj.is_approved:
-            obj.approved_by = request.user
-            obj.approved_at = timezone.now()
-        obj.save()
-
-    def save_formset(self, request, form, formset, change):
-        save_form_set(self, request, form, formset, change)
+        if not change:
+            obj.uploaded_by = request.user
+            if obj.is_approved:
+                obj.approved_by = request.user
+                obj.approved_at = timezone.now()
+        if change:
+            this_record = Article.objects.get(pk=obj.pk)
+            if this_record.is_approved and not obj.is_approved:
+                obj.approved_by = None
+                obj.approved_at = None
+            if not this_record.is_approved and obj.is_approved:
+                obj.approved_by = request.user
+                obj.approved_at = timezone.now()
+        super().save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
         images = ArticleImage.objects.filter(article=obj)

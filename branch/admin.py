@@ -16,16 +16,11 @@ class BranchAdmin(admin.ModelAdmin):
         "vdc", "vdc_ward",
     )
     search_fields = (
-        "name", "phone", "district__name",
+        "name", "phone", "district__name", "is_main",
         "municipality__name", "municipality_ward__name",
         "vdc__name", "vdc_ward__name",
     )
-    list_filter = (
-        "is_main",
-        "country",
-        "province",
-        "created_at",
-    )
+    # list_filter = ()
     date_hierarchy = "created_at"
     fieldsets = (
         ("Branch Information", {
@@ -60,18 +55,10 @@ class BranchAdmin(admin.ModelAdmin):
     list_per_page = 10
 
     def save_model(self, request, obj, form, change):
-        obj.created_by = request.user
+        if not change:
+            obj.created_by = request.user
         obj.updated_by = request.user
-        obj.save()
-
-    def save_formset(self, request, form, formset, change):
-        if formset.model == Branch:
-            instances = formset.save(commit=False)
-            for instance in instances:
-                instance.updated_by = request.user
-                instance.save()
-        else:
-            formset.save()
+        super().save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
         obj.image.delete()

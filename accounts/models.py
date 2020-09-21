@@ -62,7 +62,7 @@ class Member(models.Model):
         return self.user.username
 
     def clean(self):
-        if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+        if self.image and self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
 
     def delete(self, using=None, keep_parents=False):

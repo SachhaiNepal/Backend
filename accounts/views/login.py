@@ -1,7 +1,9 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate, get_user_model, logout
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -50,6 +52,9 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def post(request):
         """
@@ -61,18 +66,23 @@ class LogoutView(APIView):
             username = serializer.data["username"]
             try:
                 user = get_user_model().objects.get(username=username)
+                if not user.is_authenticated:
+                    return Response({
+                        "detail": "User not logged in."
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                logout(request)
                 try:
                     token = Token.objects.get(user=user)
                     token.delete()
                     return Response({
-                        "message": "User Member '{}' Logged Out Successfully.".format(user.username)
+                        "detail": "User member '{}' logged out successfully.".format(user.username)
                     }, status=status.HTTP_204_NO_CONTENT)
                 except Token.DoesNotExist:
                     return Response({
-                        "message": "User '{}' Logged Out Successfully.".format(user.username)
+                        "detail": "User '{}' logged out successfully.".format(user.username)
                     }, status=status.HTTP_204_NO_CONTENT)
             except get_user_model().DoesNotExist:
                 return Response({
-                    "detail": "Logout Failed! User Not Found."
+                    "detail": "User not found."
                 }, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
