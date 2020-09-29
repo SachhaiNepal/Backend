@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from location.models import Country, Province, District, MunicipalityWard, Municipality, VDC, VDCWard
+from location.models import (VDC, Country, District, Municipality,
+                             MunicipalityWard, Province, VDCWard)
 
 
 class CountryAdmin(admin.ModelAdmin):

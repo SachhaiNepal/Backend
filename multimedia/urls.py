@@ -1,12 +1,12 @@
-from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
+from multimedia.views import views
+from multimedia.views.article import *
 from multimedia.views.media_detail import *
 from multimedia.views.multimedia import *
-from multimedia.views.article import *
-from multimedia.views import views
 
 router = DefaultRouter()
 router.register(r"multimedia", views.MultimediaViewSet, basename="multimedia")

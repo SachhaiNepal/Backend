@@ -1,7 +1,9 @@
 from rest_framework import serializers, status
 
-from multimedia.models import Multimedia, MultimediaVideo, MultimediaAudio, MultimediaImage
-from utils.file import check_image_size_with_ext, check_audio_size_with_ext, check_video_size_with_ext
+from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
+                               MultimediaVideo)
+from utils.file import (check_audio_size_with_ext, check_image_size_with_ext,
+                        check_video_size_with_ext)
 from utils.helper import get_keys_from_ordered_dict
 
 

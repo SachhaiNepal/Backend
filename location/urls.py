@@ -1,8 +1,8 @@
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from location.views.loader import *
 from location.views.views import *
-from django.urls import path
 
 router = DefaultRouter()
 router.register(r"country", viewset=CountryViewSet, basename="country")

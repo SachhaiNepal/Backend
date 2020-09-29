@@ -1,8 +1,10 @@
 from django.urls import path
 
 from accounts.views.login import LoginView, LogoutView
-from accounts.views.password import UpdatePassword, ResetPasswordRequestCode, ResetPasswordConfirm
-from accounts.views.users import ListUser, UserDetail, MemberDetail, ToggleMemberApprovalView
+from accounts.views.password import (ResetPasswordConfirm,
+                                     ResetPasswordRequestCode, UpdatePassword)
+from accounts.views.users import (ListUser, MemberDetail,
+                                  ToggleMemberApprovalView, UserDetail)
 
 app_name = "accounts"
 

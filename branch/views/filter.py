@@ -6,7 +6,7 @@ from accounts.models import Member
 from accounts.serializers import MemberSerializer
 from branch.models import Branch
 from branch.serializers import BranchSerializer
-from location.models import Municipality, VDC, MunicipalityWard, VDCWard
+from location.models import VDC, Municipality, MunicipalityWard, VDCWard
 
 
 class ListBranchMembers(APIView):

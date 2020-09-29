@@ -3,6 +3,7 @@ Django settings for backend project.
 """
 
 import os
+
 from dotenv import load_dotenv
 
 # load environment
