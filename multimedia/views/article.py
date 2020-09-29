@@ -27,7 +27,7 @@ class ListArticleImages(APIView):
         serializer = generate_url_for_media_resources(serializer, "image")
         return Response({
             "count": images.count(),
-            "data": serializer.data
+            "data" : serializer.data
         }, status=status.HTTP_200_OK)
 
     def put(self, request, pk):

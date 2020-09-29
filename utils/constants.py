@@ -104,4 +104,3 @@ DISTRICTS = (
     (7, "Kailali"),
     (7, "Kanchanpur")
 )
-

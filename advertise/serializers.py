@@ -22,4 +22,3 @@ class AdFileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.modified_by = self.context["request"].user
         return super().update(instance, validated_data)
-

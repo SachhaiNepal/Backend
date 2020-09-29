@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('location', '0002_auto_20200912_2141'),
         ('branch', '0006_auto_20200912_2141'),
@@ -15,11 +14,14 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='branch',
             name='municipality_ward',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchMunicipalityWardNo', to='location.municipalityward', unique=True),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                    related_name='BranchMunicipalityWardNo', to='location.municipalityward',
+                                    unique=True),
         ),
         migrations.AddField(
             model_name='branch',
             name='vdc_ward',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchVdcWardNo', to='location.vdcward', unique=True),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                    related_name='BranchVdcWardNo', to='location.vdcward', unique=True),
         ),
     ]

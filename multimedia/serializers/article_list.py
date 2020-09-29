@@ -73,7 +73,7 @@ class ArticleWithImageListCreateSerializer(serializers.Serializer):
         if not created:
             raise serializers.ValidationError({
                 "message": "ACCESS DENIED",
-                "detail": "Article already exists.",
+                "detail" : "Article already exists.",
             })
         if "image" in keys:
             images = validated_data.pop('image')

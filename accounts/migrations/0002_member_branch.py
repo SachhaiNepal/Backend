@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('branch', '0001_initial'),
         ('accounts', '0001_initial'),
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='member',
             name='branch',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='Branch', to='branch.branch'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                    related_name='Branch', to='branch.branch'),
         ),
     ]

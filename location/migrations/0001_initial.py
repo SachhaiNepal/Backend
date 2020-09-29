@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -32,7 +31,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedCountryForDistrict', to='location.country')),
+                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                              related_name='RelatedCountryForDistrict', to='location.country')),
             ],
         ),
         migrations.CreateModel(
@@ -42,7 +42,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('district', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedMunicipalityForDistrict', to='location.district')),
+                ('district', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                               related_name='RelatedMunicipalityForDistrict', to='location.district')),
             ],
             options={
                 'verbose_name_plural': 'Municipalities',
@@ -55,7 +56,9 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('district', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedVDCForDistrict', to='location.district')),
+                ('district',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedVDCForDistrict',
+                                   to='location.district')),
             ],
             options={
                 'verbose_name_plural': 'VDCs',
@@ -66,10 +69,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255, unique=True)),
-                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40), django.core.validators.MinValueValidator(1)])),
+                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40),
+                                                                        django.core.validators.MinValueValidator(1)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('vdc', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedWardNumberForVDC', to='location.vdc')),
+                ('vdc',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedWardNumberForVDC',
+                                   to='location.vdc')),
             ],
             options={
                 'verbose_name_plural': 'VDC Wards',
@@ -80,10 +86,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255, unique=True)),
-                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(7), django.core.validators.MinValueValidator(1)])),
+                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(7),
+                                                                        django.core.validators.MinValueValidator(1)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedCountryForProvince', to='location.country')),
+                ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                              related_name='RelatedCountryForProvince', to='location.country')),
             ],
         ),
         migrations.CreateModel(
@@ -91,10 +99,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255, unique=True)),
-                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40), django.core.validators.MinValueValidator(1)])),
+                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40),
+                                                                        django.core.validators.MinValueValidator(1)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('municipality', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedWardNumberForMunicipality', to='location.municipality')),
+                ('municipality', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                                   related_name='RelatedWardNumberForMunicipality',
+                                                   to='location.municipality')),
             ],
             options={
                 'verbose_name_plural': 'Municipality Wards',
@@ -103,6 +114,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='district',
             name='province',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedProvince', to='location.province'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedProvince',
+                                    to='location.province'),
         ),
     ]

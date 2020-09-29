@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('multimedia', '0005_auto_20200913_1236'),
@@ -16,6 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mediacomment',
             name='writer',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='CommentWriter', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='CommentWriter', to=settings.AUTH_USER_MODEL),
         ),
     ]

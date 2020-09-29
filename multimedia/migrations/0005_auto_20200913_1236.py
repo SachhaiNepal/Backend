@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('multimedia', '0004_mediacomment'),
     ]
@@ -18,11 +17,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mediacomment',
             name='article',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='ArticleComment', to='multimedia.article'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='ArticleComment', to='multimedia.article'),
         ),
         migrations.AlterField(
             model_name='mediacomment',
             name='multimedia',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaComment', to='multimedia.multimedia'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='MultimediaComment', to='multimedia.multimedia'),
         ),
     ]

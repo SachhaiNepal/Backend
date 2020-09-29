@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('multimedia', '0009_auto_20200913_1306'),
     ]
@@ -14,11 +13,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='articleimage',
             name='image',
-            field=models.ImageField(upload_to='articles', validators=[django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
+            field=models.ImageField(upload_to='articles', validators=[
+                django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
         ),
         migrations.AlterField(
             model_name='multimediaimage',
             name='image',
-            field=models.ImageField(upload_to='multimedia/images', validators=[django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
+            field=models.ImageField(upload_to='multimedia/images', validators=[
+                django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
         ),
     ]

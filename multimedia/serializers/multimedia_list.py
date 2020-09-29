@@ -1,4 +1,4 @@
-from rest_framework import serializers, status
+from rest_framework import serializers
 
 from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
                                MultimediaVideo)
@@ -152,7 +152,7 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
         if not created:
             raise serializers.ValidationError({
                 "message": "ACCESS DENIED",
-                "detail": "Multimedia already exists.",
+                "detail" : "Multimedia already exists.",
             })
 
         if "video" in keys:

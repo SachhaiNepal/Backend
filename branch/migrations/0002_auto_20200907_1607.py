@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('location', '0001_initial'),
         ('branch', '0001_initial'),
@@ -15,21 +14,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='branch',
             name='municipality',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchMunicipality', to='location.municipality'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                    related_name='BranchMunicipality', to='location.municipality'),
         ),
         migrations.AddField(
             model_name='branch',
             name='municipality_ward_no',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchMunicipalityWardNo', to='location.municipalitywardnumber'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                    related_name='BranchMunicipalityWardNo', to='location.municipalitywardnumber'),
         ),
         migrations.AddField(
             model_name='branch',
             name='vdc',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchVdc', to='location.vdc'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                    related_name='BranchVdc', to='location.vdc'),
         ),
         migrations.AddField(
             model_name='branch',
             name='vdc_ward_no',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchVdcWardNo', to='location.vdcwardnumber'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                    related_name='BranchVdcWardNo', to='location.vdcwardnumber'),
         ),
     ]
