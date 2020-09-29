@@ -228,7 +228,6 @@ class LoveAdmin(admin.ModelAdmin):
             "classes": ("wide", "extrapretty"),
             "fields" : ("article", "multimedia")
         }),
-
         ("Love Information", {
             "classes": ("wide", "extrapretty"),
             "fields" : ("is_loved",)
@@ -250,6 +249,84 @@ class LoveAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.lover = request.user
+        obj.save()
+
+
+@admin.register(BookmarkMedia)
+class BookmarkMediaAdmin(admin.ModelAdmin):
+    list_display = (
+        "article",
+        "multimedia",
+        "is_bookmarked",
+        "marker",
+        "timestamp"
+    )
+    ordering = (
+        "article",
+        "multimedia",
+        "is_bookmarked",
+        "marker",
+        "timestamp"
+    )
+    date_hierarchy = "timestamp"
+    list_filter = ("is_bookmarked", "timestamp")
+    autocomplete_fields = ("article", "multimedia")
+    fieldsets = (
+        ("Media Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : ("article", "multimedia")
+        }),
+        ("Bookmark Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : ("is_bookmarked",)
+        })
+    )
+    search_fields = (
+        "marker__username", "marker__email",
+        "article__title", "multimedia__title",
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.marker = request.user
+        obj.save()
+
+
+@admin.register(PinMedia)
+class PinMediaAdmin(admin.ModelAdmin):
+    list_display = (
+        "article",
+        "multimedia",
+        "is_pinned",
+        "pinner",
+        "timestamp"
+    )
+    ordering = (
+        "article",
+        "multimedia",
+        "is_pinned",
+        "pinner",
+        "timestamp"
+    )
+    date_hierarchy = "timestamp"
+    list_filter = ("is_pinned", "timestamp")
+    autocomplete_fields = ("article", "multimedia")
+    fieldsets = (
+        ("Media Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : ("article", "multimedia")
+        }),
+        ("Bookmark Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : ("is_pinned",)
+        })
+    )
+    search_fields = (
+        "pinner__username", "pinner__email",
+        "article__title", "multimedia__title",
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.pinner = request.user
         obj.save()
 
 

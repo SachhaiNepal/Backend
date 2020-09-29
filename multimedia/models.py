@@ -68,6 +68,9 @@ class MultimediaVideo(models.Model):
         self.video.delete()
         super().delete(using, keep_parents)
 
+    class Meta:
+        verbose_name = "Multimedia Videos"
+
 
 class MultimediaAudio(models.Model):
     audio = models.FileField(
@@ -93,6 +96,9 @@ class MultimediaAudio(models.Model):
         self.audio.delete()
         super().delete(using, keep_parents)
 
+    class Meta:
+        verbose_name = "Multimedia Audios"
+
 
 class MultimediaImage(models.Model):
     image = models.ImageField(
@@ -104,6 +110,9 @@ class MultimediaImage(models.Model):
         on_delete=models.CASCADE,
         related_name="MultimediaImage"
     )
+
+    class Meta:
+        verbose_name = "Multimedia Images"
 
     def __str__(self):
         return "{} {}".format(self.multimedia.title, self.image.name)
@@ -134,6 +143,9 @@ class ArticleImage(models.Model):
         related_name="ArticleImage",
         on_delete=models.CASCADE
     )
+
+    class Meta:
+        verbose_name = "Article Images"
 
     def __str__(self):
         return "{} {}".format(self.article.title, self.image.name)
@@ -193,6 +205,86 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+
+
+class BookmarkMedia(models.Model):
+    article = models.ForeignKey(
+        "Article",
+        on_delete=models.CASCADE,
+        related_name="BookmarkArticle",
+        null=True,
+        blank=True,
+    )
+    multimedia = models.ForeignKey(
+        "Multimedia",
+        on_delete=models.CASCADE,
+        related_name="BookmarkMultimedia",
+        null=True,
+        blank=True,
+    )
+    is_bookmarked = models.BooleanField(default=False)
+    marker = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="BookmarkActor", editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def clean(self):
+        """
+        Require article or multimedia
+        """
+        if not (self.article or self.multimedia):
+            raise ValidationError("One of the media must be selected.")
+        if self.article and self.multimedia:
+            raise ValidationError("Both media cannot be selected.")
+
+    class Meta:
+        verbose_name_plural = "Media Bookmarks"
+        unique_together = [["article", "marker"], ["multimedia", "marker"]]
+
+    def __str__(self):
+        return '"{}" {} "{}"'.format(
+            self.marker,
+            "bookmarked" if self.is_bookmarked else "removed bookmark from",
+            self.multimedia.title if self.multimedia else self.article.title
+        )
+
+
+class PinMedia(models.Model):
+    article = models.ForeignKey(
+        "Article",
+        on_delete=models.CASCADE,
+        related_name="PinArticle",
+        null=True,
+        blank=True,
+    )
+    multimedia = models.ForeignKey(
+        "Multimedia",
+        on_delete=models.CASCADE,
+        related_name="PinMultimedia",
+        null=True,
+        blank=True,
+    )
+    is_pinned = models.BooleanField(default=False)
+    pinner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="BookmarkPinner", editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def clean(self):
+        """
+        Require article or multimedia
+        """
+        if not (self.article or self.multimedia):
+            raise ValidationError("One of the media must be selected.")
+        if self.article and self.multimedia:
+            raise ValidationError("Both media cannot be selected.")
+
+    class Meta:
+        verbose_name_plural = "Pinned Medias"
+        unique_together = [["article", "pinner"], ["multimedia", "pinner"]]
+
+    def __str__(self):
+        return '"{}" {} "{}"'.format(
+            self.pinner,
+            "pinned" if self.is_pinned else "removed pin from",
+            self.multimedia.title if self.multimedia else self.article.title
+        )
 
 
 class Love(models.Model):

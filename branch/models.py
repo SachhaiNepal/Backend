@@ -9,6 +9,7 @@ from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 
 class Branch(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    slogan = models.TextField(blank=True, null=True, max_length=1024)
     image = models.ImageField(
         upload_to="branch",
         null=True,

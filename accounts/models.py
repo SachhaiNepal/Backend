@@ -13,6 +13,7 @@ from branch.models import Branch
 
 class Member(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    bio = models.TextField(null=True, blank=True, max_length=1024)
     image = models.ImageField(
         upload_to="member",
         null=True,
