@@ -4,8 +4,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-from backend.settings import MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE, MAX_UPLOAD_AUDIO_SIZE, \
-    ALLOWED_VIDEO_EXTENSIONS, ALLOWED_AUDIO_EXTENSIONS, ALLOWED_IMAGES_EXTENSIONS
+from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
+                              ALLOWED_IMAGES_EXTENSIONS,
+                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
+                              MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
 
 
 class Media(models.Model):

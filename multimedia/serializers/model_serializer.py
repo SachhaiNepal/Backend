@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from multimedia.models import MultimediaVideo, MultimediaAudio, MultimediaImage, Multimedia, ArticleImage, Article
+from multimedia.models import (Article, ArticleImage, Multimedia,
+                               MultimediaAudio, MultimediaImage,
+                               MultimediaVideo)
 
 
 class MultimediaVideoSerializer(serializers.ModelSerializer):

@@ -1,10 +1,11 @@
-from rest_framework import permissions, viewsets, status
+from rest_framework import permissions, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
 from multimedia import models
-from multimedia.models import MultimediaImage, MultimediaVideo, MultimediaAudio
-from multimedia.serializers.model_serializer import MultimediaSerializer, ArticleSerializer
+from multimedia.models import MultimediaAudio, MultimediaImage, MultimediaVideo
+from multimedia.serializers.model_serializer import (ArticleSerializer,
+                                                     MultimediaSerializer)
 
 
 class MultimediaViewSet(viewsets.ModelViewSet):

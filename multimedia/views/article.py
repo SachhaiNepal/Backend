@@ -2,14 +2,14 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from multimedia.serializers.article_list import *
-from utils.helper import generate_url_for_media_resources
 from multimedia.serializers.model_serializer import ArticleImageSerializer
+from utils.helper import generate_url_for_media_resources
 
 
 class ListArticleImages(APIView):

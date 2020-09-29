@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse
 
-from location.models import Country, Province, District
-from utils.constants import COUNTRIES, PROVINCES, DISTRICTS
+from location.models import Country, District, Province
+from utils.constants import COUNTRIES, DISTRICTS, PROVINCES
 
 
 @permission_required('accounts.countries.add_country', raise_exception=True)

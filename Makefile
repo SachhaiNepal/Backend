@@ -47,3 +47,6 @@ collect-static:
 
 get-token:
 	$(PYTHON) manage.py  drf_create_token $(USER)
+
+isort:
+	isort .

@@ -1,6 +1,6 @@
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, viewsets
 
-from location import serializers, models
+from location import models, serializers
 
 
 class CountryViewSet(viewsets.ModelViewSet):
