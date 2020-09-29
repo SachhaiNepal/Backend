@@ -1,9 +1,7 @@
 from django.contrib.auth import authenticate, get_user_model, logout
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.authentication import (BasicAuthentication,
-                                           SessionAuthentication,
-                                           TokenAuthentication)
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -41,7 +39,7 @@ class LoginView(APIView):
                     token, created = Token.objects.get_or_create(user=user)
                     return Response({
                         "token": token.key,
-                        "data": serializer.data
+                        "data" : serializer.data
                     }, status=status.HTTP_202_ACCEPTED)
                 except Member.DoesNotExist:
                     return Response({

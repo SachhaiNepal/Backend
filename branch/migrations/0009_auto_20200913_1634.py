@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('location', '0003_remove_district_country'),
         ('branch', '0008_auto_20200912_2143'),
@@ -16,16 +15,19 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='branch',
             name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='branch', validators=[django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
+            field=models.ImageField(blank=True, null=True, upload_to='branch', validators=[
+                django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
         ),
         migrations.AlterField(
             model_name='branch',
             name='municipality_ward',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchMunicipalityWardNumber', to='location.municipalityward'),
+            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                       related_name='BranchMunicipalityWardNumber', to='location.municipalityward'),
         ),
         migrations.AlterField(
             model_name='branch',
             name='vdc_ward',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchVdcWardNumber', to='location.vdcward'),
+            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING,
+                                       related_name='BranchVdcWardNumber', to='location.vdcward'),
         ),
     ]

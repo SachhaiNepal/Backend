@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -24,8 +23,11 @@ class Migration(migrations.Migration):
                 ('approved_at', models.DateTimeField(blank=True, default=None, editable=False, null=True)),
                 ('uploaded_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('approved_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='MultimediaApprover', to=settings.AUTH_USER_MODEL)),
-                ('uploaded_by', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.DO_NOTHING, related_name='MediaUploader', to=settings.AUTH_USER_MODEL)),
+                ('approved_by', models.ForeignKey(blank=True, editable=False, null=True,
+                                                  on_delete=django.db.models.deletion.DO_NOTHING,
+                                                  related_name='MultimediaApprover', to=settings.AUTH_USER_MODEL)),
+                ('uploaded_by', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.DO_NOTHING,
+                                                  related_name='MediaUploader', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'unique_together': {('title', 'uploaded_by')},
@@ -34,7 +36,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Article',
             fields=[
-                ('media_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='multimedia.media')),
+                ('media_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='multimedia.media')),
                 ('is_approved', models.BooleanField(default=False)),
             ],
             bases=('multimedia.media',),
@@ -42,7 +46,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Multimedia',
             fields=[
-                ('media_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='multimedia.media')),
+                ('media_ptr',
+                 models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True,
+                                      primary_key=True, serialize=False, to='multimedia.media')),
                 ('is_approved', models.BooleanField(default=False)),
             ],
             bases=('multimedia.media',),
@@ -51,16 +57,24 @@ class Migration(migrations.Migration):
             name='MultimediaVideo',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('video', models.FileField(unique=True, upload_to='multimedia/videos', validators=[django.core.validators.FileExtensionValidator(['webm', 'mp4', 'mpeg', 'flv'])], verbose_name='Multimedia Video File')),
-                ('multimedia', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaVideo', to='multimedia.multimedia')),
+                ('video', models.FileField(unique=True, upload_to='multimedia/videos', validators=[
+                    django.core.validators.FileExtensionValidator(['webm', 'mp4', 'mpeg', 'flv'])],
+                                           verbose_name='Multimedia Video File')),
+                ('multimedia',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaVideo',
+                                   to='multimedia.multimedia')),
             ],
         ),
         migrations.CreateModel(
             name='MultimediaAudio',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('audio', models.FileField(unique=True, upload_to='multimedia/audios', validators=[django.core.validators.FileExtensionValidator(['mp3', 'wav'])], verbose_name='Multimedia Audio File')),
-                ('multimedia', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaAudio', to='multimedia.multimedia')),
+                ('audio', models.FileField(unique=True, upload_to='multimedia/audios',
+                                           validators=[django.core.validators.FileExtensionValidator(['mp3', 'wav'])],
+                                           verbose_name='Multimedia Audio File')),
+                ('multimedia',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaAudio',
+                                   to='multimedia.multimedia')),
             ],
         ),
         migrations.CreateModel(
@@ -68,7 +82,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('image', models.ImageField(upload_to='articles')),
-                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ArticleImage', to='multimedia.article')),
+                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ArticleImage',
+                                              to='multimedia.article')),
             ],
         ),
     ]

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('multimedia', '0001_initial'),
     ]
@@ -16,7 +15,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('image', models.ImageField(upload_to='multimedia/images')),
-                ('multimedia', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaImage', to='multimedia.multimedia')),
+                ('multimedia',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaImage',
+                                   to='multimedia.multimedia')),
             ],
         ),
     ]

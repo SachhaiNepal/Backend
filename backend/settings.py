@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
 # Rest framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
+    'DEFAULT_RENDERER_CLASSES'      : [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
@@ -57,11 +57,11 @@ REST_FRAMEWORK = {
     ],
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
+    'DEFAULT_PERMISSION_CLASSES'    : [
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE'                     : 10
 }
 
 MIDDLEWARE = [
@@ -78,10 +78,10 @@ ROOT_URLCONF = "backend.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["accounts"],
+        "BACKEND" : "django.template.backends.django.DjangoTemplates",
+        "DIRS"    : ["accounts"],
         "APP_DIRS": True,
-        "OPTIONS": {
+        "OPTIONS" : {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -101,7 +101,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME"  : os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
@@ -158,16 +158,16 @@ MEDIA_URL = "/media/"
 # Cache configuration
 CACHES = {
     "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
+        "BACKEND" : "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
+        "OPTIONS" : {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     'select2': {
-        "BACKEND": "django_redis.cache.RedisCache",
+        "BACKEND" : "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS": {
+        "OPTIONS" : {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }

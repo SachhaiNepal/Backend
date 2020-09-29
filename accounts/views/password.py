@@ -69,9 +69,9 @@ class ResetPasswordRequestCode(APIView):
                 code = code_object.code
                 mail_subject = "Reset user password"
                 message = render_to_string("reset_email.html", {
-                    "user": user.username,
+                    "user"  : user.username,
                     "domain": current_site.domain,
-                    "code": code,
+                    "code"  : code,
                 })
                 send_mail(
                     mail_subject,

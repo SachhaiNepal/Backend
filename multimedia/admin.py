@@ -43,11 +43,11 @@ class MultimediaAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Media Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("title", "description")
+            "fields" : ("title", "description")
         }),
         ("Business Information", {
             "classes": ("wide",),
-            "fields": ("is_approved",)
+            "fields" : ("is_approved",)
         })
     )
 
@@ -125,12 +125,12 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Article Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("title", "description")
+            "fields" : ("title", "description")
         }),
 
         ("Business Details", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("is_approved",)
+            "fields" : ("is_approved",)
         })
     )
 
@@ -178,12 +178,12 @@ class CommentAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Media Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("article", "multimedia")
+            "fields" : ("article", "multimedia")
         }),
 
         ("Comment Details", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("comment", "reply_to")
+            "fields" : ("comment", "reply_to")
         })
     )
     search_fields = (
@@ -226,12 +226,12 @@ class LoveAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Media Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("article", "multimedia")
+            "fields" : ("article", "multimedia")
         }),
 
         ("Love Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("is_loved",)
+            "fields" : ("is_loved",)
         })
     )
     search_fields = (

@@ -3,9 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import permissions, status
-from rest_framework.authentication import (BasicAuthentication,
-                                           SessionAuthentication,
-                                           TokenAuthentication)
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -76,7 +74,7 @@ class UserDetail(APIView):
             serializer.save()
             return Response({
                 "message": "User updated successfully.",
-                "data": serializer.data
+                "data"   : serializer.data
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -90,7 +88,7 @@ class UserDetail(APIView):
             serializer.save()
             return Response({
                 "message": "User patched successfully.",
-                "data": serializer.data
+                "data"   : serializer.data
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -130,7 +128,7 @@ class MemberDetail(APIView):
             serializer.save()
             return Response({
                 "message": "Member updated successfully.",
-                "data": serializer.data
+                "data"   : serializer.data
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -144,7 +142,7 @@ class MemberDetail(APIView):
             serializer.save()
             return Response({
                 "message": "Member patched successfully.",
-                "data": serializer.data,
+                "data"   : serializer.data,
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

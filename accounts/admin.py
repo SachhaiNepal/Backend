@@ -23,11 +23,11 @@ class MemberInline(admin.StackedInline):
     fieldsets = (
         ("Personal Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("image", "temporary_address", "permanent_address", "phone", "country", "province", "district",)
+            "fields" : ("image", "temporary_address", "permanent_address", "phone", "country", "province", "district",)
         }),
         ("Business Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": ("branch", "is_approved")
+            "fields" : ("branch", "is_approved")
         }),
     )
 
@@ -87,19 +87,19 @@ class MemberAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Personal Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "user", "phone", "image"
             )
         }),
         ("Location Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "temporary_address", "permanent_address", "country", "province", "district"
             )
         }),
         ("Business Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "branch", "is_approved"
             )
         })

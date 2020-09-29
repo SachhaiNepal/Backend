@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('multimedia', '0006_auto_20200913_1242'),
@@ -20,14 +19,18 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('article', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='ArticleComment', to='multimedia.article')),
-                ('multimedia', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaComment', to='multimedia.multimedia')),
-                ('reply_to', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='CommentReplies', to='multimedia.comment')),
-                ('writer', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='CommentWriter', to=settings.AUTH_USER_MODEL)),
+                ('article', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                              related_name='ArticleComment', to='multimedia.article')),
+                ('multimedia', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                                 related_name='MultimediaComment', to='multimedia.multimedia')),
+                ('reply_to', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                               related_name='CommentReplies', to='multimedia.comment')),
+                ('writer', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE,
+                                             related_name='CommentWriter', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name_plural': 'Comments',
-                'unique_together': {('article', 'writer'), ('multimedia', 'writer')},
+                'unique_together'    : {('article', 'writer'), ('multimedia', 'writer')},
             },
         ),
         migrations.CreateModel(
@@ -37,9 +40,12 @@ class Migration(migrations.Migration):
                 ('isLoved', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('article', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='LoveArticle', to='multimedia.article')),
-                ('lover', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='MediaLover', to=settings.AUTH_USER_MODEL)),
-                ('multimedia', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='LoveMultimedia', to='multimedia.multimedia')),
+                ('article', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                              related_name='LoveArticle', to='multimedia.article')),
+                ('lover', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE,
+                                            related_name='MediaLover', to=settings.AUTH_USER_MODEL)),
+                ('multimedia', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                                 related_name='LoveMultimedia', to='multimedia.multimedia')),
             ],
             options={
                 'unique_together': {('article', 'lover'), ('multimedia', 'lover')},

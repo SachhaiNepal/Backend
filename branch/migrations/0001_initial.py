@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -26,11 +25,20 @@ class Migration(migrations.Migration):
                 ('is_main', models.BooleanField(default=False, verbose_name='Is Main Branch')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('country', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchCountry', to='location.country')),
-                ('created_by', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.DO_NOTHING, related_name='Creator', to=settings.AUTH_USER_MODEL)),
-                ('district', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchDistrict', to='location.district')),
-                ('province', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchProvince', to='location.province')),
-                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='Modifier', to=settings.AUTH_USER_MODEL)),
+                ('country',
+                 models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchCountry',
+                                   to='location.country')),
+                ('created_by', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.DO_NOTHING,
+                                                 related_name='Creator', to=settings.AUTH_USER_MODEL)),
+                ('district',
+                 models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchDistrict',
+                                   to='location.district')),
+                ('province',
+                 models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='BranchProvince',
+                                   to='location.province')),
+                ('updated_by', models.ForeignKey(blank=True, editable=False, null=True,
+                                                 on_delete=django.db.models.deletion.DO_NOTHING,
+                                                 related_name='Modifier', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

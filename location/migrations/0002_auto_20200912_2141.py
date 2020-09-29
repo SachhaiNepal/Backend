@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('branch', '0006_auto_20200912_2141'),
         ('location', '0001_initial'),
@@ -18,10 +17,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255, unique=True)),
-                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40), django.core.validators.MinValueValidator(1)])),
+                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40),
+                                                                        django.core.validators.MinValueValidator(1)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('municipality', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedWardForMunicipality', to='location.municipality')),
+                ('municipality', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                                   related_name='RelatedWardForMunicipality',
+                                                   to='location.municipality')),
             ],
             options={
                 'verbose_name_plural': 'Municipality Wards',
@@ -32,10 +34,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255, unique=True)),
-                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40), django.core.validators.MinValueValidator(1)])),
+                ('number', models.IntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(40),
+                                                                        django.core.validators.MinValueValidator(1)])),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('vdc', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedWardForVDC', to='location.vdc')),
+                ('vdc', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='RelatedWardForVDC',
+                                          to='location.vdc')),
             ],
             options={
                 'verbose_name_plural': 'VDC Wards',

@@ -18,7 +18,7 @@ class ListBranchMembers(APIView):
             serializer = MemberSerializer(members, many=True)
             return Response({
                 "count": members.count(),
-                "data": serializer.data
+                "data" : serializer.data
             }, status=status.HTTP_200_OK)
         except Branch.DoesNotExist:
             return Response({
@@ -35,7 +35,7 @@ class ListMunicipalityBranches(APIView):
             serializer = BranchSerializer(branches, many=True)
             return Response({
                 "count": branches.count(),
-                "data": serializer.data
+                "data" : serializer.data
             }, status=status.HTTP_200_OK)
         except Municipality.DoesNotExist:
             return Response({
@@ -52,7 +52,7 @@ class ListVdcBranches(APIView):
             serializer = BranchSerializer(branches, many=True)
             return Response({
                 "count": branches.count(),
-                "data": serializer.data
+                "data" : serializer.data
             }, status=status.HTTP_200_OK)
         except VDC.DoesNotExist:
             return Response({

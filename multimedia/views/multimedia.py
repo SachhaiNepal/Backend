@@ -22,6 +22,7 @@ from utils.helper import generate_url_for_media_resources
 class ListMultimediaAudios(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get_object(pk):
         return get_object_or_404(Multimedia, pk=pk)
@@ -36,7 +37,7 @@ class ListMultimediaAudios(APIView):
         serializer = generate_url_for_media_resources(serializer, "audio")
         return Response({
             "count": multimedia_audios.count(),
-            "data": serializer.data
+            "data" : serializer.data
         }, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -73,7 +74,7 @@ class ListMultimediaImages(APIView):
         serializer = generate_url_for_media_resources(serializer, "image")
         return Response({
             "count": multimedia_images.count(),
-            "data": serializer.data
+            "data" : serializer.data
         }, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -110,7 +111,7 @@ class ListMultimediaVideos(APIView):
         serializer = generate_url_for_media_resources(serializer, "video")
         return Response({
             "count": multimedia_videos.count(),
-            "data": serializer.data
+            "data" : serializer.data
         }, status=status.HTTP_200_OK)
 
     def put(self, request, pk):

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('accounts', '0011_auto_20200919_1300'),
     ]
@@ -14,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='member', validators=[django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
+            field=models.ImageField(blank=True, null=True, upload_to='member', validators=[
+                django.core.validators.FileExtensionValidator(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])]),
         ),
     ]

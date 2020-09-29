@@ -29,7 +29,7 @@ class AdvertisementAdmin(admin.ModelAdmin):
     fieldsets = (
         (" Advertisement Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "owner",
                 "heading",
                 "description",

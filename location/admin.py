@@ -12,7 +12,7 @@ class CountryAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Country Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "name",
             )
         }),
@@ -28,7 +28,7 @@ class ProvinceAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Province Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "name", "number", "country"
             )
         }),
@@ -46,7 +46,7 @@ class DistrictAdmin(admin.ModelAdmin):
     fieldsets = (
         ("District Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "name", "province"
             )
         }),
@@ -66,7 +66,7 @@ class MunicipalityAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Municipality Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "name", "district"
             )
         }),
@@ -87,7 +87,7 @@ class MunicipalityWardAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Municipality Ward Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "name", "municipality", "number"
             )
         }),
@@ -107,7 +107,7 @@ class VDCAdmin(admin.ModelAdmin):
     fieldsets = (
         ("VDC Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "name", "district"
             )
         }),
@@ -127,7 +127,7 @@ class VDCWardAdmin(admin.ModelAdmin):
     fieldsets = (
         ("VDC Ward Information", {
             "classes": ("wide", "extrapretty"),
-            "fields": (
+            "fields" : (
                 "name", "vdc", "number"
             )
         }),

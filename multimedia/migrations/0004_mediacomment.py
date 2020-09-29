@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('accounts', '0008_auto_20200907_1634'),
         ('multimedia', '0003_auto_20200912_2218'),
@@ -19,9 +18,14 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('article', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='ArticleComment', to='multimedia.article')),
-                ('multimedia', models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='MultimediaComment', to='multimedia.multimedia')),
-                ('writer', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='CommentWriter', to='accounts.member')),
+                ('article',
+                 models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='ArticleComment', to='multimedia.article')),
+                ('multimedia',
+                 models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='MultimediaComment', to='multimedia.multimedia')),
+                ('writer', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE,
+                                             related_name='CommentWriter', to='accounts.member')),
             ],
             options={
                 'unique_together': {('multimedia', 'writer'), ('article', 'writer')},
