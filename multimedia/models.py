@@ -68,6 +68,9 @@ class MultimediaVideo(models.Model):
         self.video.delete()
         super().delete(using, keep_parents)
 
+    class Meta:
+        verbose_name = "Multimedia Videos"
+
 
 class MultimediaAudio(models.Model):
     audio = models.FileField(
@@ -93,6 +96,9 @@ class MultimediaAudio(models.Model):
         self.audio.delete()
         super().delete(using, keep_parents)
 
+    class Meta:
+        verbose_name = "Multimedia Audios"
+
 
 class MultimediaImage(models.Model):
     image = models.ImageField(
@@ -104,6 +110,9 @@ class MultimediaImage(models.Model):
         on_delete=models.CASCADE,
         related_name="MultimediaImage"
     )
+
+    class Meta:
+        verbose_name = "Multimedia Images"
 
     def __str__(self):
         return "{} {}".format(self.multimedia.title, self.image.name)
@@ -134,6 +143,9 @@ class ArticleImage(models.Model):
         related_name="ArticleImage",
         on_delete=models.CASCADE
     )
+
+    class Meta:
+        verbose_name = "Article Images"
 
     def __str__(self):
         return "{} {}".format(self.article.title, self.image.name)
@@ -224,6 +236,7 @@ class BookmarkMedia(models.Model):
             raise ValidationError("Both media cannot be selected.")
 
     class Meta:
+        verbose_name_plural = "Media Bookmarks"
         unique_together = [["article", "marker"], ["multimedia", "marker"]]
 
     def __str__(self):
@@ -263,6 +276,7 @@ class PinMedia(models.Model):
             raise ValidationError("Both media cannot be selected.")
 
     class Meta:
+        verbose_name_plural = "Pinned Medias"
         unique_together = [["article", "pinner"], ["multimedia", "pinner"]]
 
     def __str__(self):
