@@ -61,7 +61,6 @@ class MultimediaAdmin(admin.ModelAdmin):
     ordering = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
     list_per_page = 10
 
-
     def save_model(self, request, obj, form, change):
         if not change:
             obj.uploaded_by = request.user
