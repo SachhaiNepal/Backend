@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from event.filter import *
-from event.views import EventViewSet, EventPhotoViewSet, EventVideoUrlsViewSet
+from event.views import *
 
 router = DefaultRouter()
 router.register(r'event', EventViewSet, basename='event')
@@ -12,5 +12,6 @@ urlpatterns = router.urls
 
 urlpatterns += [
     path("event/<int:pk>/photo", ListEventPhotos.as_view()),
-    path("event/<int:pk>/video-urls", ListEventVideoUrls.as_view())
+    path("event/<int:pk>/video-urls", ListEventVideoUrls.as_view()),
+    path("event/<int:pk>/toggle-approval", ToggleEventApprovalView.as_view()),
 ]
