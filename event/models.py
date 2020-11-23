@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.db import models
-from phonenumber_field.formfields import PhoneNumberField
+from rest_framework.validators import UniqueValidator
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 
@@ -134,11 +134,54 @@ class Event(models.Model):
         elif self.banner and self.banner.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
 
-    class Meta:
-        def __str__(self):
-            return self.title
+    def __str__(self):
+        return self.title
+
+    # delete banner if replaced while update
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk:
+            this_record = Event.objects.get(pk=self.pk)
+            if this_record.banner != self.banner:
+                this_record.banner.delete(save=False)
+        super(Event, self).save(force_insert, force_update, using, update_fields)
 
     def delete(self, using=None, keep_parents=False):
         if self.banner:
             self.banner.delete()
         super().delete(using, keep_parents)
+
+
+class EventPhoto(models.Model):
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="BaseEvent",
+    )
+    image = models.ImageField(
+        upload_to="event/photos",
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+    )
+
+    def __str__(self):
+        return "{} - {}".format(self.event.title, self.image.name)
+
+    def clean(self):
+        if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+            raise ValidationError("Image size exceeds max image upload size.")
+
+    def delete(self, using=None, keep_parents=False):
+        self.image.delete()
+        super().delete(using, keep_parents)
+
+
+class EventVideoUrls(models.Model):
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="RootEvent"
+    )
+    video_urls = ArrayField(models.URLField(unique=True), size=10)
+
+    def __str__(self):
+        return self.video_urls

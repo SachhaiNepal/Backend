@@ -13,5 +13,4 @@ urlpatterns += [
     path("vdc/<int:pk>/branch", ListVdcBranches.as_view(), name="municipality-branches"),
     path("municipality-ward/<int:pk>/branch", ListMunicipalityWardBranch.as_view(), name="municipality-branches"),
     path("vdc-ward/<int:pk>/branch", ListVdcWardBranch.as_view(), name="municipality-branches"),
-
 ]
