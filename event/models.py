@@ -24,6 +24,12 @@ EVENT_TYPE = (
 class Event(models.Model):
     title = models.CharField(max_length=64, unique=True)
     description = models.TextField(blank=True, null=True, max_length=512)
+    venue = models.CharField(max_length=64)
+    start_date = models.DateField()
+    duration = models.IntegerField()
+    time_of_day = models.CharField(max_length=10, choices=TIME_OF_DAY)
+    type = models.CharField(max_length=15, choices=EVENT_TYPE)
+    is_approved = models.BooleanField(default=False)
     banner = models.ImageField(
         upload_to="events",
         null=True,
@@ -52,7 +58,7 @@ class Event(models.Model):
         null=True,
         blank=True
     )
-    municipality_ward = models.OneToOneField(
+    municipality_ward = models.ForeignKey(
         "location.MunicipalityWard",
         on_delete=models.DO_NOTHING,
         related_name="EventMunicipalityWardNumber",
@@ -66,14 +72,14 @@ class Event(models.Model):
         null=True,
         blank=True
     )
-    vdc_ward = models.OneToOneField(
+    vdc_ward = models.ForeignKey(
         "location.VDCWard",
         on_delete=models.DO_NOTHING,
         related_name="EventVdcWardNumber",
         null=True,
         blank=True,
     )
-    contact = ArrayField(models.IntegerField(unique=True), size=3)
+    contacts = ArrayField(models.IntegerField(unique=True), size=3)
     organizer = models.ForeignKey(
         "branch.Branch",
         on_delete=models.CASCADE,
@@ -81,12 +87,6 @@ class Event(models.Model):
         null=False,
         blank=False,
     )
-    is_approved = models.BooleanField(default=False)
-    venue = models.CharField(max_length=64)
-    start_date = models.DateTimeField()
-    duration = models.IntegerField()
-    time_of_day = models.CharField(max_length=10, choices=TIME_OF_DAY)
-    type = models.CharField(max_length=15, choices=EVENT_TYPE)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     approved_at = models.DateTimeField(null=True, blank=True, editable=False)

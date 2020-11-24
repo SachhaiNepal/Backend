@@ -27,7 +27,19 @@ class MunicipalityViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAdminUser]
 
 
+class MunicipalityWardViewSet(viewsets.ModelViewSet):
+    queryset = models.MunicipalityWard.objects.all()
+    serializer_class = serializers.MunicipalityWardSerializer
+    # permission_classes = [permissions.IsAdminUser]
+
+
 class VDCViewSet(viewsets.ModelViewSet):
     queryset = models.VDC.objects.all()
     serializer_class = serializers.VDCSerializer
+    # permission_classes = [permissions.IsAdminUser]
+
+
+class VDCWardViewSet(viewsets.ModelViewSet):
+    queryset = models.VDCWard.objects.all()
+    serializer_class = serializers.VDCWardSerializer
     # permission_classes = [permissions.IsAdminUser]

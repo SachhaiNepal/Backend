@@ -29,7 +29,7 @@ class EventAdmin(admin.ModelAdmin):
             "fields" : ("title", "description",
                         "banner",
                         "organizer",
-                        "contact",
+                        "contacts",
                         "venue",
                         "start_date",
                         "duration",
