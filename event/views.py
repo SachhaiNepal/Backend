@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from event.models import Event, EventPhoto, EventVideoUrls
-from event.serializers import EventSerializer, EventPhotoSerializer, EventVideoUrlsSerializer
+from event.serializers import *
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -16,6 +16,11 @@ class EventViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser,)
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (permissions.IsAuthenticated,)
+
+    def get_serializer_class(self):
+        if self.action == 'create' or self.action == 'update':
+            return EventPostSerializer
+        return super(EventViewSet, self).get_serializer_class()
 
     def destroy(self, request, *args, **kwargs):
         event = self.get_object()

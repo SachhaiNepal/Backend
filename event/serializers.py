@@ -1,15 +1,14 @@
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from backend.settings import MAX_UPLOAD_IMAGE_SIZE
 from event.models import Event, EventPhoto, EventVideoUrls
 from utils.file import check_size
 
 
-class EventSerializer(serializers.ModelSerializer):
-    contact = serializers.ListField(child=serializers.IntegerField())
+class EventPostSerializer(serializers.ModelSerializer):
+    contacts = serializers.ListField(child=serializers.IntegerField())
 
     class Meta:
         model = Event
@@ -24,6 +23,7 @@ class EventSerializer(serializers.ModelSerializer):
         """
         Check if both vdc and municipality are selected
         """
+        print(data)
         try:
             k = data['municipality']
             try:
@@ -43,18 +43,26 @@ class EventSerializer(serializers.ModelSerializer):
         if validated_data["is_approved"]:
             # validated_data["approved_by"] = self.context["request"].user
             validated_data["approved_at"] = timezone.now()
-        print(validated_data)
         return Event.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.updated_by = self.context["request"].user
-        if not instance.is_approved and validated_data.is_approved:
-            validated_data["approved_by"] = self.context["request"].user
+        # instance.updated_by = self.context["request"].user
+        if not instance.is_approved and validated_data["is_approved"]:
+            # validated_data["approved_by"] = self.context["request"].user
             validated_data["approved_at"] = timezone.now()
-        if not validated_data.is_approved and instance.is_approved:
+        if not validated_data["is_approved"] and instance.is_approved:
             validated_data["approved_by"] = None
             validated_data["approved_at"] = None
         return super().update(instance, validated_data)
+
+
+class EventSerializer(serializers.ModelSerializer):
+    contacts = serializers.ListField(child=serializers.IntegerField())
+
+    class Meta:
+        model = Event
+        fields = "__all__"
+        depth = 1
 
 
 class EventPhotoSerializer(serializers.ModelSerializer):
