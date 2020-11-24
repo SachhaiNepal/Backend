@@ -64,48 +64,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = "__all__"
         depth = 1
 
-    def validate_banner(self, obj):
-        check_size(obj, MAX_UPLOAD_IMAGE_SIZE)
-        return obj
-
-    # object level validation
-    def validate(self, data):
-        """
-        Check if both vdc and municipality are selected
-        """
-        print(data)
-        try:
-            k = data['municipality']
-            try:
-                k = data['vdc']
-                raise serializers.ValidationError("Both municipality and vdc cannot be assigned.")
-            except KeyError:
-                return data
-        except KeyError:
-            try:
-                k = data['vdc']
-                return data
-            except KeyError:
-                raise serializers.ValidationError("One of the municipality or vdc must be assigned.")
-
-    def create(self, validated_data):
-        # validated_data["created_by"] = self.context["request"].user
-        if validated_data["is_approved"]:
-            # validated_data["approved_by"] = self.context["request"].user
-            validated_data["approved_at"] = timezone.now()
-        print(validated_data)
-        return Event.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.updated_by = self.context["request"].user
-        if not instance.is_approved and validated_data.is_approved:
-            validated_data["approved_by"] = self.context["request"].user
-            validated_data["approved_at"] = timezone.now()
-        if not validated_data.is_approved and instance.is_approved:
-            validated_data["approved_by"] = None
-            validated_data["approved_at"] = None
-        return super().update(instance, validated_data)
-
 
 class EventPhotoSerializer(serializers.ModelSerializer):
     class Meta:
