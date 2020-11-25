@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
@@ -88,13 +89,19 @@ class AddMultimediaVideoListSerializer(serializers.Serializer):
 
 
 class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
-    video = serializers.ListField(
-        child=serializers.FileField(
-            allow_empty_file=False,
-            use_url=False
-        ),
-        required=False
-    )
+    # video = serializers.ListField(
+    #     child=serializers.FileField(
+    #         allow_empty_file=False,
+    #         use_url=False
+    #     ),
+    #     required=False
+    # )
+    video_urls = serializers.ListField(child=serializers.URLField(validators=[
+        RegexValidator(
+            regex=r"https:\/\/www\.youtube\.com\/*",
+            message="URL must be sourced from youtube."
+        )
+    ]), required=True)
     audio = serializers.ListField(
         child=serializers.FileField(
             allow_empty_file=False,
@@ -109,8 +116,8 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
         ),
         required=False
     )
-    title = serializers.CharField(required=True, max_length=512)
-    description = serializers.CharField(required=True, max_length=1024)
+    title = serializers.CharField(required=True, max_length=255)
+    description = serializers.CharField(required=True, max_length=512)
 
     def validate_title(self, title):
         try:
@@ -130,9 +137,9 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
         check_image_size_with_ext(obj)
         return obj
 
-    def validate_video(self, obj):
-        check_video_size_with_ext(obj)
-        return obj
+    # def validate_video(self, obj):
+    #     check_video_size_with_ext(obj)
+    #     return obj
 
     def validate_audio(self, obj):
         check_audio_size_with_ext(obj)
@@ -143,11 +150,13 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
         user = self.context["request"].user
         title = validated_data.pop("title")
         description = validated_data.pop("description")
+        video_urls = validated_data.pop("video_urls")
 
         multimedia, created = Multimedia.objects.get_or_create(
             title=title,
             description=description,
-            uploaded_by=user
+            uploaded_by=user,
+            video_urls=video_urls
         )
         if not created:
             raise serializers.ValidationError({
@@ -155,28 +164,29 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
                 "detail" : "Multimedia already exists.",
             })
 
-        if "video" in keys:
-            videos = validated_data.pop('video')
-            for video in videos:
-                MultimediaVideo.objects.create(
-                    video=video,
-                    multimedia=multimedia,
-                    **validated_data
-                )
+        # if "video" in keys:
+        #     videos = validated_data.pop('video')
+        #     for video in videos:
+        #         MultimediaVideo.objects.create(
+        #             video=video,
+        #             multimedia=multimedia,
+        #             **validated_data
+        #         )
+        print(keys)
         if "audio" in keys:
             audios = validated_data.pop('audio')
+            print(audios)
             for audio in audios:
                 MultimediaAudio.objects.create(
                     audio=audio,
                     multimedia=multimedia,
-                    **validated_data
                 )
+
         if "image" in keys:
             images = validated_data.pop('image')
             for image in images:
                 MultimediaImage.objects.create(
                     image=image,
                     multimedia=multimedia,
-                    **validated_data
                 )
         return MultimediaWithMultimediaListCreateSerializer(**validated_data)
