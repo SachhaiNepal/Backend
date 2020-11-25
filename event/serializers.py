@@ -23,17 +23,16 @@ class EventPostSerializer(serializers.ModelSerializer):
         """
         Check if both vdc and municipality are selected
         """
-        print(data)
         try:
-            k = data['municipality']
+            check = data['municipality']
             try:
-                k = data['vdc']
+                check = data['vdc']
                 raise serializers.ValidationError("Both municipality and vdc cannot be assigned.")
             except KeyError:
                 return data
         except KeyError:
             try:
-                k = data['vdc']
+                check = data['vdc']
                 return data
             except KeyError:
                 raise serializers.ValidationError("One of the municipality or vdc must be assigned.")

@@ -5,7 +5,7 @@ from branch.models import Branch
 
 class BranchAdmin(admin.ModelAdmin):
     list_display = (
-        "name", "phone", "is_main",
+        "name", "contacts", "is_main",
         "country", "province", "district",
         "municipality", "municipality_ward", "vdc", "vdc_ward",
         "created_by", "created_at", "updated_by", "updated_at"
@@ -16,7 +16,7 @@ class BranchAdmin(admin.ModelAdmin):
         "vdc", "vdc_ward",
     )
     search_fields = (
-        "name", "phone", "district__name", "is_main",
+        "name", "contacts", "district__name", "is_main",
         "municipality__name", "municipality_ward__name",
         "vdc__name", "vdc_ward__name",
     )
@@ -27,7 +27,7 @@ class BranchAdmin(admin.ModelAdmin):
             "classes": ("wide", "extrapretty"),
             "fields" : (
                 "name",
-                "phone",
+                "contacts",
                 "image",
                 "is_main"
             )
@@ -46,7 +46,7 @@ class BranchAdmin(admin.ModelAdmin):
         })
     )
     ordering = (
-        "name", "phone", "is_main",
+        "name", "contacts", "is_main",
         "country", "province", "district",
         "municipality", "municipality_ward", "vdc", "vdc_ward",
         "created_by", "created_at", "updated_by", "updated_at"

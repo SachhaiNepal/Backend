@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -59,8 +60,18 @@ class Branch(models.Model):
         null=True,
         blank=True,
     )
-    phone = PhoneNumberField(unique=True, max_length=15)
+    contacts = ArrayField(models.PositiveBigIntegerField(unique=True), size=3)
     is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
+    is_approved = models.BooleanField(default=False)
+    approved_by = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET_NULL,
+        related_name="BranchApprover",
+        null=True,
+        blank=True,
+        editable=False
+    )
+    approved_at = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
@@ -102,6 +113,15 @@ class Branch(models.Model):
 
     def __str__(self):
         return self.name
+
+    # delete image if replaced while update
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk:
+            this_record = Branch.objects.get(pk=self.pk)
+            if this_record.image != self.image:
+                this_record.image.delete(save=False)
+        super(Branch, self).save(force_insert, force_update, using, update_fields)
 
     def delete(self, using=None, keep_parents=False):
         if self.image:
