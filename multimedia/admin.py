@@ -36,14 +36,14 @@ class MultimediaImageAdmin(admin.StackedInline):
 
 @admin.register(Multimedia)
 class MultimediaAdmin(admin.ModelAdmin):
-    inlines = [MultimediaVideoAdmin, MultimediaAudioAdmin, MultimediaImageAdmin]
+    inlines = [MultimediaAudioAdmin, MultimediaImageAdmin]
 
     list_display = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
 
     fieldsets = (
         ("Media Information", {
             "classes": ("wide", "extrapretty"),
-            "fields" : ("title", "description")
+            "fields" : ("title", "description", "video_urls")
         }),
         ("Business Information", {
             "classes": ("wide",),
@@ -86,10 +86,10 @@ class MultimediaAdmin(admin.ModelAdmin):
         if audios.count() > 0:
             for audio in audios:
                 audio.delete()
-        videos = MultimediaVideo.objects.filter(multimedia=obj)
-        if videos.count() > 0:
-            for video in videos:
-                video.delete()
+        # videos = MultimediaVideo.objects.filter(multimedia=obj)
+        # if videos.count() > 0:
+        #     for video in videos:
+        #         video.delete()
         obj.delete()
 
 
