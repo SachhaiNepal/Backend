@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member
-from accounts.serializers import (MemberSerializer, UserCreateSerializer, UserUpdateSerializer, MemberPOSTSerializer)
+from accounts.serializers import (MemberPOSTSerializer, MemberSerializer,
+                                  UserCreateSerializer, UserUpdateSerializer)
 
 
 class ListFollower(APIView):

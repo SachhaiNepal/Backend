@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from event.models import EventPhoto, Event, EventVideoUrls
+from event.models import Event, EventPhoto, EventVideoUrls
 from event.serializers import EventPhotoSerializer, EventVideoUrlsSerializer
 from utils.helper import generate_url_for_media_resources
 

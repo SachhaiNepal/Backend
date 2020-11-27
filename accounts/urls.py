@@ -3,8 +3,8 @@ from django.urls import path
 from accounts.views.login import LoginView, LogoutView
 from accounts.views.password import (ResetPasswordConfirm,
                                      ResetPasswordRequestCode, UpdatePassword)
-from accounts.views.users import (ListFollower, MemberDetail,
-                                  ToggleMemberApprovalView, UserDetail, ListMember)
+from accounts.views.users import (ListFollower, ListMember, MemberDetail,
+                                  ToggleMemberApprovalView, UserDetail)
 
 app_name = "accounts"
 
