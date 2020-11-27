@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from accounts.models import Member
+from accounts.models import Member, Profile
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -48,6 +48,21 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ("username", "first_name", "last_name", "email")
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        depth = 1
+
+
+class ProfilePOSTSerializer(serializers.ModelSerializer):
+    contacts = serializers.ListField(child=serializers.IntegerField(), required=False)
+
+    class Meta:
+        model = Profile
+        fields = "__all__"
 
 
 class LoginSerializer(serializers.Serializer):

@@ -38,7 +38,7 @@ class Profile(models.Model):
         related_name="MemberDistrict",
         blank=True, null=True
     )
-    last_updated = models.DateTimeField(auto_now=True, editable=True)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
         return self.user.username + ' Profile'
