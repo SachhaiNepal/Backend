@@ -5,6 +5,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,6 +18,9 @@ from accounts.serializers import (ResetNewPasswordSerializer,
 
 
 class UpdatePassword(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def post(request):
         """
@@ -22,7 +28,7 @@ class UpdatePassword(APIView):
         """
         serializer = UpdatePasswordSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
-            username = serializer.validated_data["username"]
+            username = request.user.username
             password = serializer.validated_data["password"]
             new_password = serializer.validated_data["new_password"]
             try:
@@ -31,7 +37,9 @@ class UpdatePassword(APIView):
                 if user:
                     user.set_password(new_password)
                     user.save()
-                    # TODO: refresh token
+                    # Remove existing token after changing password
+                    token = Token.objects.get(user=user)
+                    token.delete()
                     update_session_auth_hash(request, request.user)
                     return Response({"message": "Update password success."}, status=status.HTTP_204_NO_CONTENT)
                 else:
