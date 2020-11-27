@@ -34,17 +34,11 @@ class LoginView(APIView):
                     user.is_active = True
                     user.save()
                 serializer = UserCreateSerializer(user)
-                try:
-                    Member.objects.get(user=user)
-                    token, created = Token.objects.get_or_create(user=user)
-                    return Response({
-                        "token": token.key,
-                        "data" : serializer.data
-                    }, status=status.HTTP_202_ACCEPTED)
-                except Member.DoesNotExist:
-                    return Response({
-                        "data": serializer.data
-                    }, status=status.HTTP_202_ACCEPTED)
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({
+                    "token": token.key,
+                    "data" : serializer.data
+                }, status=status.HTTP_202_ACCEPTED)
             return Response(
                 {"detail": "Login Failed! Provide Valid Authentication Credentials."},
                 status=status.HTTP_400_BAD_REQUEST

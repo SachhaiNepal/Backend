@@ -102,7 +102,6 @@ class ResetPasswordConfirm(APIView):
             try:
                 reset_password_code = ResetPasswordCode.objects.get(code=code)
                 user = reset_password_code.user
-                print(user)
                 user.set_password(password)
                 user.save()
                 reset_password_code.delete()

@@ -1,5 +1,3 @@
-from django.contrib.auth import get_user_model
-from django.utils import timezone
 from rest_framework import serializers
 
 from branch.models import Branch
@@ -39,19 +37,9 @@ class BranchPostSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("One of the municipality or vdc must be assigned.")
 
     def create(self, validated_data):
-        # TODO: add context request user
-        validated_data["created_by"] = get_user_model().objects.get(id=1)
-        if validated_data["is_approved"]:
-            # validated_data["approved_by"] = self.context["request"].user
-            validated_data["approved_at"] = timezone.now()
+        validated_data["created_by"] = self.context["request"].user
         return Branch.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        # instance.updated_by = self.context["request"].user
-        if not instance.is_approved and validated_data["is_approved"]:
-            # validated_data["approved_by"] = self.context["request"].user
-            validated_data["approved_at"] = timezone.now()
-        if not validated_data["is_approved"] and instance.is_approved:
-            validated_data["approved_by"] = None
-            validated_data["approved_at"] = None
+        instance.updated_by = self.context["request"].user
         return super().update(instance, validated_data)

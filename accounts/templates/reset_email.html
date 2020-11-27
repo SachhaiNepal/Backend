@@ -16,53 +16,40 @@
 </head>
 <body>
 <div class="email-container">
-	<div class="space"></div>
 	{% autoescape off %}
-	<p id="greet">
-		Hi,&nbsp;
-		<span class="font-weight-bold">{{ user }}</span>&nbsp;!</p>
-	<p id="question">
-		Are you sure you want to&nbsp;
-		<span class="font-weight-bold" id="magic" onclick="toggleForm()">
-                    reset your password
-                </span>
-		?
-	</p>
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-6">
-			<form
-				action="{% if request.is_secure %}https{% else %}http{% endif %}://localhost:8000{% url 'accounts:reset-password-confirm' code=code %}"
-				id="reset-form"
-				method="post"
-			>
-				<input
-					class="form-control form-control-lg pass"
-					id="new-password"
-					placeholder="New Password"
-					required
-					type="password"
-				/>
-				<br>
-				<input
-					class="form-control form-control-lg pass"
-					id="confirm-new-password"
-					onblur="checkError()"
-					placeholder="Confirm New Password"
-					required
-					type="password"
-				/>
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-6">
-						<ul>
-							<li id="password-miss-match">New password do not match with confirm password.</li>
-							<li id="password-strength">Password must be more than 8 characters containing small, capital letters with
-								numbers.
-							</li>
-						</ul>
-					</div>
-				</div>
-				<button class="btn btn-primary text-capitalize btn-lg" type="submit">reset password</button>
-			</form>
+	<!--Navbar-->
+	<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+		<!-- Navbar brand -->
+		<a class="navbar-brand" href="#"><i class="fas fa-dove mr-2"></i>Ishworiya Bhajan Mandal Sachchai Kendra Nepal</a>
+	</nav>
+	<div class="space"></div>
+	<div class="card card-cascade wider">
+		<!-- Card image -->
+		<div class="view view-cascade gradient-card-header peach-gradient">
+
+			<!-- Title -->
+			<h2 class="card-header-title white-text mb-3"><i class="fas fa-user-lock mr-2"></i>Reset Password</h2>
+			<hr/>
+			<!-- Text -->
+			<p id="greet" class="white-text">
+				Hi,&nbsp;
+				<span class="font-weight-bold white-text">{{ user }}</span>&nbsp;!</p>
+			<p id="question" class="white-text">
+				Are you sure you want to&nbsp;
+				<span class="font-weight-bold">reset your password</span>
+				?
+			</p>
+
+			<div class="space"></div>
+			<hr/>
+
+			<!-- Text -->
+			<p class="card-text">
+				<a class="action-text"
+					href="{% if request.is_secure %}https{% else %}http{% endif %}://localhost:8000{% url 'accounts:reset-password-confirm' code=code %}">
+					<h5 class="waves-effect waves-light">Click here to proceed.<i class="fas fa-lock-open ml-2"></i></h5>
+				</a>
+			</p>
 		</div>
 	</div>
 	<hr>
@@ -75,9 +62,14 @@
 </div>
 
 <style>
-    .email-container {
-        padding-left: 30px;
+    .card {
+        max-width: 600px;
+				margin: 0 auto;
     }
+
+		.view {
+				padding: 10px;
+		}
 
     .space {
         padding-top: 15px;
@@ -112,34 +104,9 @@
         padding-top: -1px;
     }
 
-    #reset-form {
-        display: none;
-    }
-
-    button[type="submit"] {
-        font-size: 20px;
-    }
-
-    #password-miss-match {
-        display: none;
-    }
-
-    #password-strength {
-        display: none;
-    }
-
-    .error-messages {
-        margin-top: 20px;
-        margin-bottom: 10px;
-        background-color: #eaa4a4;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border-radius: 5px;
-    }
-
-    li {
-        color: darkred;
-    }
+		.action-text {
+				color: black !important;
+		}
 </style>
 <script
 	crossorigin="anonymous"
@@ -147,37 +114,7 @@
 	src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
 <script type="text/javascript">
-    function toggleForm() {
-        $("#reset-form").toggle()
-    }
-
-    function checkError() {
-        const password = $("#new-password").val()
-        const newPassword = $("#confirm-new-password").val()
-        const errorList = $("ul")
-        const passwordMissMatchError = $("#password-miss-match")
-        const passwordStrengthError = $("#password-strength")
-        const submitButton = $("button[type='submit']")
-        if (password !== newPassword) {
-            errorList.addClass("error-messages")
-            passwordMissMatchError.show()
-            passwordStrengthError.hide()
-            submitButton.attr("disabled", "disabled")
-        } else {
-            errorList.removeClass("error-messages")
-            submitButton.removeAttr("disabled")
-            passwordMissMatchError.hide()
-            if (newPassword.length > 8 && /\d/.test(newPassword) && /[A-Z]/.test(newPassword)) {
-                errorList.removeClass("error-messages")
-                passwordStrengthError.hide()
-                submitButton.removeAttr("disabled")
-            } else {
-                errorList.addClass("error-messages")
-                passwordStrengthError.show()
-                submitButton.attr("disabled", "disabled")
-            }
-        }
-    }
+	//
 </script>
 </body>
 </html>

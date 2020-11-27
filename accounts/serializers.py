@@ -12,21 +12,21 @@ class MemberSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class MemberCreateSerializer(serializers.ModelSerializer):
+class MemberPOSTSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        exclude = ["user"]
+        fields = "__all__"
 
+    def create(self, validated_data):
+        validated_data["created_by"] = self.context["request"].user
+        return Member.objects.create(**validated_data)
 
-class MemberUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Member
-        exclude = ["user", "is_approved"]
+    def update(self, instance, validated_data):
+        instance.updated_by = self.context["request"].user
+        return super().update(instance, validated_data)
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    member = MemberCreateSerializer(many=False, read_only=False, required=False)
-
     class Meta:
         model = get_user_model()
         fields = "__all__"
@@ -39,12 +39,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return password
 
     def create(self, validated_data):
-        member_data = validated_data.pop("member")
         user = get_user_model().objects.create(**validated_data)
-        member = Member.objects.create(user=user, **member_data)
-        if member.is_approved:
-            member.approved_by = self.context["request"].user
-            member.save()
         return user
 
 

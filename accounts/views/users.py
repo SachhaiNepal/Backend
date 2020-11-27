@@ -9,15 +9,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member
-from accounts.serializers import (MemberSerializer, MemberUpdateSerializer,
-                                  UserCreateSerializer, UserUpdateSerializer)
+from accounts.serializers import (MemberSerializer, UserCreateSerializer, UserUpdateSerializer, MemberPOSTSerializer)
 
 
-class ListUser(APIView):
+class ListFollower(APIView):
     """
     View to list all users in the system.
     * Only staff users are able to access this view.
     """
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAdminUser]
 
     @staticmethod
@@ -48,6 +48,7 @@ class UserDetail(APIView):
     User Detailed Operations
     * Only staff users are able to access this view.
     """
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAdminUser]
 
     @staticmethod
@@ -100,6 +101,34 @@ class UserDetail(APIView):
         }, status=status.HTTP_204_NO_CONTENT)
 
 
+class ListMember(APIView):
+    """
+    List Members
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser]
+
+    @staticmethod
+    def get(request):
+        """
+        Return a list of all users.
+        """
+        members = Member.objects.all()
+        return Response(MemberSerializer(members, many=True).data, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def post(request):
+        """
+        Creates a brand member(x)
+        """
+        serializer = MemberPOSTSerializer(data=request.data, context={"request": request})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class MemberDetail(APIView):
     """
     Member Detailed Operations
@@ -123,7 +152,7 @@ class MemberDetail(APIView):
         Updates provided member by pk
         """
         member = self.get_object(pk)
-        serializer = MemberUpdateSerializer(member, data=request.data)
+        serializer = MemberPOSTSerializer(member, data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response({
@@ -137,7 +166,7 @@ class MemberDetail(APIView):
         Modifies provided member by pk
         """
         member = self.get_object(pk)
-        serializer = MemberUpdateSerializer(member, data=request.data, partial=True)
+        serializer = MemberPOSTSerializer(member, data=request.data, partial=True, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response({

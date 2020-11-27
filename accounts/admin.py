@@ -3,7 +3,59 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from accounts.models import Member, ResetPasswordCode
+from accounts.models import *
+
+
+class ProfileAdmin(admin.ModelAdmin):
+    save_on_top = True
+    list_display = (
+        "user", "bio", "contacts", "birth_date",
+        "current_city", "home_town",
+        "country", "province", "district",
+        "last_updated",
+    )
+    ordering = (
+        "user", "bio", "contacts", "birth_date",
+        "current_city", "home_town",
+        "country", "province", "district",
+        "last_updated",
+    )
+    list_filter = (
+        ("country", admin.RelatedFieldListFilter),
+        ("province", admin.RelatedFieldListFilter),
+        ("district", admin.RelatedFieldListFilter),
+        ("last_updated", admin.DateFieldListFilter),
+    )
+    search_fields = (
+        "user__username", "contacts", "district__name",
+        "district__name", "district__province__name",
+        "district__province__country__name"
+    )
+    autocomplete_fields = ["country", "province", "district"]
+
+    fieldsets = (
+        ("Personal Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : (
+                "user", "contacts", "bio", "birth_date"
+            )
+        }),
+        ("Location Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : (
+                "current_city", "home_town", "country", "province", "district"
+            )
+        })
+    )
+    list_per_page = 10
+
+
+class ProfileImageAdmin(admin.ModelAdmin):
+    list_display = ("profile", "image")
+
+    def delete_model(self, request, obj):
+        obj.image.delete()
+        obj.delete()
 
 
 class MemberInline(admin.StackedInline):
@@ -17,14 +69,10 @@ class MemberInline(admin.StackedInline):
 
     exclude = ("approved_by", "approved_at")
 
-    autocomplete_fields = ["branch", "country", "province", "district"]
+    autocomplete_fields = ["branch"]
 
     # update form for admin site
     fieldsets = (
-        ("Personal Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("image", "temporary_address", "permanent_address", "phone", "country", "province", "district",)
-        }),
         ("Business Information", {
             "classes": ("wide", "extrapretty"),
             "fields" : ("branch", "is_approved")
@@ -67,7 +115,7 @@ class UserAdmin(BaseUserAdmin):
 
 class MemberAdmin(admin.ModelAdmin):
     list_display = (
-        "user", "country", "province", "district", "phone",
+        "user",
         "branch", "is_approved", "approved_by", "approved_at",
     )
     list_filter = (
@@ -77,24 +125,18 @@ class MemberAdmin(admin.ModelAdmin):
 
     )
     search_fields = (
-        "user__username", "phone", "district__name",
+        "user__username", "district__name",
         "branch__name", "district__name", "district__province__name",
         "district__province__country__name"
     )
 
-    autocomplete_fields = ["branch", "country", "province", "district"]
+    autocomplete_fields = ["branch"]
 
     fieldsets = (
         ("Personal Information", {
             "classes": ("wide", "extrapretty"),
             "fields" : (
-                "user", "phone", "image"
-            )
-        }),
-        ("Location Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "temporary_address", "permanent_address", "country", "province", "district"
+                "user",
             )
         }),
         ("Business Information", {
@@ -106,7 +148,7 @@ class MemberAdmin(admin.ModelAdmin):
     )
 
     ordering = (
-        "user", "country", "province", "district", "phone",
+        "user",
         "branch", "is_approved", "approved_by", "approved_at",
     )
 
@@ -127,10 +169,6 @@ class MemberAdmin(admin.ModelAdmin):
                 obj.approved_at = timezone.now()
         super(MemberAdmin, self).save_model(request, obj, form, change)
 
-    def delete_model(self, request, obj):
-        obj.image.delete()
-        obj.delete()
-
 
 class ResetPasswordCodeAdmin(admin.ModelAdmin):
     list_display = ("user", "code")
@@ -139,5 +177,7 @@ class ResetPasswordCodeAdmin(admin.ModelAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Profile, ProfileAdmin)
+admin.site.register(ProfileImage, ProfileImageAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(ResetPasswordCode, ResetPasswordCodeAdmin)
