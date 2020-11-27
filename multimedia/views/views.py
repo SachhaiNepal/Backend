@@ -9,10 +9,10 @@ from multimedia.serializers.model_serializer import (ArticleSerializer,
 
 
 class MultimediaViewSet(viewsets.ModelViewSet):
-    queryset = models.Multimedia.objects.all()
+    queryset = models.Multimedia.objects.order_by("-uploaded_at")
     serializer_class = MultimediaSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def destroy(self, request, *args, **kwargs):
         multimedia = self.get_object()
@@ -32,10 +32,10 @@ class MultimediaViewSet(viewsets.ModelViewSet):
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = models.Article.objects.all()
+    queryset = models.Article.objects.order_by("-uploaded_at")
     serializer_class = ArticleSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def destroy(self, request, *args, **kwargs):
         article = self.get_object()

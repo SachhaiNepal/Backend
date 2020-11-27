@@ -66,6 +66,16 @@ class CreateArticleWithImageList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class GetArticlesWithImageList(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def get(request):
+        articles = Article.objects.all()
+
+
+
 class ToggleArticleApprovalView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
