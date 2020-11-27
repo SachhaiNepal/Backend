@@ -30,7 +30,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = "__all__"
-        read_only_fields = ["is_active", "date_joined"]
+        # do not create admins from this api
+        read_only_fields = ["is_active", "date_joined", "is_superuser", "is_staff"]
         extra_kwargs = {'password': {'write_only': True}}
 
     @staticmethod
@@ -46,7 +47,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("username", "first_name", "last_name", "email", "is_staff")
+        fields = ("username", "first_name", "last_name", "email")
 
 
 class LoginSerializer(serializers.Serializer):
@@ -59,7 +60,6 @@ class LogoutSerializer(serializers.Serializer):
 
 
 class UpdatePasswordSerializer(serializers.Serializer):
-    username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)

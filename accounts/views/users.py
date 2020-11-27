@@ -76,7 +76,7 @@ class UserDetail(APIView):
             serializer.save()
             return Response({
                 "message": "User updated successfully.",
-                "data"   : serializer.data
+                "data"   : UserCreateSerializer(self.get_object(pk)).data
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -90,7 +90,7 @@ class UserDetail(APIView):
             serializer.save()
             return Response({
                 "message": "User patched successfully.",
-                "data"   : serializer.data
+                "data"   : UserCreateSerializer(self.get_object(pk)).data
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -135,6 +135,7 @@ class MemberDetail(APIView):
     Member Detailed Operations
     * Only staff users are able to access this view.
     """
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAdminUser]
 
     @staticmethod
