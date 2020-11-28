@@ -1,5 +1,4 @@
 from django.core.validators import RegexValidator
-from django.utils import timezone
 from rest_framework import serializers
 
 from backend.settings import MAX_UPLOAD_IMAGE_SIZE

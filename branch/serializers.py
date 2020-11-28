@@ -10,7 +10,7 @@ class BranchSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class BranchPostSerializer(serializers.ModelSerializer):
+class BranchPOSTSerializer(serializers.ModelSerializer):
     contacts = serializers.ListField(child=serializers.IntegerField())
 
     class Meta:

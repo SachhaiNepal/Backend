@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -12,8 +13,8 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     parser_classes = (MultiPartParser, FormParser,)
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.action == 'create' or self.action == 'update':
@@ -32,6 +33,8 @@ class EventViewSet(viewsets.ModelViewSet):
 class EventPhotoViewSet(viewsets.ModelViewSet):
     queryset = EventPhoto.objects.all()
     serializer_class = EventPhotoSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
     parser_classes = (MultiPartParser, FormParser,)
 
     def destroy(self, request, *args, **kwargs):
@@ -46,6 +49,8 @@ class EventPhotoViewSet(viewsets.ModelViewSet):
 class EventVideoUrlsViewSet(viewsets.ModelViewSet):
     queryset = EventVideoUrls.objects.all()
     serializer_class = EventVideoUrlsSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
 
 class ToggleEventApprovalView(APIView):

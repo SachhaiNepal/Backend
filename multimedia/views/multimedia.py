@@ -20,8 +20,8 @@ from utils.helper import generate_url_for_media_resources
 
 
 class ListMultimediaAudios(APIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):
@@ -57,8 +57,8 @@ class ListMultimediaAudios(APIView):
 
 
 class ListMultimediaImages(APIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):

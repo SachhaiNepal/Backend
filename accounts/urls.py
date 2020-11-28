@@ -3,9 +3,12 @@ from django.urls import path
 from accounts.views.login import LoginView, LogoutView
 from accounts.views.password import (ResetPasswordConfirm,
                                      ResetPasswordRequestCode, UpdatePassword)
-from accounts.views.users import (ListFollower, ListMember, MemberDetail,
-                                  ToggleMemberApprovalView, UserDetail, ListProfile, ProfileDetail, ListMemberRole,
-                                  CreateMemberRole, MemberRoleDetail)
+from accounts.views.users import (AddMemberBranch, AddMemberRole, ListFollower,
+                                  ListMember, ListMemberBranch, ListMemberRole,
+                                  ListProfile, MemberBranchDetail,
+                                  MemberDetail, MemberRoleDetail,
+                                  ProfileDetail, ToggleMemberApprovalView,
+                                  UserDetail)
 
 app_name = "accounts"
 
@@ -15,8 +18,11 @@ urlpatterns = [
     path("user/<int:pk>", UserDetail.as_view(), name="user-detail"),
     path("member/<int:pk>", MemberDetail.as_view(), name="member-detail"),
     path("member/<int:pk>/role", ListMemberRole.as_view(), name="member-list-role"),
-    path("role", CreateMemberRole.as_view(), name="member-create-role"),
+    path("role", AddMemberRole.as_view(), name="member-create-role"),
     path("role/<int:pk>", MemberRoleDetail.as_view(), name="member-detail-role"),
+    path("member/<int:pk>/branch", ListMemberBranch.as_view(), name="member-list-role"),
+    path("member-branch", AddMemberBranch.as_view(), name="member-create-role"),
+    path("member-branch/<int:pk>", MemberBranchDetail.as_view(), name="member-detail-role"),
     path("user/<int:pk>/profile", ListProfile.as_view(), name="profile-list"),
     path("profile/<int:pk>", ProfileDetail.as_view(), name="profile-detail"),
     path("login", LoginView.as_view(), name="s_login"),

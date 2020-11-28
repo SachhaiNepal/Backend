@@ -34,10 +34,10 @@ class MultimediaSerializer(serializers.ModelSerializer):
         branch = Multimedia.objects.create(**validated_data)
         return branch
 
-    def update(self, instance, validated_data):
-        instance.updated_by = self.context["request"].user
-        instance.save()
-        return instance
+    # def update(self, instance, validated_data):
+    #     instance.updated_by = self.context["request"].user
+    #     instance.save()
+    #     return instance
 
 
 class ArticleImageSerializer(serializers.ModelSerializer):
@@ -63,7 +63,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         branch = Article.objects.create(**validated_data)
         return branch
 
-    def update(self, instance, validated_data):
-        instance.updated_by = self.context["request"].user
-        instance.save()
-        return instance
+    # def update(self, instance, validated_data):
+    #     instance.updated_by = self.context["request"].user
+    #     instance.save()
+    #     return instance

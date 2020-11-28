@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -10,11 +11,12 @@ from branch.serializers import *
 class BranchViewSet(viewsets.ModelViewSet):
     queryset = Branch.objects.all()
     serializer_class = BranchSerializer
-    # permission_classes = [permissions.IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'create' or self.action == 'update':
-            return BranchPostSerializer
+            return BranchPOSTSerializer
         return super(BranchViewSet, self).get_serializer_class()
 
     def destroy(self, request, *args, **kwargs):

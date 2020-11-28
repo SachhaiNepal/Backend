@@ -172,7 +172,6 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
         #             multimedia=multimedia,
         #             **validated_data
         #         )
-        print(keys)
         if "audio" in keys:
             audios = validated_data.pop('audio')
             print(audios)

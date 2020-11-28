@@ -13,6 +13,9 @@ from utils.helper import generate_url_for_media_resources
 
 
 class ListArticleImages(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get_object(pk):
         return get_object_or_404(Article, pk=pk)
@@ -64,16 +67,6 @@ class CreateArticleWithImageList(APIView):
                 "message": "Article Created Successfully."
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class GetArticlesWithImageList(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get(request):
-        articles = Article.objects.all()
-
 
 
 class ToggleArticleApprovalView(APIView):

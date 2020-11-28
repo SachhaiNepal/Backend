@@ -11,7 +11,6 @@ from django.dispatch import receiver
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 from branch.models import Branch
 
-
 MEMBER_ROLE_CHOICES = (
     ("Branch Chief", "Branch Chief"),
     ("Branch Vice Chief", "Branch Vice Chief"),
@@ -161,7 +160,7 @@ class MemberRole(models.Model):
         selected_branch = self.branch
         # check if selected branch id is valid
         try:
-            check = Branch.objects.get(pk=selected_branch)
+            Branch.objects.get(pk=selected_branch)
         except Branch.DoesNotExist:
             raise ValidationError("Selected branch does not exist.")
         # check if member is registered in selected branch
@@ -190,12 +189,10 @@ class MemberBranch(models.Model):
     def __str__(self):
         return self.member.user.username
 
-    # check if selected branch is valid
     def clean(self):
-        selected_member = self.member
         selected_branch = self.branch
         # check if selected branch id is valid
         try:
-            check = Branch.objects.get(pk=selected_branch)
+            Branch.objects.get(pk=selected_branch)
         except Branch.DoesNotExist:
             raise ValidationError("Selected branch does not exist.")

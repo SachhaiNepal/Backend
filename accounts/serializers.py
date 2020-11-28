@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from accounts.models import Member, Profile, MemberBranch, MemberRole
+from accounts.models import Member, MemberBranch, MemberRole, Profile
 from branch.models import Branch
 
 
@@ -116,6 +116,13 @@ class MemberBranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberBranch
         fields = "__all__"
+
+    def validate_branch(self, value):
+        try:
+            Branch.objects.get(pk=value)
+            return value
+        except Branch.DoesNotExist:
+            raise serializers.ValidationError("Branch does not exist.")
 
 
 class MemberRoleSerializer(serializers.ModelSerializer):
