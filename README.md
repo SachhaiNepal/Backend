@@ -40,3 +40,11 @@ make collect-static
 make serve
 ```
 
+## Migration Order
+- Locations
+- Accounts
+- Member
+- Branch
+- Multimedia
+- Event
+- Advertisement

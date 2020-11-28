@@ -58,31 +58,41 @@ class ProfileImageAdmin(admin.ModelAdmin):
         obj.delete()
 
 
-class MemberInline(admin.StackedInline):
-    model = Member
-    extra = 0
-    min_num = 0
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    extra = 1
+    min_num = 1
     max_num = 1
     fk_name = "user"
     can_delete = False
-    verbose_name_plural = "Add Branch Member Detail"
-
-    exclude = ("approved_by", "approved_at")
-
-    autocomplete_fields = ["branch"]
+    verbose_name_plural = "Add Profile Detail"
 
     # update form for admin site
     fieldsets = (
-        ("Business Information", {
+        ("Personal Information", {
             "classes": ("wide", "extrapretty"),
-            "fields" : ("branch", "is_approved")
+            "fields" : (
+                "bio",
+                "contacts",
+                "birth_date",
+            )
         }),
+        ("Location Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields": (
+                "current_city",
+                "home_town",
+                "country",
+                "province",
+                "district",
+                )
+        })
     )
 
 
 class UserAdmin(BaseUserAdmin):
     save_on_top = True
-    inlines = (MemberInline,)
+    inlines = (ProfileInline,)
 
     list_display = (
         "username", "email", "first_name", "last_name",
@@ -94,7 +104,6 @@ class UserAdmin(BaseUserAdmin):
     def save_formset(self, request, form, formset, change):
         if formset.model == Member:
             instances = formset.save(commit=False)
-            print(instances)
             for instance in instances:
                 if change:
                     this_record = Member.objects.get(pk=instance.pk)
@@ -113,43 +122,122 @@ class UserAdmin(BaseUserAdmin):
             formset.save()
 
 
+class MemberBranchInline(admin.StackedInline):
+    model = MemberBranch
+    extra = 0
+    min_num = 1
+    max_num = 1
+    fk_name = "member"
+    can_delete = True
+    verbose_name_plural = "Add Branch Detail"
+
+    # update form for admin site
+    fieldsets = (
+        ("Business Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : (
+                "branch_id",
+                "date_of_membership"
+            )
+        }),
+    )
+
+
+class MemberRoleInline(admin.StackedInline):
+    model = MemberRole
+    extra = 0
+    min_num = 1
+    max_num = 10
+    fk_name = "member"
+    can_delete = True
+    verbose_name_plural = "Add Branch Role Detail"
+
+    # update form for admin site
+    fieldsets = (
+        ("Business Information", {
+            "classes": ("wide", "extrapretty"),
+            "fields" : (
+                "role_name",
+                "from_date",
+                "to_date",
+                "branch_id",
+            )
+        }),
+    )
+
+
+class MemberRoleAdmin(admin.ModelAdmin):
+    list_display = (
+        "member",
+        "branch_id",
+        "role_name",
+        "from_date",
+        "to_date",
+    )
+    ordering = (
+        "member",
+        "branch_id",
+        "role_name",
+        "from_date",
+        "to_date",
+    )
+
+    list_per_page = 10
+    list_filter = ("member", "from_date", "to_date")
+    search_fields = ("member__user__username", "member__user__email")
+
+    autocomplete_fields = ["member"]
+
+
+class MemberBranchAdmin(admin.ModelAdmin):
+    list_display = (
+        "member",
+        "branch_id",
+        "date_of_membership"
+    )
+    ordering = (
+        "member",
+        "branch_id",
+        "date_of_membership"
+    )
+
+    list_per_page = 10
+    list_filter = ("member", "date_of_membership")
+    search_fields = ("member__user__username", "member__user__email")
+
+    autocomplete_fields = ["member"]
+
+
 class MemberAdmin(admin.ModelAdmin):
+    save_on_top = True
+    inlines = (MemberBranchInline,)
+
     list_display = (
         "user",
-        "branch", "is_approved", "approved_by", "approved_at",
+        "is_approved", "approved_by", "approved_at",
     )
     list_filter = (
         ("is_approved", admin.BooleanFieldListFilter),
-        ("branch__is_main", admin.BooleanFieldListFilter),
         ("approved_at", admin.DateFieldListFilter),
 
     )
     search_fields = (
         "user__username", "district__name",
-        "branch__name", "district__name", "district__province__name",
+        "district__name", "district__province__name",
         "district__province__country__name"
     )
-
-    autocomplete_fields = ["branch"]
-
     fieldsets = (
-        ("Personal Information", {
+        ("Select Follower", {
             "classes": ("wide", "extrapretty"),
             "fields" : (
                 "user",
-            )
+            ),
         }),
-        ("Business Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "branch", "is_approved"
-            )
-        })
     )
 
     ordering = (
         "user",
-        "branch", "is_approved", "approved_by", "approved_at",
+        "is_approved", "approved_by", "approved_at",
     )
 
     list_per_page = 10
@@ -180,4 +268,6 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(ProfileImage, ProfileImageAdmin)
 admin.site.register(Member, MemberAdmin)
+admin.site.register(MemberRole, MemberRoleAdmin)
+admin.site.register(MemberBranch, MemberBranchAdmin)
 admin.site.register(ResetPasswordCode, ResetPasswordCodeAdmin)

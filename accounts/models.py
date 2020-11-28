@@ -7,10 +7,19 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from phonenumber_field.modelfields import PhoneNumberField
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 from branch.models import Branch
+
+
+MEMBER_ROLE_CHOICES = (
+    ("Branch Chief", "Branch Chief"),
+    ("Branch Vice Chief", "Branch Vice Chief"),
+    ("Leader", "Leader"),
+    ("Double Star Leader", "Double Star Leader"),
+    ("Single Star Leader", "Single Star Leader"),
+    ("MAINTAINER", "MAINTAINER")
+)
 
 
 class Profile(models.Model):
@@ -68,6 +77,10 @@ class ProfileImage(models.Model):
         related_name="FollowerProfileImage"
     )
 
+    class Meta:
+        verbose_name = "Follower Profile"
+        verbose_name_plural = "Follower Profile Images"
+
     def __str__(self):
         return self.profile.user.username
 
@@ -83,12 +96,7 @@ class ProfileImage(models.Model):
 
 
 class Member(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, editable=False)
-    branch = models.ForeignKey(
-        Branch,
-        on_delete=models.DO_NOTHING,
-        related_name="Branch",
-    )
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     is_approved = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(
         get_user_model(),
@@ -134,3 +142,72 @@ class ResetPasswordCode(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.user.username, self.code)
+
+
+class MemberRole(models.Model):
+    """
+        MemberRole can be assigned in multiple Branch objects.
+        Branch has multiple MemberRole objects
+
+        Similarly
+        MemberRole can be assigned in multiple Member objects.
+        Member has multiple MemberRole objects
+    """
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    role_name = models.CharField(max_length=18, choices=MEMBER_ROLE_CHOICES)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    branch_id = models.PositiveBigIntegerField()
+
+    class Meta:
+        verbose_name = "Member Role"
+        verbose_name_plural = "Member Roles"
+        unique_together = ("member", "role_name", "branch_id")
+
+    def clean(self):
+        selected_member = self.member
+        selected_branch = self.branch_id
+        # check if selected branch id is valid
+        try:
+            check = Branch.objects.get(pk=selected_branch)
+        except Branch.DoesNotExist:
+            raise ValidationError("Selected branch does not exist.")
+        # check if member is registered in selected branch
+        member_branches = MemberBranch.objects.filter(member=selected_member)
+        found = False
+        for member_branch in member_branches:
+            if member_branch.id == selected_branch:
+                found = True
+        if not found:
+            raise ValidationError("Member not registered in selected branch.")
+
+    def __str__(self):
+        return self.member.user.username
+
+
+class MemberBranch(models.Model):
+    """
+        Member can be assigned in multiple Branch objects.
+        Branch has multiple Member objects
+    """
+    member = models.ForeignKey(Member, on_delete=models.DO_NOTHING)
+    branch_id = models.PositiveBigIntegerField()
+    date_of_membership = models.DateField()
+
+    class Meta:
+        verbose_name = "Member Branch"
+        verbose_name_plural = "Member Branches"
+        unique_together = ("member", "branch_id")
+
+    def __str__(self):
+        return self.member.user.username
+
+    # check if selected branch is valid
+    def clean(self):
+        selected_member = self.member
+        selected_branch = self.branch_id
+        # check if selected branch id is valid
+        try:
+            check = Branch.objects.get(pk=selected_branch)
+        except Branch.DoesNotExist:
+            raise ValidationError("Selected branch does not exist.")
