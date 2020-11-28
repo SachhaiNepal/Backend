@@ -136,7 +136,7 @@ class MemberBranchInline(admin.StackedInline):
         ("Business Information", {
             "classes": ("wide", "extrapretty"),
             "fields" : (
-                "branch_id",
+                "branch",
                 "date_of_membership"
             )
         }),
@@ -160,7 +160,7 @@ class MemberRoleInline(admin.StackedInline):
                 "role_name",
                 "from_date",
                 "to_date",
-                "branch_id",
+                "branch",
             )
         }),
     )
@@ -169,14 +169,14 @@ class MemberRoleInline(admin.StackedInline):
 class MemberRoleAdmin(admin.ModelAdmin):
     list_display = (
         "member",
-        "branch_id",
+        "branch",
         "role_name",
         "from_date",
         "to_date",
     )
     ordering = (
         "member",
-        "branch_id",
+        "branch",
         "role_name",
         "from_date",
         "to_date",
@@ -192,12 +192,12 @@ class MemberRoleAdmin(admin.ModelAdmin):
 class MemberBranchAdmin(admin.ModelAdmin):
     list_display = (
         "member",
-        "branch_id",
+        "branch",
         "date_of_membership"
     )
     ordering = (
         "member",
-        "branch_id",
+        "branch",
         "date_of_membership"
     )
 
@@ -210,7 +210,7 @@ class MemberBranchAdmin(admin.ModelAdmin):
 
 class MemberAdmin(admin.ModelAdmin):
     save_on_top = True
-    inlines = (MemberBranchInline,)
+    inlines = (MemberBranchInline, MemberRoleInline)
 
     list_display = (
         "user",
@@ -244,17 +244,9 @@ class MemberAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if change:
-            this_record = Member.objects.get(pk=obj.pk)
-            if this_record.is_approved and not obj.is_approved:
-                obj.approved_by = None
-                obj.approved_at = None
-            if not this_record.is_approved and obj.is_approved:
-                obj.approved_by = request.user
-                obj.approved_at = timezone.now()
+            obj.updated_by = request.user
         else:
-            if obj.is_approved:
-                obj.approved_by = request.user
-                obj.approved_at = timezone.now()
+            obj.created_by = request.user
         super(MemberAdmin, self).save_model(request, obj, form, change)
 
 

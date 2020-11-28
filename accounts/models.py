@@ -145,28 +145,20 @@ class ResetPasswordCode(models.Model):
 
 
 class MemberRole(models.Model):
-    """
-        MemberRole can be assigned in multiple Branch objects.
-        Branch has multiple MemberRole objects
-
-        Similarly
-        MemberRole can be assigned in multiple Member objects.
-        Member has multiple MemberRole objects
-    """
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     role_name = models.CharField(max_length=18, choices=MEMBER_ROLE_CHOICES)
     from_date = models.DateField()
     to_date = models.DateField()
-    branch_id = models.PositiveBigIntegerField()
+    branch = models.PositiveBigIntegerField()
 
     class Meta:
         verbose_name = "Member Role"
         verbose_name_plural = "Member Roles"
-        unique_together = ("member", "role_name", "branch_id")
+        unique_together = ("member", "role_name", "branch")
 
     def clean(self):
         selected_member = self.member
-        selected_branch = self.branch_id
+        selected_branch = self.branch
         # check if selected branch id is valid
         try:
             check = Branch.objects.get(pk=selected_branch)
@@ -186,18 +178,14 @@ class MemberRole(models.Model):
 
 
 class MemberBranch(models.Model):
-    """
-        Member can be assigned in multiple Branch objects.
-        Branch has multiple Member objects
-    """
     member = models.ForeignKey(Member, on_delete=models.DO_NOTHING)
-    branch_id = models.PositiveBigIntegerField()
+    branch = models.PositiveBigIntegerField()
     date_of_membership = models.DateField()
 
     class Meta:
         verbose_name = "Member Branch"
         verbose_name_plural = "Member Branches"
-        unique_together = ("member", "branch_id")
+        unique_together = ("member", "branch")
 
     def __str__(self):
         return self.member.user.username
@@ -205,7 +193,7 @@ class MemberBranch(models.Model):
     # check if selected branch is valid
     def clean(self):
         selected_member = self.member
-        selected_branch = self.branch_id
+        selected_branch = self.branch
         # check if selected branch id is valid
         try:
             check = Branch.objects.get(pk=selected_branch)

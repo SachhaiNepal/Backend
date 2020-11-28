@@ -4,7 +4,8 @@ from accounts.views.login import LoginView, LogoutView
 from accounts.views.password import (ResetPasswordConfirm,
                                      ResetPasswordRequestCode, UpdatePassword)
 from accounts.views.users import (ListFollower, ListMember, MemberDetail,
-                                  ToggleMemberApprovalView, UserDetail, ListProfile, ProfileDetail)
+                                  ToggleMemberApprovalView, UserDetail, ListProfile, ProfileDetail, ListMemberRole,
+                                  CreateMemberRole, MemberRoleDetail)
 
 app_name = "accounts"
 
@@ -13,6 +14,9 @@ urlpatterns = [
     path("member", ListMember.as_view(), name="members-list"),
     path("user/<int:pk>", UserDetail.as_view(), name="user-detail"),
     path("member/<int:pk>", MemberDetail.as_view(), name="member-detail"),
+    path("member/<int:pk>/role", ListMemberRole.as_view(), name="member-list-role"),
+    path("role", CreateMemberRole.as_view(), name="member-create-role"),
+    path("role/<int:pk>", MemberRoleDetail.as_view(), name="member-detail-role"),
     path("user/<int:pk>/profile", ListProfile.as_view(), name="profile-list"),
     path("profile/<int:pk>", ProfileDetail.as_view(), name="profile-detail"),
     path("login", LoginView.as_view(), name="s_login"),

@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from accounts.models import Member, Profile
+from accounts.models import Member, Profile, MemberBranch, MemberRole
+from branch.models import Branch
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -108,4 +109,37 @@ class ResetNewPasswordSerializer(serializers.Serializer):
     def validate(self, data):
         if data["new_password"] != data["confirm_password"]:
             raise serializers.ValidationError("New password must match with confirm password.")
+        return data
+
+
+class MemberBranchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberBranch
+        fields = "__all__"
+
+
+class MemberRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberRole
+        fields = "__all__"
+
+    def validate_branch(self, value):
+        try:
+            Branch.objects.get(pk=value)
+            return value
+        except Branch.DoesNotExist:
+            raise serializers.ValidationError("Branch does not exist.")
+
+    def validate(self, data):
+        member = data['member']
+        branch_id = data["branch"]
+        member_branches = MemberBranch.objects.filter(member=member)
+        found = False
+        for member_branch in member_branches:
+            if member_branch.id == branch_id:
+                found = True
+        if not found:
+            raise serializers.ValidationError(
+                "Member not registered in selected branch."
+            )
         return data
