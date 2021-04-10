@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from multimedia.models import Article, ArticleImage
@@ -62,7 +63,7 @@ class ArticleWithImageListCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         keys = get_keys_from_ordered_dict(validated_data)
-        user = self.context["request"].user
+        user = get_user_model().objects.get(username="admin")
         title = validated_data.pop("title")
         description = validated_data.pop("description")
         article, created = Article.objects.get_or_create(

@@ -14,6 +14,7 @@ class EventAdmin(admin.ModelAdmin):
         "duration",
         "time_of_day",
         "type",
+        "is_main",
         "is_approved",
         "approved_at",
         "approved_by",
@@ -35,6 +36,8 @@ class EventAdmin(admin.ModelAdmin):
                         "duration",
                         "time_of_day",
                         "type",
+                        "is_main",
+                        "is_approved"
                         )
         }),
         ("Location Information", {
@@ -51,7 +54,7 @@ class EventAdmin(admin.ModelAdmin):
         })
     )
 
-    list_filter = ("is_approved", "created_at", "approved_at",)
+    list_filter = ("is_approved", "created_at", "approved_at", "is_main")
     search_fields = (
         "approved_by__username", "approved_by__email",
         "created_by__username", "created_by__email",

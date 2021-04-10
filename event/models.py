@@ -15,8 +15,7 @@ TIME_OF_DAY = (
 EVENT_TYPE = (
     ("Satsang", "Satsang"),
     ("General Meeting", "General Meeting"),
-    ("Board Meet", "Board Meet"),
-    ("General", "Board Meet"),
+    ("Board Meeting", "Board Meeting"),
 )
 
 
@@ -29,6 +28,7 @@ class Event(models.Model):
     time_of_day = models.CharField(max_length=10, choices=TIME_OF_DAY)
     type = models.CharField(max_length=15, choices=EVENT_TYPE)
     is_approved = models.BooleanField(default=False)
+    is_main = models.BooleanField(default=False)
     banner = models.ImageField(
         upload_to="events",
         null=True,
@@ -78,7 +78,7 @@ class Event(models.Model):
         null=True,
         blank=True,
     )
-    contacts = ArrayField(models.IntegerField(unique=True), size=3)
+    contacts = ArrayField(models.PositiveBigIntegerField(unique=True), size=3)
     organizer = models.ForeignKey(
         "branch.Branch",
         on_delete=models.CASCADE,
@@ -113,6 +113,11 @@ class Event(models.Model):
         blank=True,
         editable=False
     )
+
+    class Meta:
+        permissions = [
+            ("approve_event", "Can toggle approval status of event"),
+        ]
 
     def clean(self):
         """

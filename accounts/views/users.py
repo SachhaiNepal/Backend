@@ -12,7 +12,7 @@ from accounts.models import Member, MemberBranch, MemberRole, Profile
 from accounts.serializers import (MemberBranchSerializer, MemberPOSTSerializer,
                                   MemberRoleSerializer, MemberSerializer,
                                   ProfilePOSTSerializer, ProfileSerializer,
-                                  UserCreateSerializer, UserUpdateSerializer)
+                                  UserCreateSerializer, UserUpdateSerializer, RegisterFollowerSerializer)
 
 
 class ListFollower(APIView):
@@ -382,3 +382,16 @@ class MemberBranchDetail(APIView):
         return Response({
             "message": "Member branch deleted successfully."
         }, status=status.HTTP_204_NO_CONTENT)
+
+
+class RegisterFollower(APIView):
+
+    @staticmethod
+    def post(request):
+        serializer = RegisterFollowerSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response({
+                "message": "Follower registered successfully.",
+                "user": serializer.data
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

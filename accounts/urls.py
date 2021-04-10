@@ -8,11 +8,12 @@ from accounts.views.users import (AddMemberBranch, AddMemberRole, ListFollower,
                                   ListProfile, MemberBranchDetail,
                                   MemberDetail, MemberRoleDetail,
                                   ProfileDetail, ToggleMemberApprovalView,
-                                  UserDetail)
+                                  UserDetail, RegisterFollower)
 
 app_name = "accounts"
 
 urlpatterns = [
+    path("register-follower", RegisterFollower.as_view(), name="register-follower"),
     path("user", ListFollower.as_view(), name="users-list"),
     path("member", ListMember.as_view(), name="members-list"),
     path("user/<int:pk>", UserDetail.as_view(), name="user-detail"),

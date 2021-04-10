@@ -9,13 +9,13 @@ from accounts.models import *
 class ProfileAdmin(admin.ModelAdmin):
     save_on_top = True
     list_display = (
-        "user", "bio", "contacts", "birth_date",
+        "user", "bio", "contact", "birth_date",
         "current_city", "home_town",
         "country", "province", "district",
         "last_updated",
     )
     ordering = (
-        "user", "bio", "contacts", "birth_date",
+        "user", "bio", "contact", "birth_date",
         "current_city", "home_town",
         "country", "province", "district",
         "last_updated",
@@ -27,7 +27,7 @@ class ProfileAdmin(admin.ModelAdmin):
         ("last_updated", admin.DateFieldListFilter),
     )
     search_fields = (
-        "user__username", "contacts", "district__name",
+        "user__username", "contact", "district__name",
         "district__name", "district__province__name",
         "district__province__country__name"
     )
@@ -37,7 +37,7 @@ class ProfileAdmin(admin.ModelAdmin):
         ("Personal Information", {
             "classes": ("wide", "extrapretty"),
             "fields" : (
-                "user", "contacts", "bio", "birth_date"
+                "user", "contact", "bio", "birth_date"
             )
         }),
         ("Location Information", {
@@ -58,42 +58,8 @@ class ProfileImageAdmin(admin.ModelAdmin):
         obj.delete()
 
 
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    extra = 1
-    min_num = 1
-    max_num = 1
-    fk_name = "user"
-    can_delete = False
-    verbose_name_plural = "Add Profile Detail"
-
-    # update form for admin site
-    fieldsets = (
-        ("Personal Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "bio",
-                "contacts",
-                "birth_date",
-            )
-        }),
-        ("Location Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields": (
-                "current_city",
-                "home_town",
-                "country",
-                "province",
-                "district",
-                )
-        })
-    )
-
-
 class UserAdmin(BaseUserAdmin):
     save_on_top = True
-    inlines = (ProfileInline,)
-
     list_display = (
         "username", "email", "first_name", "last_name",
         "is_superuser", "is_staff", "date_joined"
