@@ -26,7 +26,7 @@ class Province(models.Model):
     country = models.ForeignKey(
         "Country",
         on_delete=models.CASCADE,
-        related_name="RelatedCountryForProvince"
+        related_name="provinces"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -40,7 +40,7 @@ class District(models.Model):
     province = models.ForeignKey(
         "Province",
         on_delete=models.CASCADE,
-        related_name="RelatedProvince"
+        related_name="districts"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -54,7 +54,7 @@ class Municipality(models.Model):
     district = models.ForeignKey(
         "District",
         on_delete=models.CASCADE,
-        related_name="RelatedMunicipalityForDistrict"
+        related_name="municipalities"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -71,7 +71,7 @@ class VDC(models.Model):
     district = models.ForeignKey(
         "District",
         on_delete=models.CASCADE,
-        related_name="RelatedVDCForDistrict"
+        related_name="vdcs"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -95,7 +95,7 @@ class VDCWard(models.Model):
     vdc = models.ForeignKey(
         "VDC",
         on_delete=models.CASCADE,
-        related_name="RelatedWardForVDC"
+        related_name="vdc_wards"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -119,7 +119,7 @@ class MunicipalityWard(models.Model):
     municipality = models.ForeignKey(
         "Municipality",
         on_delete=models.CASCADE,
-        related_name="RelatedWardForMunicipality"
+        related_name="municipality_wards"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

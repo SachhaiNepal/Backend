@@ -50,14 +50,6 @@ class ProfileAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
-class ProfileImageAdmin(admin.ModelAdmin):
-    list_display = ("profile", "image")
-
-    def delete_model(self, request, obj):
-        obj.image.delete()
-        obj.delete()
-
-
 class UserAdmin(BaseUserAdmin):
     save_on_top = True
     list_display = (
@@ -224,7 +216,6 @@ class ResetPasswordCodeAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
-admin.site.register(ProfileImage, ProfileImageAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(MemberRole, MemberRoleAdmin)
 admin.site.register(MemberBranch, MemberBranchAdmin)

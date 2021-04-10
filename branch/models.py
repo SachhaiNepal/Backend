@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 
@@ -59,7 +59,7 @@ class Branch(models.Model):
         null=True,
         blank=True,
     )
-    contacts = ArrayField(models.PositiveBigIntegerField(unique=True), size=3)
+    contact = PhoneNumberField(unique=True)
     is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
     is_approved = models.BooleanField(default=False)
     approved_by = models.ForeignKey(

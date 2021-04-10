@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -44,7 +43,7 @@ class Media(models.Model):
 
 
 class Multimedia(Media):
-    video_urls = ArrayField(models.URLField(unique=True), size=3)
+    # video_urls = ArrayField(models.URLField(unique=True), size=3)
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):

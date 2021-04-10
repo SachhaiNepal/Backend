@@ -6,11 +6,11 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from phonenumber_field.modelfields import PhoneNumberField
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 from branch.models import Branch
 from utils.constants import MEMBER_ROLE_CHOICES
-from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Profile(models.Model):
@@ -23,19 +23,19 @@ class Profile(models.Model):
     country = models.ForeignKey(
         "location.Country",
         on_delete=models.DO_NOTHING,
-        related_name="MemberCountry",
+        related_name="country_followers",
         blank=True, null=True
     )
     province = models.ForeignKey(
         "location.Province",
         on_delete=models.DO_NOTHING,
-        related_name="MemberProvince",
+        related_name="province_followers",
         blank=True, null=True
     )
     district = models.ForeignKey(
         "location.District",
         on_delete=models.DO_NOTHING,
-        related_name="MemberDistrict",
+        related_name="district_followers",
         blank=True, null=True
     )
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -69,7 +69,7 @@ class ProfileImage(models.Model):
     profile = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
-        related_name="FollowerProfileImage"
+        related_name="follower_profile_images"
     )
 
     class Meta:
@@ -97,7 +97,7 @@ class Member(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name="Approver",
+        related_name="approved_members",
         editable=False
     )
     approved_at = models.DateTimeField(default=None, null=True, blank=True, editable=False)
@@ -106,7 +106,7 @@ class Member(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name="MemberCreator",
+        related_name="members_created",
         editable=False
     )
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -115,7 +115,7 @@ class Member(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name="MemberModifier",
+        related_name="members_updated",
         editable=False
     )
     updated_at = models.DateTimeField(auto_now=True, editable=False)
@@ -131,7 +131,7 @@ class Member(models.Model):
 
 
 class ResetPasswordCode(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="reset_pw_codes")
     code = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
 
     class Meta:
@@ -142,7 +142,7 @@ class ResetPasswordCode(models.Model):
 
 
 class MemberRole(models.Model):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="member_role")
     role_name = models.CharField(max_length=18, choices=MEMBER_ROLE_CHOICES)
     from_date = models.DateField()
     to_date = models.DateField()
@@ -175,7 +175,7 @@ class MemberRole(models.Model):
 
 
 class MemberBranch(models.Model):
-    member = models.ForeignKey(Member, on_delete=models.DO_NOTHING)
+    member = models.ForeignKey(Member, on_delete=models.DO_NOTHING, related_name="member_branches")
     branch = models.PositiveBigIntegerField()
     date_of_membership = models.DateField()
 
