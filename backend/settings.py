@@ -208,3 +208,5 @@ MAX_UPLOAD_IMAGE_SIZE = 70000
 ALLOWED_IMAGES_EXTENSIONS = ["png", "jpg", "jpeg", "gif", "bmp", "tiff", "JPG"]
 ALLOWED_AUDIO_EXTENSIONS = ["mp3", "wav"]
 ALLOWED_VIDEO_EXTENSIONS = ["webm", "mp4", "mpeg", "flv"]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

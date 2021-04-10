@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 
@@ -78,7 +78,7 @@ class Event(models.Model):
         null=True,
         blank=True,
     )
-    contacts = ArrayField(models.PositiveBigIntegerField(unique=True), size=3)
+    contact = PhoneNumberField(unique=True)
     organizer = models.ForeignKey(
         "branch.Branch",
         on_delete=models.CASCADE,
@@ -185,7 +185,7 @@ class EventVideoUrls(models.Model):
         on_delete=models.CASCADE,
         related_name="RootEvent"
     )
-    video_urls = ArrayField(models.URLField(unique=True), size=10)
+    # video_urls = ArrayField(models.URLField(unique=True), size=10)
 
     def __str__(self):
         return self.video_urls
