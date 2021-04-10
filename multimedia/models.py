@@ -37,6 +37,11 @@ class Media(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
 
+    class Meta:
+        permissions = [
+            ("approve_media", "Can toggle approval status of media"),
+        ]
+
 
 class Multimedia(Media):
     video_urls = ArrayField(models.URLField(unique=True), size=3)

@@ -28,6 +28,8 @@ clean-migrations:
 	rm -rf branch/migrations
 	rm -rf multimedia/migrations
 	rm -rf location/migrations
+	rm -rf event/migrations
+	rm -rf advertise/migrations
 
 clean-db-with-migration: clean-db clean-migrations
 

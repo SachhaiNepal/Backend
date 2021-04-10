@@ -1,7 +1,6 @@
 import uuid
 
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -10,21 +9,14 @@ from django.dispatch import receiver
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 from branch.models import Branch
-
-MEMBER_ROLE_CHOICES = (
-    ("Branch Chief", "Branch Chief"),
-    ("Branch Vice Chief", "Branch Vice Chief"),
-    ("Leader", "Leader"),
-    ("Double Star Leader", "Double Star Leader"),
-    ("Single Star Leader", "Single Star Leader"),
-    ("MAINTAINER", "MAINTAINER")
-)
+from utils.constants import MEMBER_ROLE_CHOICES
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Profile(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, editable=False)
     bio = models.TextField(null=True, blank=True, max_length=1024)
-    contacts = ArrayField(models.PositiveBigIntegerField(unique=True), size=3, null=True, blank=True)
+    contact = PhoneNumberField(unique=True, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     current_city = models.CharField(max_length=512, blank=True, null=True)
     home_town = models.CharField(max_length=512, blank=True, null=True)
@@ -50,6 +42,10 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username + ' Profile'
+
+    class Meta:
+        verbose_name = "Follower Profile"
+        verbose_name_plural = "Follower Profiles"
 
 
 @receiver(post_save, sender=get_user_model())
@@ -77,7 +73,7 @@ class ProfileImage(models.Model):
     )
 
     class Meta:
-        verbose_name = "Follower Profile"
+        verbose_name = "Follower Profile Image"
         verbose_name_plural = "Follower Profile Images"
 
     def __str__(self):
@@ -90,7 +86,6 @@ class ProfileImage(models.Model):
     def delete(self, using=None, keep_parents=False):
         if self.image:
             self.image.delete()
-        self.user.delete()
         super().delete(using, keep_parents)
 
 
@@ -127,6 +122,9 @@ class Member(models.Model):
 
     class Meta:
         verbose_name_plural = "Members"
+        permissions = [
+            ("approve_member", "Can toggle approval status of member"),
+        ]
 
     def __str__(self):
         return self.user.username

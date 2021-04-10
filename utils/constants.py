@@ -1,3 +1,12 @@
+MEMBER_ROLE_CHOICES = (
+    ("Branch Chief", "Branch Chief"),
+    ("Branch Vice Chief", "Branch Vice Chief"),
+    ("Leader", "Leader"),
+    ("Double Star Leader", "Double Star Leader"),
+    ("Single Star Leader", "Single Star Leader"),
+    ("MAINTAINER", "MAINTAINER")
+)
+
 COUNTRIES = (
     ("AFG", "Afghanistan"),
     ("IND", "India"),
@@ -18,6 +27,46 @@ PROVINCES = (
     ("Nepal", "Karnali Pradesh", 6),
     ("Nepal", "Sudurpashchim Pradesh", 7),
 )
+
+PERMISSIONS = [
+    'add_member', 'approve_member', 'change_member', 'delete_member', 'view_member',
+    'add_memberbranch', 'change_memberbranch', 'delete_memberbranch', 'view_memberbranch',
+    'add_memberrole', 'change_memberrole', 'delete_memberrole', 'view_memberrole',
+    'add_profile', 'change_profile', 'delete_profile', 'view_profile',
+    'add_profileimage', 'change_profileimage', 'delete_profileimage', 'view_profileimage',
+    'add_resetpasswordcode', 'change_resetpasswordcode', 'delete_resetpasswordcode', 'view_resetpasswordcode',
+    'add_logentry', 'change_logentry', 'delete_logentry', 'view_logentry',
+    'add_advertisement', 'change_advertisement', 'delete_advertisement', 'view_advertisement',
+    'add_group', 'change_group', 'delete_group', 'view_group',
+    'add_permission', 'change_permission', 'delete_permission', 'view_permission',
+    'add_user', 'change_user', 'delete_user', 'view_user',
+    'add_token', 'change_token', 'delete_token', 'view_token',
+    'add_tokenproxy', 'change_tokenproxy', 'delete_tokenproxy', 'view_tokenproxy',
+    'add_branch', 'approve_branch', 'change_branch', 'delete_branch', 'view_branch',
+    'add_contenttype', 'change_contenttype', 'delete_contenttype', 'view_contenttype',
+    'add_event', 'approve_event', 'change_event', 'delete_event', 'view_event',
+    'add_eventphoto', 'change_eventphoto', 'delete_eventphoto', 'view_eventphoto',
+    'add_eventvideourls', 'change_eventvideourls', 'delete_eventvideourls', 'view_eventvideourls',
+    'add_country', 'change_country', 'delete_country', 'view_country',
+    'add_district', 'change_district', 'delete_district', 'view_district',
+    'add_municipality', 'change_municipality', 'delete_municipality', 'view_municipality',
+    'add_municipalityward', 'change_municipalityward', 'delete_municipalityward', 'view_municipalityward',
+    'add_province', 'change_province', 'delete_province', 'view_province',
+    'add_vdc', 'change_vdc', 'delete_vdc', 'view_vdc',
+    'add_vdcward', 'change_vdcward', 'delete_vdcward', 'view_vdcward',
+    'add_article', 'change_article', 'delete_article', 'view_article',
+    'add_articleimage', 'change_articleimage', 'delete_articleimage', 'view_articleimage',
+    'add_bookmarkmedia', 'change_bookmarkmedia', 'delete_bookmarkmedia', 'view_bookmarkmedia',
+    'add_comment', 'change_comment', 'delete_comment', 'view_comment',
+    'add_love', 'change_love', 'delete_love', 'view_love',
+    'add_media', 'approve_media', 'change_media', 'delete_media', 'view_media',
+    'add_multimedia', 'change_multimedia', 'delete_multimedia', 'view_multimedia',
+    'add_multimediaaudio', 'change_multimediaaudio', 'delete_multimediaaudio', 'view_multimediaaudio',
+    'add_multimediaimage', 'change_multimediaimage', 'delete_multimediaimage', 'view_multimediaimage',
+    'add_multimediavideo', 'change_multimediavideo', 'delete_multimediavideo', 'view_multimediavideo',
+    'add_pinmedia', 'change_pinmedia', 'delete_pinmedia', 'view_pinmedia',
+    'add_session', 'change_session', 'delete_session', 'view_session'
+]
 
 DISTRICTS = (
     (1, "Bhojpur"),

@@ -109,6 +109,9 @@ class Branch(models.Model):
 
     class Meta:
         verbose_name_plural = "Branches"
+        permissions = [
+            ("approve_branch", "Can toggle approval status of branch"),
+        ]
 
     def __str__(self):
         return self.name

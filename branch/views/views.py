@@ -24,7 +24,7 @@ class BranchViewSet(viewsets.ModelViewSet):
         branch.image.delete()
         branch.delete()
         return Response({
-            "message": "Event deleted successfully"
+            "message": "Branch deleted successfully"
         }, status=status.HTTP_204_NO_CONTENT)
 
 
