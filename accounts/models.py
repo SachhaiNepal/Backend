@@ -11,7 +11,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 from branch.models import Branch
 from utils.constants import MEMBER_ROLE_CHOICES
-from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Profile(models.Model):
@@ -24,19 +23,19 @@ class Profile(models.Model):
     country = models.ForeignKey(
         "location.Country",
         on_delete=models.DO_NOTHING,
-        related_name="MemberCountry",
+        related_name="country_followers",
         blank=True, null=True
     )
     province = models.ForeignKey(
         "location.Province",
         on_delete=models.DO_NOTHING,
-        related_name="MemberProvince",
+        related_name="province_followers",
         blank=True, null=True
     )
     district = models.ForeignKey(
         "location.District",
         on_delete=models.DO_NOTHING,
-        related_name="MemberDistrict",
+        related_name="district_followers",
         blank=True, null=True
     )
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -98,7 +97,7 @@ class Member(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name="Approver",
+        related_name="approved_members",
         editable=False
     )
     approved_at = models.DateTimeField(default=None, null=True, blank=True, editable=False)
@@ -107,7 +106,7 @@ class Member(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name="MemberCreator",
+        related_name="members_created",
         editable=False
     )
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -116,7 +115,7 @@ class Member(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name="member_updaters",
+        related_name="members_updated",
         editable=False
     )
     updated_at = models.DateTimeField(auto_now=True, editable=False)
