@@ -183,9 +183,9 @@ class EventVideoUrls(models.Model):
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
-        related_name="RootEvent"
+        related_name="video_urls"
     )
-    # video_urls = ArrayField(models.URLField(unique=True), size=10)
+    video_url = models.URLField(unique=True)
 
     def __str__(self):
-        return self.video_urls
+        return self.video_url

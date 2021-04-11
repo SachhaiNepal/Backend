@@ -16,7 +16,7 @@ class Media(models.Model):
     approved_by = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
-        related_name="MultimediaApprover",
+        related_name="approved_medias",
         null=True,
         blank=True,
         editable=False
@@ -30,7 +30,7 @@ class Media(models.Model):
     uploaded_by = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
-        related_name="MediaUploader",
+        related_name="uploaded_medias",
         editable=False
     )
     uploaded_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -43,11 +43,22 @@ class Media(models.Model):
 
 
 class Multimedia(Media):
-    # video_urls = ArrayField(models.URLField(unique=True), size=3)
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
+
+
+class MultimediaVideoUrls(models.Model):
+    multimedia = models.ForeignKey(
+        Multimedia,
+        on_delete=models.CASCADE,
+        related_name="video_urls"
+    )
+    video_url = models.URLField(unique=True)
+
+    def __str__(self):
+        return self.video_url
 
 
 class MultimediaVideo(models.Model):
@@ -60,7 +71,7 @@ class MultimediaVideo(models.Model):
     multimedia = models.ForeignKey(
         Multimedia,
         on_delete=models.CASCADE,
-        related_name="MultimediaVideo"
+        related_name="multimedia_video"
     )
 
     def __str__(self):
@@ -88,7 +99,7 @@ class MultimediaAudio(models.Model):
     multimedia = models.ForeignKey(
         Multimedia,
         on_delete=models.CASCADE,
-        related_name="MultimediaAudio"
+        related_name="multimedia_audio"
     )
 
     def __str__(self):
@@ -114,7 +125,7 @@ class MultimediaImage(models.Model):
     multimedia = models.ForeignKey(
         Multimedia,
         on_delete=models.CASCADE,
-        related_name="MultimediaImage"
+        related_name="multimedia_image"
     )
 
     class Meta:
@@ -146,7 +157,7 @@ class ArticleImage(models.Model):
     )
     article = models.ForeignKey(
         "Article",
-        related_name="ArticleImage",
+        related_name="article_images",
         on_delete=models.CASCADE
     )
 
@@ -169,21 +180,21 @@ class Comment(models.Model):
     article = models.ForeignKey(
         "Article",
         on_delete=models.CASCADE,
-        related_name="ArticleComment",
+        related_name="article_comments",
         null=True,
         blank=True,
     )
     multimedia = models.ForeignKey(
         "Multimedia",
         on_delete=models.CASCADE,
-        related_name="MultimediaComment",
+        related_name="multimedia_comments",
         null=True,
         blank=True,
     )
     writer = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        related_name="CommentWriter",
+        related_name="user_comments",
         editable=False
     )
     comment = models.TextField()
@@ -217,19 +228,24 @@ class BookmarkMedia(models.Model):
     article = models.ForeignKey(
         "Article",
         on_delete=models.CASCADE,
-        related_name="BookmarkArticle",
+        related_name="bookmarked_articles",
         null=True,
         blank=True,
     )
     multimedia = models.ForeignKey(
         "Multimedia",
         on_delete=models.CASCADE,
-        related_name="BookmarkMultimedia",
+        related_name="bookmarked_multimedias",
         null=True,
         blank=True,
     )
     is_bookmarked = models.BooleanField(default=False)
-    marker = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="BookmarkActor", editable=False)
+    marker = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="bookmarked_medias",
+        editable=False
+    )
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
     def clean(self):
@@ -257,19 +273,24 @@ class PinMedia(models.Model):
     article = models.ForeignKey(
         "Article",
         on_delete=models.CASCADE,
-        related_name="PinArticle",
+        related_name="pinned_articles",
         null=True,
         blank=True,
     )
     multimedia = models.ForeignKey(
         "Multimedia",
         on_delete=models.CASCADE,
-        related_name="PinMultimedia",
+        related_name="pinned_multimedias",
         null=True,
         blank=True,
     )
     is_pinned = models.BooleanField(default=False)
-    pinner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="BookmarkPinner", editable=False)
+    pinner = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="pinned_medias",
+        editable=False
+    )
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
     def clean(self):
@@ -297,14 +318,14 @@ class Love(models.Model):
     article = models.ForeignKey(
         "Article",
         on_delete=models.CASCADE,
-        related_name="LoveArticle",
+        related_name="loved_articles",
         null=True,
         blank=True,
     )
     multimedia = models.ForeignKey(
         "Multimedia",
         on_delete=models.CASCADE,
-        related_name="LoveMultimedia",
+        related_name="loved_multimedias",
         null=True,
         blank=True,
     )
@@ -312,7 +333,7 @@ class Love(models.Model):
     lover = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        related_name="MediaLover",
+        related_name="loved_medias",
         editable=False
     )
     created_at = models.DateTimeField(auto_now_add=True)

@@ -26,13 +26,13 @@ class Advertisement(models.Model):
     created_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        related_name="AdvertiseCreator",
+        related_name="ads_created",
         editable=False
     )
     modified_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        related_name="AdvertiseModifier",
+        related_name="ads_modified",
         editable=False
     )
 
