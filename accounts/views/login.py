@@ -39,7 +39,7 @@ class LoginView(APIView):
                     "data" : serializer.data
                 }, status=status.HTTP_202_ACCEPTED)
             return Response(
-                {"detail": "Login Failed! Provide Valid Authentication Credentials."},
+                {"detail": "Login failed! Provide valid authentication credentials."},
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

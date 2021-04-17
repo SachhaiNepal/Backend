@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
@@ -43,9 +42,9 @@ class RegisterFollowerSerializer(serializers.Serializer):
     contact = PhoneNumberField(validators=[UniqueValidator(queryset=Profile.objects.all())], required=False, allow_blank=True)
     password = serializers.CharField(max_length=20, required=True)
     confirm_password = serializers.CharField(max_length=20, required=True)
-    birth_date = serializers.DateField(required=False)
-    current_city = serializers.CharField(max_length=64, required=False)
-    home_town = serializers.CharField(max_length=64, required=False)
+    birth_date = serializers.DateField(required=False, allow_null=True)
+    current_city = serializers.CharField(max_length=64, required=False, allow_null=True)
+    home_town = serializers.CharField(max_length=64, required=False, allow_null=True)
     country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=False)
     province = serializers.PrimaryKeyRelatedField(queryset=Province.objects.all(), required=False)
     district = serializers.PrimaryKeyRelatedField(queryset=District.objects.all(), required=False)
