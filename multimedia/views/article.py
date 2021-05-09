@@ -50,8 +50,8 @@ class ListArticleImages(APIView):
 
 
 class CreateArticleWithImageList(APIView):
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser,)
 
     @staticmethod
@@ -64,6 +64,7 @@ class CreateArticleWithImageList(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response({
+                "success": "True",
                 "message": "Article Created Successfully."
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -86,6 +87,7 @@ class ToggleArticleApprovalView(APIView):
                 article.approved_at = None
             article.save()
             return Response({
+                "success": True,
                 "article": "Article {} successfully.".format("approved" if article.is_approved else "rejected")
             }, status=status.HTTP_204_NO_CONTENT)
         except Article.DoesNotExist:

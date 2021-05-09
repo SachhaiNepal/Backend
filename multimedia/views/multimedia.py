@@ -7,11 +7,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo)
-from multimedia.serializers.model_serializer import (MultimediaAudioSerializer,
-                                                     MultimediaImageSerializer,
-                                                     MultimediaVideoSerializer)
+from multimedia.models import (
+    Multimedia, MultimediaAudio, MultimediaImage,
+    MultimediaVideo, MultimediaVideoUrls
+)
+from multimedia.serializers.model_serializer import (
+    MultimediaAudioSerializer,
+    MultimediaImageSerializer,
+    MultimediaVideoSerializer, MultimediaVideoUrlsSerializer
+)
 from multimedia.serializers.multimedia_list import (
     AddMultimediaAudioListSerializer, AddMultimediaImageListSerializer,
     AddMultimediaVideoListSerializer,
@@ -54,6 +58,27 @@ class ListMultimediaAudios(APIView):
                 "details": "Audios added to multimedia successfully."
             }, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ListMultimediaVideoUrls(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def get_object(pk):
+        return get_object_or_404(Multimedia, pk=pk)
+
+    def get(self, request, pk):
+        """
+        Returns list of images for a multimedia
+        """
+        multimedia = self.get_object(pk)
+        multimedia_video_urls = MultimediaVideoUrls.objects.filter(multimedia=multimedia)
+        serializer = MultimediaVideoUrlsSerializer(multimedia_video_urls, many=True)
+        return Response({
+            "count": multimedia_video_urls.count(),
+            "data" : serializer.data
+        }, status=status.HTTP_200_OK)
 
 
 class ListMultimediaImages(APIView):
@@ -145,6 +170,7 @@ class CreateMultimediaWithMultimediaList(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response({
+                "success": "True",
                 "message": "Multimedia Created Successfully."
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -171,5 +197,6 @@ class ToggleMultimediaApprovalView(APIView):
             multimedia.approved_at = None
         multimedia.save()
         return Response({
+            "success": True,
             "message": "Multimedia {} successfully.".format("approved" if multimedia.is_approved else "rejected")
         }, status=status.HTTP_204_NO_CONTENT)

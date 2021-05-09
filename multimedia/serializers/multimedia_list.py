@@ -1,10 +1,15 @@
 from django.core.validators import RegexValidator
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
-from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo)
-from utils.file import (check_audio_size_with_ext, check_image_size_with_ext,
-                        check_video_size_with_ext)
+from multimedia.models import (
+    Multimedia, MultimediaAudio, MultimediaImage,
+    MultimediaVideo, MultimediaVideoUrls
+)
+from utils.file import (
+    check_audio_size_with_ext, check_image_size_with_ext,
+    check_video_size_with_ext
+)
 from utils.helper import get_keys_from_ordered_dict
 
 
@@ -89,19 +94,20 @@ class AddMultimediaVideoListSerializer(serializers.Serializer):
 
 
 class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
-    # video = serializers.ListField(
-    #     child=serializers.FileField(
-    #         allow_empty_file=False,
-    #         use_url=False
-    #     ),
-    #     required=False
-    # )
-    video_urls = serializers.ListField(child=serializers.URLField(validators=[
+    video = serializers.ListField(
+        child=serializers.FileField(
+            allow_empty_file=False,
+            use_url=False
+        ),
+        required=False
+    )
+    video_url = serializers.ListField(child=serializers.URLField(validators=[
         RegexValidator(
             regex=r"https:\/\/www\.youtube\.com\/*",
             message="URL must be sourced from youtube."
         )
-    ]), required=True)
+    ]), required=False)
+
     audio = serializers.ListField(
         child=serializers.FileField(
             allow_empty_file=False,
@@ -137,9 +143,9 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
         check_image_size_with_ext(obj)
         return obj
 
-    # def validate_video(self, obj):
-    #     check_video_size_with_ext(obj)
-    #     return obj
+    def validate_video(self, obj):
+        check_video_size_with_ext(obj)
+        return obj
 
     def validate_audio(self, obj):
         check_audio_size_with_ext(obj)
@@ -150,31 +156,36 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
         user = self.context["request"].user
         title = validated_data.pop("title")
         description = validated_data.pop("description")
-        video_urls = validated_data.pop("video_urls")
 
         multimedia, created = Multimedia.objects.get_or_create(
             title=title,
             description=description,
             uploaded_by=user,
-            video_urls=video_urls
         )
         if not created:
             raise serializers.ValidationError({
                 "message": "ACCESS DENIED",
-                "detail" : "Multimedia already exists.",
+                "detail": "Multimedia already exists.",
             })
 
-        # if "video" in keys:
-        #     videos = validated_data.pop('video')
-        #     for video in videos:
-        #         MultimediaVideo.objects.create(
-        #             video=video,
-        #             multimedia=multimedia,
-        #             **validated_data
-        #         )
+        if "video" in keys:
+            videos = validated_data.pop('video')
+            for video in videos:
+                MultimediaVideo.objects.create(
+                    video=video,
+                    multimedia=multimedia,
+                )
+
+        if "video_url" in keys:
+            video_urls = validated_data.pop('video_url')
+            for video_url in video_urls:
+                MultimediaVideoUrls.objects.create(
+                    video_url=video_url,
+                    multimedia=multimedia,
+                )
+
         if "audio" in keys:
             audios = validated_data.pop('audio')
-            print(audios)
             for audio in audios:
                 MultimediaAudio.objects.create(
                     audio=audio,

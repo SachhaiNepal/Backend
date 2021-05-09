@@ -55,7 +55,7 @@ class MultimediaVideoUrls(models.Model):
         on_delete=models.CASCADE,
         related_name="video_urls"
     )
-    video_url = models.URLField(unique=True)
+    video_url = models.URLField()
 
     def __str__(self):
         return self.video_url
