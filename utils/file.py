@@ -26,7 +26,7 @@ def check_extension(resource, allowed_extensions_array):
     Validates file extension
     Raises serializer validation error if requirement does not match
     """
-    ext = re.split("\.", resource.name)[1]
+    ext = resource.name[-3:]
     if ext not in allowed_extensions_array:
         raise serializers.ValidationError(
             f"Resource extension '{ext}' is not allowed for upload."

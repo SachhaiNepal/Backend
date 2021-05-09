@@ -7,6 +7,12 @@ from multimedia.views import views
 from multimedia.views.article import *
 from multimedia.views.media_detail import *
 from multimedia.views.multimedia import *
+from multimedia.views.post_actions import (
+    CreateOrToggleLoveStatusOfArticle, ArticleExtraStatus,
+    CreateOrToggleBookmarkStatusOfArticle, CreateOrToggleLoveStatusOfMultimedia,
+    CreateOrToggleBookmarkStatusOfMultimedia, MultimediaExtraStatus, ListMultimediaComments, ListArticleComments,
+    PostComment
+)
 
 router = DefaultRouter()
 router.register(r"multimedia", views.MultimediaViewSet, basename="multimedia")
@@ -16,16 +22,25 @@ urlpatterns += [
     path("create-article", CreateArticleWithImageList.as_view()),
     path("create-multimedia", CreateMultimediaWithMultimediaList.as_view()),
     path("article/<int:pk>/image", ListArticleImages.as_view()),
-    # path("multimedia/<int:pk>/video", ListMultimediaVideos.as_view()),
+    path("multimedia/<int:pk>/video", ListMultimediaVideos.as_view()),
     path("multimedia/<int:pk>/audio", ListMultimediaAudios.as_view()),
     path("multimedia/<int:pk>/image", ListMultimediaImages.as_view()),
+    path("multimedia/<int:pk>/video-url", ListMultimediaVideoUrls.as_view()),
     path("article-image/<int:pk>", ArticleImageDetailView.as_view()),
     path("multimedia-image/<int:pk>", MultimediaImageDetailView.as_view()),
     path("multimedia-audio/<int:pk>", MultimediaAudioDetailView.as_view()),
-    # path("multimedia-video/<int:pk>", MultimediaVideoDetailView.as_view()),
+    path("multimedia-video/<int:pk>", MultimediaVideoDetailView.as_view()),
     path("multimedia/<int:pk>/toggle-approval", ToggleMultimediaApprovalView.as_view()),
     path("article/<int:pk>/toggle-approval", ToggleArticleApprovalView.as_view()),
-    path("multimedia/<int:pk>/toggle-approval", ToggleMultimediaApprovalView.as_view()),
+    path("article/<int:pk>/toggle-love", CreateOrToggleLoveStatusOfArticle.as_view()),
+    path("article/<int:pk>/toggle-bookmark", CreateOrToggleBookmarkStatusOfArticle.as_view()),
+    path("article-extra-status/<int:pk>", ArticleExtraStatus.as_view()),
+    path("multimedia/<int:pk>/toggle-love", CreateOrToggleLoveStatusOfMultimedia.as_view()),
+    path("multimedia/<int:pk>/toggle-bookmark", CreateOrToggleBookmarkStatusOfMultimedia.as_view()),
+    path("multimedia-extra-status/<int:pk>", MultimediaExtraStatus.as_view()),
 
+    path("multimedia/<int:pk>/comment", ListMultimediaComments.as_view()),
+    path("article/<int:pk>/comment", ListArticleComments.as_view()),
+    path("comment", PostComment.as_view())
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,8 +7,6 @@ from utils.file import check_size
 
 
 class EventPostSerializer(serializers.ModelSerializer):
-    contacts = serializers.ListField(child=serializers.IntegerField())
-
     class Meta:
         model = Event
         fields = "__all__"
@@ -46,8 +44,6 @@ class EventPostSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    contacts = serializers.ListField(child=serializers.IntegerField())
-
     class Meta:
         model = Event
         fields = "__all__"
