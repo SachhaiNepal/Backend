@@ -7,8 +7,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.serializers import (LoginSerializer, LogoutSerializer,
-                                  UserCreateSerializer)
+from accounts.serializers import (
+    LoginSerializer, LogoutSerializer,
+    UserWithProfileSerializer
+)
 
 
 class LoginView(APIView):
@@ -32,7 +34,7 @@ class LoginView(APIView):
                 if not user.is_active:
                     user.is_active = True
                     user.save()
-                serializer = UserCreateSerializer(user)
+                serializer = UserWithProfileSerializer(user, context={"request": request})
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({
                     "token": token.key,
