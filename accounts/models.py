@@ -69,7 +69,7 @@ class ProfileImage(models.Model):
     profile = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
-        related_name="follower_profile_images"
+        related_name="profile_images"
     )
 
     class Meta:
