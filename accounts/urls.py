@@ -1,18 +1,25 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from accounts.views.login import LoginView, LogoutView
 from accounts.views.password import (ResetPasswordConfirm,
                                      ResetPasswordRequestCode, UpdatePassword)
-from accounts.views.users import (AddMemberBranch, AddMemberRole, ListFollower,
-                                  ListMember, ListMemberBranch, ListMemberRole,
-                                  ListProfile, MemberBranchDetail,
-                                  MemberDetail, MemberRoleDetail,
-                                  ProfileDetail, ToggleMemberApprovalView,
-                                  UserDetail, RegisterFollower)
+from accounts.views.users import (
+    AddMemberBranch, AddMemberRole, ListFollower,
+    ListMember, ListMemberBranch, ListMemberRole,
+    ListProfile, MemberBranchDetail,
+    MemberDetail, MemberRoleDetail,
+    ProfileDetail, ToggleMemberApprovalView,
+    UserDetail, RegisterFollower, ProfileImageViewSet
+)
 
 app_name = "accounts"
 
-urlpatterns = [
+router = DefaultRouter()
+router.register(r'profile-image', ProfileImageViewSet, basename='profile-image')
+urlpatterns = router.urls
+
+urlpatterns += [
     path("register-follower", RegisterFollower.as_view(), name="register-follower"),
     path("user", ListFollower.as_view(), name="users-list"),
     path("member", ListMember.as_view(), name="members-list"),

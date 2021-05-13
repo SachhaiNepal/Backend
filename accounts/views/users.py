@@ -8,11 +8,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Member, MemberBranch, MemberRole, Profile
-from accounts.serializers import (MemberBranchSerializer, MemberPOSTSerializer,
-                                  MemberRoleSerializer, MemberSerializer,
-                                  ProfilePOSTSerializer, ProfileSerializer,
-                                  UserCreateSerializer, UserUpdateSerializer, RegisterFollowerSerializer)
+from accounts.models import Member, MemberBranch, MemberRole, Profile, ProfileImage
+from accounts.serializers import (
+    MemberBranchSerializer, MemberPOSTSerializer,
+    MemberRoleSerializer, MemberSerializer,
+    ProfilePOSTSerializer, ProfileSerializer,
+    UserCreateSerializer, UserUpdateSerializer, RegisterFollowerSerializer, ProfileImageSerializer,
+    ProfileImagePostSerializer
+)
 from location.models import Country, District, Province
 
 
@@ -420,3 +423,11 @@ class RegisterFollower(APIView):
                 }
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileImageViewSet(viewsets.ModelViewSet):
+    queryset = ProfileImage.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProfileImagePostSerializer
+
