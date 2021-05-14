@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.serializers import (
-    LoginSerializer, LogoutSerializer,
-    UserWithProfileSerializer
+    LoginSerializer,
+    LogoutSerializer,
+    UserWithProfileSerializer,
 )
 
 
@@ -22,27 +23,32 @@ class LoginView(APIView):
         """
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            username = serializer.data['username']
-            password = serializer.data['password']
+            username = serializer.data["username"]
+            password = serializer.data["password"]
             try:
                 get_user_model().objects.get(username=username)
             except get_user_model().DoesNotExist:
-                return Response({"detail": "User '" + username + "' Not Found!"}, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"detail": "User '" + username + "' Not Found!"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
             user = authenticate(username=username, password=password)
             if user:
                 user.last_login = timezone.now()
                 if not user.is_active:
                     user.is_active = True
                     user.save()
-                serializer = UserWithProfileSerializer(user, context={"request": request})
+                serializer = UserWithProfileSerializer(
+                    user, context={"request": request}
+                )
                 token, created = Token.objects.get_or_create(user=user)
-                return Response({
-                    "token": token.key,
-                    "data" : serializer.data
-                }, status=status.HTTP_202_ACCEPTED)
+                return Response(
+                    {"token": token.key, "data": serializer.data},
+                    status=status.HTTP_202_ACCEPTED,
+                )
             return Response(
                 {"detail": "Login failed! Provide valid authentication credentials."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -63,22 +69,33 @@ class LogoutView(APIView):
             try:
                 user = get_user_model().objects.get(username=username)
                 if not user.is_authenticated:
-                    return Response({
-                        "detail": "User not logged in."
-                    }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(
+                        {"detail": "User not logged in."},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
                 logout(request)
                 try:
                     token = Token.objects.get(user=user)
                     token.delete()
-                    return Response({
-                        "detail": "User member '{}' logged out successfully.".format(user.username)
-                    }, status=status.HTTP_204_NO_CONTENT)
+                    return Response(
+                        {
+                            "detail": "User member '{}' logged out successfully.".format(
+                                user.username
+                            )
+                        },
+                        status=status.HTTP_204_NO_CONTENT,
+                    )
                 except Token.DoesNotExist:
-                    return Response({
-                        "detail": "User '{}' logged out successfully.".format(user.username)
-                    }, status=status.HTTP_204_NO_CONTENT)
+                    return Response(
+                        {
+                            "detail": "User '{}' logged out successfully.".format(
+                                user.username
+                            )
+                        },
+                        status=status.HTTP_204_NO_CONTENT,
+                    )
             except get_user_model().DoesNotExist:
-                return Response({
-                    "detail": "User not found."
-                }, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND
+                )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

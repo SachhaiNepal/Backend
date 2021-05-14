@@ -25,56 +25,68 @@ class EventAdmin(admin.ModelAdmin):
     )
 
     fieldsets = (
-        ("Event Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("title", "description",
-                        "banner",
-                        "organizer",
-                        "contact",
-                        "venue",
-                        "start_date",
-                        "duration",
-                        "time_of_day",
-                        "type",
-                        "is_main",
-                        "is_approved"
-                        )
-        }),
-        ("Location Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "country",
-                "province",
-                "district",
-                "municipality",
-                "municipality_ward",
-                "vdc",
-                "vdc_ward"
-            )
-        })
+        (
+            "Event Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": (
+                    "title",
+                    "description",
+                    "banner",
+                    "organizer",
+                    "contact",
+                    "venue",
+                    "start_date",
+                    "duration",
+                    "time_of_day",
+                    "type",
+                    "is_main",
+                    "is_approved",
+                ),
+            },
+        ),
+        (
+            "Location Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": (
+                    "country",
+                    "province",
+                    "district",
+                    "municipality",
+                    "municipality_ward",
+                    "vdc",
+                    "vdc_ward",
+                ),
+            },
+        ),
     )
 
     list_filter = ("is_approved", "created_at", "approved_at", "is_main")
     search_fields = (
-        "approved_by__username", "approved_by__email",
-        "created_by__username", "created_by__email",
-        "title", "description",
+        "approved_by__username",
+        "approved_by__email",
+        "created_by__username",
+        "created_by__email",
+        "title",
+        "description",
     )
     date_hierarchy = "created_at"
-    ordering = ("title",
-                "venue",
-                "start_date",
-                "duration",
-                "time_of_day",
-                "type",
-                "is_approved",
-                "approved_at",
-                "approved_by",
-                "created_by",
-                "created_at",
-                "updated_at",
-                "updated_by",
-                )
+    ordering = (
+        "title",
+        "venue",
+        "start_date",
+        "duration",
+        "time_of_day",
+        "type",
+        "is_approved",
+        "approved_at",
+        "approved_by",
+        "created_by",
+        "created_at",
+        "updated_at",
+        "updated_by",
+    )
     list_per_page = 10
 
     def save_model(self, request, obj, form, change):

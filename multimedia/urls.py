@@ -8,10 +8,15 @@ from multimedia.views.article import *
 from multimedia.views.media_detail import *
 from multimedia.views.multimedia import *
 from multimedia.views.post_actions import (
-    CreateOrToggleLoveStatusOfArticle, ArticleExtraStatus,
-    CreateOrToggleBookmarkStatusOfArticle, CreateOrToggleLoveStatusOfMultimedia,
-    CreateOrToggleBookmarkStatusOfMultimedia, MultimediaExtraStatus, ListMultimediaComments, ListArticleComments,
-    PostComment
+    ArticleExtraStatus,
+    CreateOrToggleBookmarkStatusOfArticle,
+    CreateOrToggleBookmarkStatusOfMultimedia,
+    CreateOrToggleLoveStatusOfArticle,
+    CreateOrToggleLoveStatusOfMultimedia,
+    ListArticleComments,
+    ListMultimediaComments,
+    MultimediaExtraStatus,
+    PostComment,
 )
 
 router = DefaultRouter()
@@ -33,14 +38,22 @@ urlpatterns += [
     path("multimedia/<int:pk>/toggle-approval", ToggleMultimediaApprovalView.as_view()),
     path("article/<int:pk>/toggle-approval", ToggleArticleApprovalView.as_view()),
     path("article/<int:pk>/toggle-love", CreateOrToggleLoveStatusOfArticle.as_view()),
-    path("article/<int:pk>/toggle-bookmark", CreateOrToggleBookmarkStatusOfArticle.as_view()),
+    path(
+        "article/<int:pk>/toggle-bookmark",
+        CreateOrToggleBookmarkStatusOfArticle.as_view(),
+    ),
     path("article-extra-status/<int:pk>", ArticleExtraStatus.as_view()),
-    path("multimedia/<int:pk>/toggle-love", CreateOrToggleLoveStatusOfMultimedia.as_view()),
-    path("multimedia/<int:pk>/toggle-bookmark", CreateOrToggleBookmarkStatusOfMultimedia.as_view()),
+    path(
+        "multimedia/<int:pk>/toggle-love",
+        CreateOrToggleLoveStatusOfMultimedia.as_view(),
+    ),
+    path(
+        "multimedia/<int:pk>/toggle-bookmark",
+        CreateOrToggleBookmarkStatusOfMultimedia.as_view(),
+    ),
     path("multimedia-extra-status/<int:pk>", MultimediaExtraStatus.as_view()),
-
     path("multimedia/<int:pk>/comment", ListMultimediaComments.as_view()),
     path("article/<int:pk>/comment", ListArticleComments.as_view()),
-    path("comment", PostComment.as_view())
+    path("comment", PostComment.as_view()),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

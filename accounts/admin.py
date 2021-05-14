@@ -9,15 +9,27 @@ from accounts.models import *
 class ProfileAdmin(admin.ModelAdmin):
     save_on_top = True
     list_display = (
-        "user", "bio", "contact", "birth_date",
-        "current_city", "home_town",
-        "country", "province", "district",
+        "user",
+        "bio",
+        "contact",
+        "birth_date",
+        "current_city",
+        "home_town",
+        "country",
+        "province",
+        "district",
         "last_updated",
     )
     ordering = (
-        "user", "bio", "contact", "birth_date",
-        "current_city", "home_town",
-        "country", "province", "district",
+        "user",
+        "bio",
+        "contact",
+        "birth_date",
+        "current_city",
+        "home_town",
+        "country",
+        "province",
+        "district",
         "last_updated",
     )
     list_filter = (
@@ -27,25 +39,36 @@ class ProfileAdmin(admin.ModelAdmin):
         ("last_updated", admin.DateFieldListFilter),
     )
     search_fields = (
-        "user__username", "contact", "district__name",
-        "district__name", "district__province__name",
-        "district__province__country__name"
+        "user__username",
+        "contact",
+        "district__name",
+        "district__name",
+        "district__province__name",
+        "district__province__country__name",
     )
     autocomplete_fields = ["country", "province", "district"]
 
     fieldsets = (
-        ("Personal Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "user", "contact", "bio", "birth_date"
-            )
-        }),
-        ("Location Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "current_city", "home_town", "country", "province", "district"
-            )
-        })
+        (
+            "Personal Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": ("contact", "bio", "birth_date"),
+            },
+        ),
+        (
+            "Location Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": (
+                    "current_city",
+                    "home_town",
+                    "country",
+                    "province",
+                    "district",
+                ),
+            },
+        ),
     )
     list_per_page = 10
 
@@ -53,8 +76,13 @@ class ProfileAdmin(admin.ModelAdmin):
 class UserAdmin(BaseUserAdmin):
     save_on_top = True
     list_display = (
-        "username", "email", "first_name", "last_name",
-        "is_superuser", "is_staff", "date_joined"
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "is_superuser",
+        "is_staff",
+        "date_joined",
     )
 
     list_per_page = 10
@@ -91,13 +119,13 @@ class MemberBranchInline(admin.StackedInline):
 
     # update form for admin site
     fieldsets = (
-        ("Business Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "branch",
-                "date_of_membership"
-            )
-        }),
+        (
+            "Business Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": ("branch", "date_of_membership"),
+            },
+        ),
     )
 
 
@@ -112,15 +140,18 @@ class MemberRoleInline(admin.StackedInline):
 
     # update form for admin site
     fieldsets = (
-        ("Business Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "role_name",
-                "from_date",
-                "to_date",
-                "branch",
-            )
-        }),
+        (
+            "Business Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": (
+                    "role_name",
+                    "from_date",
+                    "to_date",
+                    "branch",
+                ),
+            },
+        ),
     )
 
 
@@ -148,16 +179,8 @@ class MemberRoleAdmin(admin.ModelAdmin):
 
 
 class MemberBranchAdmin(admin.ModelAdmin):
-    list_display = (
-        "member",
-        "branch",
-        "date_of_membership"
-    )
-    ordering = (
-        "member",
-        "branch",
-        "date_of_membership"
-    )
+    list_display = ("member", "branch", "date_of_membership")
+    ordering = ("member", "branch", "date_of_membership")
 
     list_per_page = 10
     list_filter = ("member", "date_of_membership")
@@ -172,30 +195,36 @@ class MemberAdmin(admin.ModelAdmin):
 
     list_display = (
         "user",
-        "is_approved", "approved_by", "approved_at",
+        "is_approved",
+        "approved_by",
+        "approved_at",
     )
     list_filter = (
         ("is_approved", admin.BooleanFieldListFilter),
         ("approved_at", admin.DateFieldListFilter),
-
     )
     search_fields = (
-        "user__username", "district__name",
-        "district__name", "district__province__name",
-        "district__province__country__name"
+        "user__username",
+        "district__name",
+        "district__name",
+        "district__province__name",
+        "district__province__country__name",
     )
     fieldsets = (
-        ("Select Follower", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "user",
-            ),
-        }),
+        (
+            "Select Follower",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": ("user",),
+            },
+        ),
     )
 
     ordering = (
         "user",
-        "is_approved", "approved_by", "approved_at",
+        "is_approved",
+        "approved_by",
+        "approved_at",
     )
 
     list_per_page = 10

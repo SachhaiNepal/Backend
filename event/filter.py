@@ -15,14 +15,14 @@ class ListEventPhotos(APIView):
             event_photos = EventPhoto.objects.filter(event=event)
             serializer = EventPhotoSerializer(event_photos, many=True)
             serializer = generate_url_for_media_resources(serializer, "image")
-            return Response({
-                "count": event_photos.count(),
-                "data" : serializer.data
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {"count": event_photos.count(), "data": serializer.data},
+                status=status.HTTP_200_OK,
+            )
         except Event.DoesNotExist:
-            return Response({
-                "details": "Event not found."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"details": "Event not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class ListEventVideoUrls(APIView):
@@ -32,11 +32,11 @@ class ListEventVideoUrls(APIView):
             event = Event.objects.get(pk=pk)
             event_video_urls = EventVideoUrls.objects.filter(event=event)
             serializer = EventVideoUrlsSerializer(event_video_urls, many=True)
-            return Response({
-                "count": event_video_urls.count(),
-                "data" : serializer.data
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {"count": event_video_urls.count(), "data": serializer.data},
+                status=status.HTTP_200_OK,
+            )
         except Event.DoesNotExist:
-            return Response({
-                "details": "Event not found."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"details": "Event not found."}, status=status.HTTP_404_NOT_FOUND
+            )

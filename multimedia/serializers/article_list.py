@@ -8,11 +8,7 @@ from utils.helper import get_keys_from_ordered_dict
 
 class AddArticleImageListSerializer(serializers.Serializer):
     image = serializers.ListField(
-        child=serializers.FileField(
-            allow_empty_file=False,
-            use_url=True
-        ),
-        required=True
+        child=serializers.FileField(allow_empty_file=False, use_url=True), required=True
     )
 
     def validate_image(self, obj):
@@ -26,19 +22,14 @@ class AddArticleImageListSerializer(serializers.Serializer):
         article = Article.objects.get(pk=article_id)
         for image in images:
             article, created = ArticleImage.objects.get_or_create(
-                image=image,
-                article=article,
-                **validated_data
+                image=image, article=article, **validated_data
             )
         return AddArticleImageListSerializer(**validated_data)
 
 
 class ArticleWithImageListCreateSerializer(serializers.Serializer):
     image = serializers.ListField(
-        child=serializers.FileField(
-            allow_empty_file=False,
-            use_url=False
-        )
+        child=serializers.FileField(allow_empty_file=False, use_url=False)
     )
     title = serializers.CharField(required=True, max_length=512)
     description = serializers.CharField(required=True, max_length=1024)
@@ -67,21 +58,19 @@ class ArticleWithImageListCreateSerializer(serializers.Serializer):
         title = validated_data.pop("title")
         description = validated_data.pop("description")
         article, created = Article.objects.get_or_create(
-            title=title,
-            description=description,
-            uploaded_by=user
+            title=title, description=description, uploaded_by=user
         )
         if not created:
-            raise serializers.ValidationError({
-                "message": "ACCESS DENIED",
-                "detail" : "Article already exists.",
-            })
+            raise serializers.ValidationError(
+                {
+                    "message": "ACCESS DENIED",
+                    "detail": "Article already exists.",
+                }
+            )
         if "image" in keys:
-            images = validated_data.pop('image')
+            images = validated_data.pop("image")
             for image in images:
                 ArticleImage.objects.create(
-                    image=image,
-                    article=article,
-                    **validated_data
+                    image=image, article=article, **validated_data
                 )
         return ArticleWithImageListCreateSerializer(**validated_data)

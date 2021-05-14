@@ -9,7 +9,9 @@ router.register(r"country", viewset=CountryViewSet, basename="country")
 router.register(r"province", viewset=ProvinceViewSet, basename="province")
 router.register(r"district", viewset=DistrictViewSet, basename="district")
 router.register(r"municipality", viewset=MunicipalityViewSet, basename="municipality")
-router.register(r"municipality-ward", viewset=MunicipalityWardViewSet, basename="municipality-ward")
+router.register(
+    r"municipality-ward", viewset=MunicipalityWardViewSet, basename="municipality-ward"
+)
 router.register(r"vdc", viewset=VDCViewSet, basename="vdc")
 router.register(r"vdc-ward", viewset=VDCWardViewSet, basename="vdc-ward")
 

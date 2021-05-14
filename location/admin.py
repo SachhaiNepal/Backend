@@ -1,7 +1,14 @@
 from django.contrib import admin
 
-from location.models import (VDC, Country, District, Municipality,
-                             MunicipalityWard, Province, VDCWard)
+from location.models import (
+    VDC,
+    Country,
+    District,
+    Municipality,
+    MunicipalityWard,
+    Province,
+    VDCWard,
+)
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -10,12 +17,10 @@ class CountryAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name", "created_at", "updated_at")
     fieldsets = (
-        ("Country Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "name",
-            )
-        }),
+        (
+            "Country Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("name",)},
+        ),
     )
 
 
@@ -26,12 +31,13 @@ class ProvinceAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     ordering = ("name", "number", "country", "created_at", "updated_at")
     fieldsets = (
-        ("Province Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "name", "number", "country"
-            )
-        }),
+        (
+            "Province Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": ("name", "number", "country"),
+            },
+        ),
     )
 
 
@@ -39,17 +45,13 @@ class DistrictAdmin(admin.ModelAdmin):
     list_display = ("name", "province", "created_at", "updated_at")
     list_filter = ("province", "created_at", "updated_at")
     autocomplete_fields = ["province"]
-    search_fields = (
-        "name", "province__name", "province__country__name"
-    )
+    search_fields = ("name", "province__name", "province__country__name")
     ordering = ("name", "province", "created_at", "updated_at")
     fieldsets = (
-        ("District Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "name", "province"
-            )
-        }),
+        (
+            "District Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("name", "province")},
+        ),
     )
     list_per_page = 10
 
@@ -60,16 +62,16 @@ class MunicipalityAdmin(admin.ModelAdmin):
     autocomplete_fields = ["district"]
     search_fields = (
         "name",
-        "district__name", "district__province__name", "district__province__country__name"
+        "district__name",
+        "district__province__name",
+        "district__province__country__name",
     )
     ordering = ("name", "district", "created_at", "updated_at")
     fieldsets = (
-        ("Municipality Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "name", "district"
-            )
-        }),
+        (
+            "Municipality Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("name", "district")},
+        ),
     )
     list_per_page = 10
 
@@ -79,18 +81,22 @@ class MunicipalityWardAdmin(admin.ModelAdmin):
     list_filter = ("created_at", "updated_at")
     autocomplete_fields = ["municipality"]
     search_fields = (
-        "name", "number",
-        "municipality__name", "municipality__district__name",
-        "municipality__district__province__name", "municipality__district__province__country__name"
+        "name",
+        "number",
+        "municipality__name",
+        "municipality__district__name",
+        "municipality__district__province__name",
+        "municipality__district__province__country__name",
     )
     ordering = ("name", "municipality", "number", "created_at", "updated_at")
     fieldsets = (
-        ("Municipality Ward Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "name", "municipality", "number"
-            )
-        }),
+        (
+            "Municipality Ward Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": ("name", "municipality", "number"),
+            },
+        ),
     )
     list_per_page = 10
 
@@ -101,16 +107,16 @@ class VDCAdmin(admin.ModelAdmin):
     autocomplete_fields = ["district"]
     search_fields = (
         "name",
-        "district__name", "district__province__name", "district__province__country__name"
+        "district__name",
+        "district__province__name",
+        "district__province__country__name",
     )
     ordering = ("name", "district", "created_at", "updated_at")
     fieldsets = (
-        ("VDC Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "name", "district"
-            )
-        }),
+        (
+            "VDC Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("name", "district")},
+        ),
     )
     list_per_page = 10
 
@@ -120,17 +126,19 @@ class VDCWardAdmin(admin.ModelAdmin):
     list_filter = ("created_at", "updated_at")
     autocomplete_fields = ["vdc"]
     search_fields = (
-        "name", "number",
-        "vdc__name", "vdc__district__name", "vdc__district__province__name", "vdc__district__province__country__name"
+        "name",
+        "number",
+        "vdc__name",
+        "vdc__district__name",
+        "vdc__district__province__name",
+        "vdc__district__province__country__name",
     )
     ordering = ("name", "vdc", "number", "created_at", "updated_at")
     fieldsets = (
-        ("VDC Ward Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "name", "vdc", "number"
-            )
-        }),
+        (
+            "VDC Ward Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("name", "vdc", "number")},
+        ),
     )
     list_per_page = 10
 

@@ -10,7 +10,10 @@ from advertise.serializers import AdFileSerializer
 class AdFileViewSet(viewsets.ModelViewSet):
     queryset = Advertisement.objects.all()
     serializer_class = AdFileSerializer
-    parser_classes = (MultiPartParser, FormParser,)
+    parser_classes = (
+        MultiPartParser,
+        FormParser,
+    )
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -18,6 +21,7 @@ class AdFileViewSet(viewsets.ModelViewSet):
         ad = self.get_object()
         ad.image.delete()
         ad.delete()
-        return Response({
-            "message": "Advertisement deleted successfully"
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"message": "Advertisement deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )

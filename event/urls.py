@@ -5,9 +5,9 @@ from event.filter import *
 from event.views import *
 
 router = DefaultRouter()
-router.register(r'event', EventViewSet, basename='event')
-router.register(r'event-photo', EventPhotoViewSet, basename='event-photo')
-router.register(r'event-video-url', EventVideoUrlsViewSet, basename='event-video-url')
+router.register(r"event", EventViewSet, basename="event")
+router.register(r"event-photo", EventPhotoViewSet, basename="event-photo")
+router.register(r"event-video-url", EventVideoUrlsViewSet, basename="event-video-url")
 urlpatterns = router.urls
 
 urlpatterns += [

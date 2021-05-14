@@ -5,10 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import Love, Article, BookmarkMedia, Multimedia, Comment
+from multimedia.models import Article, BookmarkMedia, Comment, Love, Multimedia
 from multimedia.serializers.article_actions import (
-    LovePostSerializer, LoveSerializer, CommentSerializer,
-    CommentPostSerializer
+    CommentPostSerializer,
+    CommentSerializer,
+    LovePostSerializer,
+    LoveSerializer,
 )
 
 
@@ -31,13 +33,18 @@ class ArticleExtraStatus(APIView):
     def get(request, pk):
         article = get_object_or_404(Article, pk=pk)
         love, created = Love.objects.get_or_create(article=article, lover=request.user)
-        bookmark, created = BookmarkMedia.objects.get_or_create(article=article, marker=request.user)
+        bookmark, created = BookmarkMedia.objects.get_or_create(
+            article=article, marker=request.user
+        )
         love_counts = Love.objects.filter(article=article, is_loved=True).count()
-        return Response({
-            "loved": love.is_loved,
-            "bookmarked": bookmark.is_bookmarked,
-            "love_count": love_counts
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "loved": love.is_loved,
+                "bookmarked": bookmark.is_bookmarked,
+                "love_count": love_counts,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class CreateOrToggleLoveStatusOfArticle(APIView):
@@ -48,19 +55,24 @@ class CreateOrToggleLoveStatusOfArticle(APIView):
     def post(request, pk):
         try:
             article = Article.objects.get(pk=pk)
-            love, created = Love.objects.get_or_create(article=article, lover=request.user)
+            love, created = Love.objects.get_or_create(
+                article=article, lover=request.user
+            )
             if created:
                 love.is_loved = True
             else:
                 love.is_loved = not love.is_loved
             love.save()
-            return Response({
-                "success": True,
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "success": True,
+                },
+                status=status.HTTP_200_OK,
+            )
         except Article.DoesNotExist:
-            return Response({
-                "detail": "Article not found."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Article not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class CreateOrToggleBookmarkStatusOfArticle(APIView):
@@ -71,19 +83,24 @@ class CreateOrToggleBookmarkStatusOfArticle(APIView):
     def post(request, pk):
         try:
             article = Article.objects.get(pk=pk)
-            bookmark, created = BookmarkMedia.objects.get_or_create(article=article, marker=request.user)
+            bookmark, created = BookmarkMedia.objects.get_or_create(
+                article=article, marker=request.user
+            )
             if created:
                 bookmark.is_bookmarked = True
             else:
                 bookmark.is_bookmarked = not bookmark.is_bookmarked
             bookmark.save()
-            return Response({
-                "success": True,
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "success": True,
+                },
+                status=status.HTTP_200_OK,
+            )
         except Article.DoesNotExist:
-            return Response({
-                "detail": "Article not found."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Article not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class MultimediaExtraStatus(APIView):
@@ -93,14 +110,21 @@ class MultimediaExtraStatus(APIView):
     @staticmethod
     def get(request, pk):
         multimedia = get_object_or_404(Multimedia, pk=pk)
-        love, created = Love.objects.get_or_create(multimedia=multimedia, lover=request.user)
-        bookmark, created = BookmarkMedia.objects.get_or_create(multimedia=multimedia, marker=request.user)
+        love, created = Love.objects.get_or_create(
+            multimedia=multimedia, lover=request.user
+        )
+        bookmark, created = BookmarkMedia.objects.get_or_create(
+            multimedia=multimedia, marker=request.user
+        )
         love_counts = Love.objects.filter(multimedia=multimedia, is_loved=True).count()
-        return Response({
-            "loved": love.is_loved,
-            "bookmarked": bookmark.is_bookmarked,
-            "love_count": love_counts
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "loved": love.is_loved,
+                "bookmarked": bookmark.is_bookmarked,
+                "love_count": love_counts,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class CreateOrToggleLoveStatusOfMultimedia(APIView):
@@ -111,19 +135,24 @@ class CreateOrToggleLoveStatusOfMultimedia(APIView):
     def post(request, pk):
         try:
             multimedia = Multimedia.objects.get(pk=pk)
-            love, created = Love.objects.get_or_create(multimedia=multimedia, lover=request.user)
+            love, created = Love.objects.get_or_create(
+                multimedia=multimedia, lover=request.user
+            )
             if created:
                 love.is_loved = True
             else:
                 love.is_loved = not love.is_loved
             love.save()
-            return Response({
-                "success": True,
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "success": True,
+                },
+                status=status.HTTP_200_OK,
+            )
         except Multimedia.DoesNotExist:
-            return Response({
-                "detail": "Multimedia not found."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Multimedia not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class CreateOrToggleBookmarkStatusOfMultimedia(APIView):
@@ -134,19 +163,24 @@ class CreateOrToggleBookmarkStatusOfMultimedia(APIView):
     def post(request, pk):
         try:
             multimedia = Multimedia.objects.get(pk=pk)
-            bookmark, created = BookmarkMedia.objects.get_or_create(multimedia=multimedia, marker=request.user)
+            bookmark, created = BookmarkMedia.objects.get_or_create(
+                multimedia=multimedia, marker=request.user
+            )
             if created:
                 bookmark.is_bookmarked = True
             else:
                 bookmark.is_bookmarked = not bookmark.is_bookmarked
             bookmark.save()
-            return Response({
-                "success": True,
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "success": True,
+                },
+                status=status.HTTP_200_OK,
+            )
         except Multimedia.DoesNotExist:
-            return Response({
-                "detail": "Multimedia not found."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Multimedia not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class ListArticleComments(APIView):
@@ -161,9 +195,7 @@ class ListArticleComments(APIView):
         article = self.get_object(pk)
         comments = Comment.objects.filter(article=article)
         serializer = CommentSerializer(comments, many=True)
-        return Response({
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
 class ListMultimediaComments(APIView):
@@ -178,9 +210,7 @@ class ListMultimediaComments(APIView):
         multimedia = self.get_object(pk)
         comments = Comment.objects.filter(multimedia=multimedia)
         serializer = CommentSerializer(comments, many=True)
-        return Response({
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
 class PostComment(APIView):
@@ -189,14 +219,16 @@ class PostComment(APIView):
 
     @staticmethod
     def post(request):
-        serializer = CommentPostSerializer(data=request.data, context={'request': request})
+        serializer = CommentPostSerializer(
+            data=request.data, context={"request": request}
+        )
         if serializer.is_valid():
             print(request.user)
             # serializer.writer = request.user
             print(serializer)
             serializer.save()
-            return Response({
-                "success": True,
-                "comment": serializer.data
-            }, status=status.HTTP_201_CREATED)
+            return Response(
+                {"success": True, "comment": serializer.data},
+                status=status.HTTP_201_CREATED,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -4,10 +4,14 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
-                              ALLOWED_IMAGES_EXTENSIONS,
-                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
-                              MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
+from backend.settings import (
+    ALLOWED_AUDIO_EXTENSIONS,
+    ALLOWED_IMAGES_EXTENSIONS,
+    ALLOWED_VIDEO_EXTENSIONS,
+    MAX_UPLOAD_AUDIO_SIZE,
+    MAX_UPLOAD_IMAGE_SIZE,
+    MAX_UPLOAD_VIDEO_SIZE,
+)
 
 
 class Media(models.Model):
@@ -19,19 +23,16 @@ class Media(models.Model):
         related_name="approved_medias",
         null=True,
         blank=True,
-        editable=False
+        editable=False,
     )
     approved_at = models.DateTimeField(
-        default=None,
-        null=True,
-        blank=True,
-        editable=False
+        default=None, null=True, blank=True, editable=False
     )
     uploaded_by = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
         related_name="uploaded_medias",
-        editable=False
+        editable=False,
     )
     uploaded_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
@@ -51,9 +52,7 @@ class Multimedia(Media):
 
 class MultimediaVideoUrls(models.Model):
     multimedia = models.ForeignKey(
-        Multimedia,
-        on_delete=models.CASCADE,
-        related_name="video_urls"
+        Multimedia, on_delete=models.CASCADE, related_name="video_urls"
     )
     video_url = models.URLField()
 
@@ -66,12 +65,10 @@ class MultimediaVideo(models.Model):
         upload_to="multimedia/videos",
         validators=[FileExtensionValidator(ALLOWED_VIDEO_EXTENSIONS)],
         unique=True,
-        verbose_name="Multimedia Video File"
+        verbose_name="Multimedia Video File",
     )
     multimedia = models.ForeignKey(
-        Multimedia,
-        on_delete=models.CASCADE,
-        related_name="multimedia_video"
+        Multimedia, on_delete=models.CASCADE, related_name="multimedia_video"
     )
 
     def __str__(self):
@@ -94,12 +91,10 @@ class MultimediaAudio(models.Model):
         upload_to="multimedia/audios",
         validators=[FileExtensionValidator(ALLOWED_AUDIO_EXTENSIONS)],
         unique=True,
-        verbose_name="Multimedia Audio File"
+        verbose_name="Multimedia Audio File",
     )
     multimedia = models.ForeignKey(
-        Multimedia,
-        on_delete=models.CASCADE,
-        related_name="multimedia_audio"
+        Multimedia, on_delete=models.CASCADE, related_name="multimedia_audio"
     )
 
     def __str__(self):
@@ -120,12 +115,10 @@ class MultimediaAudio(models.Model):
 class MultimediaImage(models.Model):
     image = models.ImageField(
         upload_to="multimedia/images",
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     multimedia = models.ForeignKey(
-        Multimedia,
-        on_delete=models.CASCADE,
-        related_name="multimedia_image"
+        Multimedia, on_delete=models.CASCADE, related_name="multimedia_image"
     )
 
     class Meta:
@@ -153,12 +146,10 @@ class Article(Media):
 class ArticleImage(models.Model):
     image = models.ImageField(
         upload_to="articles",
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     article = models.ForeignKey(
-        "Article",
-        related_name="article_images",
-        on_delete=models.CASCADE
+        "Article", related_name="article_images", on_delete=models.CASCADE
     )
 
     class Meta:
@@ -195,7 +186,7 @@ class Comment(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="user_comments",
-        editable=False
+        editable=False,
     )
     comment = models.TextField()
     reply_to = models.ForeignKey(
@@ -203,7 +194,7 @@ class Comment(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE,
-        related_name="CommentReplies"
+        related_name="CommentReplies",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -244,7 +235,7 @@ class BookmarkMedia(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="bookmarked_medias",
-        editable=False
+        editable=False,
     )
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -265,7 +256,7 @@ class BookmarkMedia(models.Model):
         return '"{}" {} "{}"'.format(
             self.marker,
             "bookmarked" if self.is_bookmarked else "removed bookmark from",
-            self.multimedia.title if self.multimedia else self.article.title
+            self.multimedia.title if self.multimedia else self.article.title,
         )
 
 
@@ -289,7 +280,7 @@ class PinMedia(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="pinned_medias",
-        editable=False
+        editable=False,
     )
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -310,7 +301,7 @@ class PinMedia(models.Model):
         return '"{}" {} "{}"'.format(
             self.pinner,
             "pinned" if self.is_pinned else "removed pin from",
-            self.multimedia.title if self.multimedia else self.article.title
+            self.multimedia.title if self.multimedia else self.article.title,
         )
 
 
@@ -334,7 +325,7 @@ class Love(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="loved_medias",
-        editable=False
+        editable=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -355,5 +346,5 @@ class Love(models.Model):
         return '"{}" {} "{}"'.format(
             self.lover,
             "loves" if self.is_loved else "does not love",
-            self.multimedia.title if self.multimedia else self.article.title
+            self.multimedia.title if self.multimedia else self.article.title,
         )

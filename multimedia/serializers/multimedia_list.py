@@ -3,23 +3,23 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from multimedia.models import (
-    Multimedia, MultimediaAudio, MultimediaImage,
-    MultimediaVideo, MultimediaVideoUrls
+    Multimedia,
+    MultimediaAudio,
+    MultimediaImage,
+    MultimediaVideo,
+    MultimediaVideoUrls,
 )
 from utils.file import (
-    check_audio_size_with_ext, check_image_size_with_ext,
-    check_video_size_with_ext
+    check_audio_size_with_ext,
+    check_image_size_with_ext,
+    check_video_size_with_ext,
 )
 from utils.helper import get_keys_from_ordered_dict
 
 
 class AddMultimediaImageListSerializer(serializers.Serializer):
     image = serializers.ListField(
-        child=serializers.FileField(
-            allow_empty_file=False,
-            use_url=True
-        ),
-        required=True
+        child=serializers.FileField(allow_empty_file=False, use_url=True), required=True
     )
 
     def validate_image(self, obj):
@@ -33,9 +33,7 @@ class AddMultimediaImageListSerializer(serializers.Serializer):
         multimedia = Multimedia.objects.get(pk=multimedia_id)
         for image in images:
             multimedia, created = MultimediaImage.objects.get_or_create(
-                image=image,
-                multimedia=multimedia,
-                **validated_data
+                image=image, multimedia=multimedia, **validated_data
             )
         return AddMultimediaImageListSerializer(**validated_data)
 
@@ -46,7 +44,7 @@ class AddMultimediaAudioListSerializer(serializers.Serializer):
             allow_empty_file=False,
             use_url=False,
         ),
-        required=True
+        required=True,
     )
 
     def validate_audio(self, obj):
@@ -68,11 +66,8 @@ class AddMultimediaAudioListSerializer(serializers.Serializer):
 
 class AddMultimediaVideoListSerializer(serializers.Serializer):
     video = serializers.ListField(
-        child=serializers.FileField(
-            allow_empty_file=False,
-            use_url=False
-        ),
-        required=False
+        child=serializers.FileField(allow_empty_file=False, use_url=False),
+        required=False,
     )
 
     def validate_video(self, obj):
@@ -86,41 +81,41 @@ class AddMultimediaVideoListSerializer(serializers.Serializer):
         multimedia = Multimedia.objects.get(pk=multimedia_id)
         for video in videos:
             multimedia, created = MultimediaVideo.objects.get_or_create(
-                video=video,
-                multimedia=multimedia,
-                **validated_data
+                video=video, multimedia=multimedia, **validated_data
             )
         return AddMultimediaVideoListSerializer(**validated_data)
 
 
 class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
     video = serializers.ListField(
-        child=serializers.FileField(
-            allow_empty_file=False,
-            use_url=False
-        ),
-        required=False
+        child=serializers.FileField(allow_empty_file=False, use_url=False),
+        required=False,
     )
-    video_url = serializers.ListField(child=serializers.URLField(validators=[
-        RegexValidator(
-            regex=r"https:\/\/www\.youtube\.com\/*",
-            message="URL must be sourced from youtube."
-        )
-    ]), required=False)
+    video_url = serializers.ListField(
+        child=serializers.URLField(
+            validators=[
+                RegexValidator(
+                    regex=r"https:\/\/www\.youtube\.com\/*",
+                    message="URL must be sourced from youtube.",
+                )
+            ]
+        ),
+        required=False,
+    )
 
     audio = serializers.ListField(
         child=serializers.FileField(
             allow_empty_file=False,
             use_url=False,
         ),
-        required=False
+        required=False,
     )
     image = serializers.ListField(
         child=serializers.ImageField(
             allow_empty_file=False,
             use_url=False,
         ),
-        required=False
+        required=False,
     )
     title = serializers.CharField(required=True, max_length=255)
     description = serializers.CharField(required=True, max_length=512)
@@ -163,13 +158,15 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
             uploaded_by=user,
         )
         if not created:
-            raise serializers.ValidationError({
-                "message": "ACCESS DENIED",
-                "detail": "Multimedia already exists.",
-            })
+            raise serializers.ValidationError(
+                {
+                    "message": "ACCESS DENIED",
+                    "detail": "Multimedia already exists.",
+                }
+            )
 
         if "video" in keys:
-            videos = validated_data.pop('video')
+            videos = validated_data.pop("video")
             for video in videos:
                 MultimediaVideo.objects.create(
                     video=video,
@@ -177,7 +174,7 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
                 )
 
         if "video_url" in keys:
-            video_urls = validated_data.pop('video_url')
+            video_urls = validated_data.pop("video_url")
             for video_url in video_urls:
                 MultimediaVideoUrls.objects.create(
                     video_url=video_url,
@@ -185,7 +182,7 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
                 )
 
         if "audio" in keys:
-            audios = validated_data.pop('audio')
+            audios = validated_data.pop("audio")
             for audio in audios:
                 MultimediaAudio.objects.create(
                     audio=audio,
@@ -193,7 +190,7 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
                 )
 
         if "image" in keys:
-            images = validated_data.pop('image')
+            images = validated_data.pop("image")
             for image in images:
                 MultimediaImage.objects.create(
                     image=image,

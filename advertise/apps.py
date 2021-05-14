@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class AdvertisementConfig(AppConfig):
-    name = 'advertise'
+    name = "advertise"

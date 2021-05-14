@@ -2,10 +2,14 @@ import os
 
 from rest_framework import serializers
 
-from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
-                              ALLOWED_IMAGES_EXTENSIONS,
-                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
-                              MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
+from backend.settings import (
+    ALLOWED_AUDIO_EXTENSIONS,
+    ALLOWED_IMAGES_EXTENSIONS,
+    ALLOWED_VIDEO_EXTENSIONS,
+    MAX_UPLOAD_AUDIO_SIZE,
+    MAX_UPLOAD_IMAGE_SIZE,
+    MAX_UPLOAD_VIDEO_SIZE,
+)
 
 
 def check_size(resource, max_size):
@@ -17,7 +21,8 @@ def check_size(resource, max_size):
     if resource.size / 1000 > max_size:
         raise serializers.ValidationError(
             f"Resource exceeds maximum upload size."
-            f" Allowed maximum size: {max_size / 1000} MB")
+            f" Allowed maximum size: {max_size / 1000} MB"
+        )
 
 
 def check_extension(resource, allowed_extensions_array):

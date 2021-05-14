@@ -15,7 +15,7 @@ class BranchViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.action == 'create' or self.action == 'update':
+        if self.action == "create" or self.action == "update":
             return BranchPOSTSerializer
         return super(BranchViewSet, self).get_serializer_class()
 
@@ -23,9 +23,10 @@ class BranchViewSet(viewsets.ModelViewSet):
         branch = self.get_object()
         branch.image.delete()
         branch.delete()
-        return Response({
-            "message": "Branch deleted successfully"
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"message": "Branch deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
 
 class ToggleBranchApprovalView(APIView):
@@ -37,9 +38,9 @@ class ToggleBranchApprovalView(APIView):
         try:
             branch = Branch.objects.get(pk=pk)
         except Branch.DoesNotExist:
-            return Response({
-                "detail": "Branch does not exist."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Branch does not exist."}, status=status.HTTP_404_NOT_FOUND
+            )
         branch.is_approved = not branch.is_approved
         if branch.is_approved:
             branch.approved_by = request.user
@@ -48,6 +49,11 @@ class ToggleBranchApprovalView(APIView):
             branch.approved_by = None
             branch.approved_at = None
         branch.save()
-        return Response({
-            "message": "Branch {} successfully.".format("approved" if branch.is_approved else "rejected")
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {
+                "message": "Branch {} successfully.".format(
+                    "approved" if branch.is_approved else "rejected"
+                )
+            },
+            status=status.HTTP_204_NO_CONTENT,
+        )
