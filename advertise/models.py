@@ -8,16 +8,11 @@ from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 
 
 class Advertisement(models.Model):
-    heading = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        unique=True
-    )
+    heading = models.CharField(max_length=255, blank=True, null=True, unique=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(
         upload_to="advertise",
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     phone = PhoneNumberField(unique=True)
     owner = models.CharField(max_length=255)
@@ -27,13 +22,13 @@ class Advertisement(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="ads_created",
-        editable=False
+        editable=False,
     )
     modified_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="ads_modified",
-        editable=False
+        editable=False,
     )
 
     def __str__(self):
@@ -43,13 +38,16 @@ class Advertisement(models.Model):
         if self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         if self.pk:
             this_record = Advertisement.objects.get(pk=self.pk)
             if this_record.image != self.image:
                 this_record.image.delete(save=False)
-        super(Advertisement, self).save(force_insert, force_update, using, update_fields)
+        super(Advertisement, self).save(
+            force_insert, force_update, using, update_fields
+        )
 
     def delete(self, using=None, keep_parents=False):
         self.image.delete()

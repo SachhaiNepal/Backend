@@ -23,18 +23,22 @@ class BranchPOSTSerializer(serializers.ModelSerializer):
         Check if both vdc and municipality are selected
         """
         try:
-            check = data['municipality']
+            check = data["municipality"]
             try:
-                check = data['vdc']
-                raise serializers.ValidationError("Both municipality and vdc cannot be assigned.")
+                check = data["vdc"]
+                raise serializers.ValidationError(
+                    "Both municipality and vdc cannot be assigned."
+                )
             except KeyError:
                 return data
         except KeyError:
             try:
-                check = data['vdc']
+                check = data["vdc"]
                 return data
             except KeyError:
-                raise serializers.ValidationError("One of the municipality or vdc must be assigned.")
+                raise serializers.ValidationError(
+                    "One of the municipality or vdc must be assigned."
+                )
 
     def create(self, validated_data):
         validated_data["created_by"] = self.context["request"].user

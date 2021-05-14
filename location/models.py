@@ -17,16 +17,10 @@ class Country(models.Model):
 class Province(models.Model):
     name = models.CharField(max_length=255, unique=True)
     number = models.IntegerField(
-        unique=True,
-        validators=[
-            MaxValueValidator(7),
-            MinValueValidator(1)
-        ]
+        unique=True, validators=[MaxValueValidator(7), MinValueValidator(1)]
     )
     country = models.ForeignKey(
-        "Country",
-        on_delete=models.CASCADE,
-        related_name="provinces"
+        "Country", on_delete=models.CASCADE, related_name="provinces"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -38,9 +32,7 @@ class Province(models.Model):
 class District(models.Model):
     name = models.CharField(max_length=255, unique=True)
     province = models.ForeignKey(
-        "Province",
-        on_delete=models.CASCADE,
-        related_name="districts"
+        "Province", on_delete=models.CASCADE, related_name="districts"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -52,9 +44,7 @@ class District(models.Model):
 class Municipality(models.Model):
     name = models.CharField(max_length=255, unique=True)
     district = models.ForeignKey(
-        "District",
-        on_delete=models.CASCADE,
-        related_name="municipalities"
+        "District", on_delete=models.CASCADE, related_name="municipalities"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -69,9 +59,7 @@ class Municipality(models.Model):
 class VDC(models.Model):
     name = models.CharField(max_length=255, unique=True)
     district = models.ForeignKey(
-        "District",
-        on_delete=models.CASCADE,
-        related_name="vdcs"
+        "District", on_delete=models.CASCADE, related_name="vdcs"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -86,17 +74,9 @@ class VDC(models.Model):
 class VDCWard(models.Model):
     name = models.CharField(max_length=255, unique=True)
     number = models.IntegerField(
-        unique=True,
-        validators=[
-            MaxValueValidator(40),
-            MinValueValidator(1)
-        ]
+        unique=True, validators=[MaxValueValidator(40), MinValueValidator(1)]
     )
-    vdc = models.ForeignKey(
-        "VDC",
-        on_delete=models.CASCADE,
-        related_name="vdc_wards"
-    )
+    vdc = models.ForeignKey("VDC", on_delete=models.CASCADE, related_name="vdc_wards")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -110,16 +90,10 @@ class VDCWard(models.Model):
 class MunicipalityWard(models.Model):
     name = models.CharField(max_length=255, unique=True)
     number = models.IntegerField(
-        unique=True,
-        validators=[
-            MaxValueValidator(40),
-            MinValueValidator(1)
-        ]
+        unique=True, validators=[MaxValueValidator(40), MinValueValidator(1)]
     )
     municipality = models.ForeignKey(
-        "Municipality",
-        on_delete=models.CASCADE,
-        related_name="municipality_wards"
+        "Municipality", on_delete=models.CASCADE, related_name="municipality_wards"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

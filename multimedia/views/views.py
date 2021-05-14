@@ -5,8 +5,10 @@ from rest_framework.response import Response
 from multimedia import models
 from multimedia.models import MultimediaAudio, MultimediaImage, MultimediaVideo
 from multimedia.serializers.model_serializer import (
+    ArticlePOSTSerializer,
     ArticleSerializer,
-    MultimediaSerializer, MultimediaPOTSerializer, ArticlePOSTSerializer
+    MultimediaPOTSerializer,
+    MultimediaSerializer,
 )
 
 
@@ -15,7 +17,7 @@ class MultimediaViewSet(viewsets.ModelViewSet):
     serializer_class = MultimediaSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
-    filterset_fields = ['is_approved']
+    filterset_fields = ["is_approved"]
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":
@@ -34,9 +36,10 @@ class MultimediaViewSet(viewsets.ModelViewSet):
         for video in multimedia_videos:
             video.delete()
         multimedia.delete()
-        return Response({
-            "message": "Multimedia deleted successfully."
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"message": "Multimedia deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -44,7 +47,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
-    filterset_fields = ['is_approved']
+    filterset_fields = ["is_approved"]
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":
@@ -56,6 +59,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         article_images = MultimediaImage.objects.filter(article=article)
         for image in article_images:
             image.delete()
-        return Response({
-            "message": "Article deleted successfully."
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"message": "Article deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
+        )

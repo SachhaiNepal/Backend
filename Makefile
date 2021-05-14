@@ -30,6 +30,7 @@ clean-migrations:
 	rm -rf location/migrations
 	rm -rf event/migrations
 	rm -rf advertise/migrations
+	rm -rf utilities/migrations
 
 clean-db-with-migration: clean-db clean-migrations
 
@@ -52,3 +53,6 @@ get-token:
 
 isort:
 	isort .
+
+black:
+	black .

@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
@@ -34,47 +34,46 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # dependent apps
     "rest_framework",
     "rest_framework.authtoken",
     "phonenumber_field",
     "corsheaders",
     "django_filters",
-
     # apps for the project
     "accounts",
     "branch",
     "multimedia",
     "location",
     "advertise",
-    "event"
+    "event",
+    "utilities",
 ]
 
 # Rest framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES'      : [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ],
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES'    : [
+    "DEFAULT_PERMISSION_CLASSES": [
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
-    'DEFAULT_PAGINATION_CLASS'      : 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE'                     : 10,
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -86,10 +85,10 @@ ROOT_URLCONF = "backend.urls"
 
 TEMPLATES = [
     {
-        "BACKEND" : "django.template.backends.django.DjangoTemplates",
-        "DIRS"    : ["accounts"],
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": ["accounts"],
         "APP_DIRS": True,
-        "OPTIONS" : {
+        "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -109,7 +108,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME"  : os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 # DATABASES = {
@@ -176,38 +175,40 @@ MEDIA_URL = "/media/"
 # Cache configuration
 CACHES = {
     "default": {
-        "BACKEND" : "django_redis.cache.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS" : {
+        "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     },
-    'select2': {
-        "BACKEND" : "django_redis.cache.RedisCache",
+    "select2": {
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS" : {
+        "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
+        },
+    },
 }
 
 # Tell select2 which cache configuration to use:
 SELECT2_CACHE_BACKEND = "select2"
 
 # EMAIL_CONFIGURATION
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "127.0.0.1"
 EMAIL_PORT = 1025
-EMAIL_HOST_USER = 'foo@bar.com'
+EMAIL_HOST_USER = "foo@bar.com"
 
 # File size rule in KB
 MAX_UPLOAD_VIDEO_SIZE = 500000
 MAX_UPLOAD_AUDIO_SIZE = 100000
 MAX_UPLOAD_IMAGE_SIZE = 70000
 
+MAX_SHOWCASE_GALLERY_IMAGES = 5
+
 # File extension rule
 ALLOWED_IMAGES_EXTENSIONS = ["png", "jpg", "jpeg", "gif", "bmp", "tiff", "JPG"]
 ALLOWED_AUDIO_EXTENSIONS = ["mp3", "wav"]
 ALLOWED_VIDEO_EXTENSIONS = ["webm", "mp4", "mpeg", "flv"]
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

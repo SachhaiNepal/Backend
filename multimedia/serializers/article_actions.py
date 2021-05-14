@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from multimedia.models import Love, Comment, Multimedia, Article
+from multimedia.models import Article, Comment, Love, Multimedia
 
 
 class LoveSerializer(serializers.ModelSerializer):
@@ -31,8 +31,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentPostSerializer(serializers.ModelSerializer):
-    article = serializers.PrimaryKeyRelatedField(queryset=Article.objects.all(), required=False)
-    multimedia = serializers.PrimaryKeyRelatedField(queryset=Multimedia.objects.all(), required=False)
+    article = serializers.PrimaryKeyRelatedField(
+        queryset=Article.objects.all(), required=False
+    )
+    multimedia = serializers.PrimaryKeyRelatedField(
+        queryset=Multimedia.objects.all(), required=False
+    )
 
     class Meta:
         model = Comment

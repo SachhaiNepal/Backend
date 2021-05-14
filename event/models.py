@@ -9,7 +9,7 @@ from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 TIME_OF_DAY = (
     ("Morning", "Morning"),
     ("Afternoon", "Afternoon"),
-    ("Evening", "Evening")
+    ("Evening", "Evening"),
 )
 
 EVENT_TYPE = (
@@ -33,29 +33,23 @@ class Event(models.Model):
         upload_to="events",
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     country = models.ForeignKey(
-        "location.Country",
-        on_delete=models.DO_NOTHING,
-        related_name="EventCountry"
+        "location.Country", on_delete=models.DO_NOTHING, related_name="EventCountry"
     )
     province = models.ForeignKey(
-        "location.Province",
-        on_delete=models.DO_NOTHING,
-        related_name="EventProvince"
+        "location.Province", on_delete=models.DO_NOTHING, related_name="EventProvince"
     )
     district = models.ForeignKey(
-        "location.District",
-        on_delete=models.DO_NOTHING,
-        related_name="EventDistrict"
+        "location.District", on_delete=models.DO_NOTHING, related_name="EventDistrict"
     )
     municipality = models.ForeignKey(
         "location.Municipality",
         on_delete=models.DO_NOTHING,
         related_name="EventMunicipality",
         null=True,
-        blank=True
+        blank=True,
     )
     municipality_ward = models.ForeignKey(
         "location.MunicipalityWard",
@@ -69,7 +63,7 @@ class Event(models.Model):
         on_delete=models.DO_NOTHING,
         related_name="EventVdc",
         null=True,
-        blank=True
+        blank=True,
     )
     vdc_ward = models.ForeignKey(
         "location.VDCWard",
@@ -95,7 +89,7 @@ class Event(models.Model):
         related_name="EventCreator",
         null=True,
         blank=True,
-        editable=False
+        editable=False,
     )
     updated_by = models.ForeignKey(
         get_user_model(),
@@ -103,7 +97,7 @@ class Event(models.Model):
         related_name="EventModifier",
         null=True,
         blank=True,
-        editable=False
+        editable=False,
     )
     approved_by = models.ForeignKey(
         get_user_model(),
@@ -111,7 +105,7 @@ class Event(models.Model):
         related_name="EventApprover",
         null=True,
         blank=True,
-        editable=False
+        editable=False,
     )
 
     class Meta:
@@ -124,15 +118,23 @@ class Event(models.Model):
         Require only vdc or municipality
         """
         if not (self.vdc or self.municipality):
-            raise ValidationError("One of the location field (municipality | vdc) must be selected.")
+            raise ValidationError(
+                "One of the location field (municipality | vdc) must be selected."
+            )
         elif self.vdc and self.municipality:
-            raise ValidationError("Both municipality and vdc fields cannot be selected.")
+            raise ValidationError(
+                "Both municipality and vdc fields cannot be selected."
+            )
         elif not (self.vdc_ward or self.municipality_ward):
-            raise ValidationError("One of the location field (municipality | vdc) ward must be selected.")
+            raise ValidationError(
+                "One of the location field (municipality | vdc) ward must be selected."
+            )
         elif self.municipality and self.vdc_ward:
             raise ValidationError("Cannot assign vdc ward for a municipality.")
         elif self.vdc_ward and self.municipality_ward:
-            raise ValidationError("Both municipality and vdc ward fields cannot be selected.")
+            raise ValidationError(
+                "Both municipality and vdc ward fields cannot be selected."
+            )
         elif self.vdc and self.municipality_ward:
             raise ValidationError("Cannot assign municipality ward for a vdc.")
         elif self.banner and self.banner.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
@@ -142,8 +144,9 @@ class Event(models.Model):
         return self.title
 
     # delete banner if replaced while update
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         if self.pk:
             this_record = Event.objects.get(pk=self.pk)
             if this_record.banner != self.banner:
@@ -164,7 +167,7 @@ class EventPhoto(models.Model):
     )
     image = models.ImageField(
         upload_to="event/photos",
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
 
     def __str__(self):
@@ -181,9 +184,7 @@ class EventPhoto(models.Model):
 
 class EventVideoUrls(models.Model):
     event = models.ForeignKey(
-        Event,
-        on_delete=models.CASCADE,
-        related_name="video_urls"
+        Event, on_delete=models.CASCADE, related_name="video_urls"
     )
     video_url = models.URLField(unique=True)
 

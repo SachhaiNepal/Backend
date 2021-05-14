@@ -27,15 +27,18 @@ class AdvertisementAdmin(admin.ModelAdmin):
     )
     date_hierarchy = "created_at"
     fieldsets = (
-        (" Advertisement Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : (
-                "owner",
-                "heading",
-                "description",
-                "image",
-            )
-        }),
+        (
+            " Advertisement Information",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": (
+                    "owner",
+                    "heading",
+                    "description",
+                    "image",
+                ),
+            },
+        ),
     )
     ordering = (
         "heading",

@@ -1,7 +1,14 @@
 from rest_framework import serializers
 
-from location.models import (VDC, Country, District, Municipality,
-                             MunicipalityWard, Province, VDCWard)
+from location.models import (
+    VDC,
+    Country,
+    District,
+    Municipality,
+    MunicipalityWard,
+    Province,
+    VDCWard,
+)
 
 
 class CountrySerializer(serializers.ModelSerializer):

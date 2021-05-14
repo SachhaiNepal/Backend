@@ -4,12 +4,18 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (ArticleImage, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo)
-from multimedia.serializers.model_serializer import (ArticleImageSerializer,
-                                                     MultimediaAudioSerializer,
-                                                     MultimediaImageSerializer,
-                                                     MultimediaVideoSerializer)
+from multimedia.models import (
+    ArticleImage,
+    MultimediaAudio,
+    MultimediaImage,
+    MultimediaVideo,
+)
+from multimedia.serializers.model_serializer import (
+    ArticleImageSerializer,
+    MultimediaAudioSerializer,
+    MultimediaImageSerializer,
+    MultimediaVideoSerializer,
+)
 from utils.helper import generate_url_for_media_resource
 
 
@@ -30,9 +36,10 @@ class ArticleImageDetailView(APIView):
     def delete(self, request, pk):
         article_image = self.get_object(pk)
         article_image.delete()
-        return Response({
-            "detail": "Article image deleted successfully."
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "Article image deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
 
 class MultimediaImageDetailView(APIView):
@@ -52,9 +59,10 @@ class MultimediaImageDetailView(APIView):
     def delete(self, request, pk):
         multimedia_image = self.get_object(pk)
         multimedia_image.delete()
-        return Response({
-            "detail": "Multimedia image deleted successfully."
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "Multimedia image deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
 
 class MultimediaAudioDetailView(APIView):
@@ -74,9 +82,10 @@ class MultimediaAudioDetailView(APIView):
     def delete(self, request, pk):
         multimedia_audio = self.get_object(pk)
         multimedia_audio.delete()
-        return Response({
-            "detail": "Multimedia audio deleted successfully."
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "Multimedia audio deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
 
 class MultimediaVideoDetailView(APIView):
@@ -96,6 +105,7 @@ class MultimediaVideoDetailView(APIView):
     def delete(self, request, pk):
         multimedia_video = self.get_object(pk)
         multimedia_video.delete()
-        return Response({
-            "detail": "Multimedia video deleted successfully."
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "Multimedia video deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
+        )

@@ -14,7 +14,9 @@ from utils.constants import MEMBER_ROLE_CHOICES
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, editable=False)
+    user = models.OneToOneField(
+        get_user_model(), on_delete=models.CASCADE, editable=False
+    )
     bio = models.TextField(null=True, blank=True, max_length=1024)
     contact = PhoneNumberField(unique=True, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
@@ -24,24 +26,27 @@ class Profile(models.Model):
         "location.Country",
         on_delete=models.DO_NOTHING,
         related_name="country_followers",
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
     province = models.ForeignKey(
         "location.Province",
         on_delete=models.DO_NOTHING,
         related_name="province_followers",
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
     district = models.ForeignKey(
         "location.District",
         on_delete=models.DO_NOTHING,
         related_name="district_followers",
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
     last_updated = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
-        return self.user.username + ' Profile'
+        return self.user.username + " Profile"
 
     class Meta:
         verbose_name = "Follower Profile"
@@ -64,12 +69,10 @@ class ProfileImage(models.Model):
         upload_to="follower/profile",
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     profile = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
-        related_name="profile_images"
+        Profile, on_delete=models.CASCADE, related_name="profile_images"
     )
 
     class Meta:
@@ -98,16 +101,18 @@ class Member(models.Model):
         blank=True,
         on_delete=models.DO_NOTHING,
         related_name="approved_members",
-        editable=False
+        editable=False,
     )
-    approved_at = models.DateTimeField(default=None, null=True, blank=True, editable=False)
+    approved_at = models.DateTimeField(
+        default=None, null=True, blank=True, editable=False
+    )
     created_by = models.ForeignKey(
         get_user_model(),
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
         related_name="members_created",
-        editable=False
+        editable=False,
     )
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_by = models.ForeignKey(
@@ -116,7 +121,7 @@ class Member(models.Model):
         blank=True,
         on_delete=models.DO_NOTHING,
         related_name="members_updated",
-        editable=False
+        editable=False,
     )
     updated_at = models.DateTimeField(auto_now=True, editable=False)
 
@@ -131,7 +136,9 @@ class Member(models.Model):
 
 
 class ResetPasswordCode(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="reset_pw_codes")
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="reset_pw_codes"
+    )
     code = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
 
     class Meta:
@@ -142,7 +149,9 @@ class ResetPasswordCode(models.Model):
 
 
 class MemberRole(models.Model):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="member_role")
+    member = models.ForeignKey(
+        Member, on_delete=models.CASCADE, related_name="member_role"
+    )
     role_name = models.CharField(max_length=18, choices=MEMBER_ROLE_CHOICES)
     from_date = models.DateField()
     to_date = models.DateField()
@@ -175,7 +184,9 @@ class MemberRole(models.Model):
 
 
 class MemberBranch(models.Model):
-    member = models.ForeignKey(Member, on_delete=models.DO_NOTHING, related_name="member_branches")
+    member = models.ForeignKey(
+        Member, on_delete=models.DO_NOTHING, related_name="member_branches"
+    )
     branch = models.PositiveBigIntegerField()
     date_of_membership = models.DateField()
 

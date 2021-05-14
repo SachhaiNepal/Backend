@@ -16,9 +16,7 @@ def load_provinces_of_nepal(request):
     for country_name, province_name, province_number in PROVINCES:
         country = Country.objects.get(name=country_name)
         obj, created = Province.objects.get_or_create(
-            name=province_name,
-            number=province_number,
-            country=country
+            name=province_name, number=province_number, country=country
         )
         if created:
             obj.save()

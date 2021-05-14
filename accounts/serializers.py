@@ -6,7 +6,7 @@ from rest_framework.validators import UniqueValidator
 
 from accounts.models import Member, MemberBranch, MemberRole, Profile, ProfileImage
 from branch.models import Branch
-from location.models import Country, Province, District
+from location.models import Country, District, Province
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -36,18 +36,31 @@ class RegisterFollowerSerializer(serializers.Serializer):
     username = serializers.CharField(
         max_length=20,
         validators=[UniqueValidator(queryset=get_user_model().objects.all())],
-        required=True
+        required=True,
     )
-    email = serializers.EmailField(validators=[UniqueValidator(queryset=get_user_model().objects.all())], required=True)
-    contact = PhoneNumberField(validators=[UniqueValidator(queryset=Profile.objects.all())], required=False, allow_blank=True)
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=get_user_model().objects.all())],
+        required=True,
+    )
+    contact = PhoneNumberField(
+        validators=[UniqueValidator(queryset=Profile.objects.all())],
+        required=False,
+        allow_blank=True,
+    )
     password = serializers.CharField(max_length=20, required=True)
     confirm_password = serializers.CharField(max_length=20, required=True)
     birth_date = serializers.DateField(required=False, allow_null=True)
     current_city = serializers.CharField(max_length=64, required=False, allow_null=True)
     home_town = serializers.CharField(max_length=64, required=False, allow_null=True)
-    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), required=False)
-    province = serializers.PrimaryKeyRelatedField(queryset=Province.objects.all(), required=False)
-    district = serializers.PrimaryKeyRelatedField(queryset=District.objects.all(), required=False)
+    country = serializers.PrimaryKeyRelatedField(
+        queryset=Country.objects.all(), required=False
+    )
+    province = serializers.PrimaryKeyRelatedField(
+        queryset=Province.objects.all(), required=False
+    )
+    district = serializers.PrimaryKeyRelatedField(
+        queryset=District.objects.all(), required=False
+    )
 
     @staticmethod
     def validate_password(value):
@@ -69,7 +82,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
         # do not create admins from this api
         read_only_fields = ["is_active", "date_joined", "is_superuser", "is_staff"]
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {"password": {"write_only": True}}
 
     @staticmethod
     def validate_password(password):
@@ -89,6 +102,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 class ProfileImageSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True)
+
     class Meta:
         model = ProfileImage
         fields = ["image"]
@@ -115,7 +129,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "province",
             "district",
             "last_updated",
-            "profile_images"
+            "profile_images",
         )
         depth = 1
 
@@ -148,6 +162,7 @@ class UserWithProfileSerializer(serializers.ModelSerializer):
             "profile",
         )
 
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=64)
     password = serializers.CharField(max_length=64)
@@ -169,7 +184,9 @@ class UpdatePasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data["new_password"] != data["confirm_password"]:
-            raise serializers.ValidationError("New password must match with confirm password.")
+            raise serializers.ValidationError(
+                "New password must match with confirm password."
+            )
         if data["confirm_password"] == data["password"]:
             raise serializers.ValidationError("New and old password must not be same.")
         return data
@@ -190,7 +207,9 @@ class ResetNewPasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data["new_password"] != data["confirm_password"]:
-            raise serializers.ValidationError("New password must match with confirm password.")
+            raise serializers.ValidationError(
+                "New password must match with confirm password."
+            )
         return data
 
 
@@ -220,7 +239,7 @@ class MemberRoleSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Branch does not exist.")
 
     def validate(self, data):
-        member = data['member']
+        member = data["member"]
         branch_id = data["branch"]
         member_branches = MemberBranch.objects.filter(member=member)
         found = False

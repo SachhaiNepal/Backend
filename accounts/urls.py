@@ -2,21 +2,33 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from accounts.views.login import LoginView, LogoutView
-from accounts.views.password import (ResetPasswordConfirm,
-                                     ResetPasswordRequestCode, UpdatePassword)
+from accounts.views.password import (
+    ResetPasswordConfirm,
+    ResetPasswordRequestCode,
+    UpdatePassword,
+)
 from accounts.views.users import (
-    AddMemberBranch, AddMemberRole, ListFollower,
-    ListMember, ListMemberBranch, ListMemberRole,
-    ListProfile, MemberBranchDetail,
-    MemberDetail, MemberRoleDetail,
-    ProfileDetail, ToggleMemberApprovalView,
-    UserDetail, RegisterFollower, ProfileImageViewSet
+    AddMemberBranch,
+    AddMemberRole,
+    ListFollower,
+    ListMember,
+    ListMemberBranch,
+    ListMemberRole,
+    ListProfile,
+    MemberBranchDetail,
+    MemberDetail,
+    MemberRoleDetail,
+    ProfileDetail,
+    ProfileImageViewSet,
+    RegisterFollower,
+    ToggleMemberApprovalView,
+    UserDetail,
 )
 
 app_name = "accounts"
 
 router = DefaultRouter()
-router.register(r'profile-image', ProfileImageViewSet, basename='profile-image')
+router.register(r"profile-image", ProfileImageViewSet, basename="profile-image")
 urlpatterns = router.urls
 
 urlpatterns += [
@@ -30,13 +42,29 @@ urlpatterns += [
     path("role/<int:pk>", MemberRoleDetail.as_view(), name="member-detail-role"),
     path("member/<int:pk>/branch", ListMemberBranch.as_view(), name="member-list-role"),
     path("member-branch", AddMemberBranch.as_view(), name="member-create-role"),
-    path("member-branch/<int:pk>", MemberBranchDetail.as_view(), name="member-detail-role"),
+    path(
+        "member-branch/<int:pk>",
+        MemberBranchDetail.as_view(),
+        name="member-detail-role",
+    ),
     path("user/<int:pk>/profile", ListProfile.as_view(), name="profile-list"),
     path("profile/<int:pk>", ProfileDetail.as_view(), name="profile-detail"),
     path("login", LoginView.as_view(), name="s_login"),
     path("logout", LogoutView.as_view(), name="s_logout"),
     path("user/update-password", UpdatePassword.as_view(), name="update-password"),
-    path("user/reset-password", ResetPasswordRequestCode.as_view(), name="reset-password-request"),
-    path("user/reset-password/<str:code>/", ResetPasswordConfirm.as_view(), name="reset-password-confirm"),
-    path("member/<int:pk>/toggle-approval", ToggleMemberApprovalView.as_view(), name="member-approval-toggle")
+    path(
+        "user/reset-password",
+        ResetPasswordRequestCode.as_view(),
+        name="reset-password-request",
+    ),
+    path(
+        "user/reset-password/<str:code>/",
+        ResetPasswordConfirm.as_view(),
+        name="reset-password-confirm",
+    ),
+    path(
+        "member/<int:pk>/toggle-approval",
+        ToggleMemberApprovalView.as_view(),
+        name="member-approval-toggle",
+    ),
 ]

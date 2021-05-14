@@ -20,11 +20,13 @@ def generate_url_for_media_resources(serializer, param):
 
 def generate_url_for_media_resource(serializer, param):
     front = "http" if os.getenv("IS_SECURE") else "https"
-    serializer[param] = "{}://{}{}".format(front, os.getenv("BASE_URL"), serializer[param])
+    serializer[param] = "{}://{}{}".format(
+        front, os.getenv("BASE_URL"), serializer[param]
+    )
     return serializer
 
 
 def get_random_alphanumeric_string(length):
     letters_and_digits = string.ascii_letters + string.digits
-    result_str = ''.join((random.choice(letters_and_digits) for i in range(length)))
+    result_str = "".join((random.choice(letters_and_digits) for i in range(length)))
     return result_str

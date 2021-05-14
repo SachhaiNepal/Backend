@@ -38,27 +38,45 @@ class MultimediaImageAdmin(admin.StackedInline):
 class MultimediaAdmin(admin.ModelAdmin):
     inlines = [MultimediaAudioAdmin, MultimediaImageAdmin, MultimediaVideoAdmin]
 
-    list_display = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
+    list_display = (
+        "title",
+        "is_approved",
+        "approved_at",
+        "approved_by",
+        "uploaded_by",
+        "uploaded_at",
+    )
 
     fieldsets = (
-        ("Media Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("title", "description")
-        }),
-        ("Business Information", {
-            "classes": ("wide",),
-            "fields" : ("is_approved",)
-        })
+        (
+            "Media Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("title", "description")},
+        ),
+        ("Business Information", {"classes": ("wide",), "fields": ("is_approved",)}),
     )
 
-    list_filter = ("is_approved", "uploaded_at", "approved_at",)
+    list_filter = (
+        "is_approved",
+        "uploaded_at",
+        "approved_at",
+    )
     search_fields = (
-        "approved_by__username", "approved_by__email",
-        "uploaded_by__username", "uploaded_by__email",
-        "title", "description",
+        "approved_by__username",
+        "approved_by__email",
+        "uploaded_by__username",
+        "uploaded_by__email",
+        "title",
+        "description",
     )
     date_hierarchy = "uploaded_at"
-    ordering = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
+    ordering = (
+        "title",
+        "is_approved",
+        "approved_at",
+        "approved_by",
+        "uploaded_by",
+        "uploaded_at",
+    )
     list_per_page = 10
 
     def save_model(self, request, obj, form, change):
@@ -107,7 +125,14 @@ class ArticleImageAdmin(admin.StackedInline):
 class ArticleAdmin(admin.ModelAdmin):
     inlines = [ArticleImageAdmin]
 
-    list_display = ("title", "is_approved", "approved_at", "approved_by", "uploaded_by", "uploaded_at")
+    list_display = (
+        "title",
+        "is_approved",
+        "approved_at",
+        "approved_by",
+        "uploaded_by",
+        "uploaded_at",
+    )
     list_filter = (
         ("is_approved", admin.BooleanFieldListFilter),
         "approved_at",
@@ -116,21 +141,22 @@ class ArticleAdmin(admin.ModelAdmin):
     list_per_page = 10
     search_fields = (
         "title",
-        "approved_by__username", "approved_by__email",
-        "uploaded_by__username", "uploaded_by__email"
+        "approved_by__username",
+        "approved_by__email",
+        "uploaded_by__username",
+        "uploaded_by__email",
     )
 
     # update form for admin site
     fieldsets = (
-        ("Article Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("title", "description")
-        }),
-
-        ("Business Details", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("is_approved",)
-        })
+        (
+            "Article Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("title", "description")},
+        ),
+        (
+            "Business Details",
+            {"classes": ("wide", "extrapretty"), "fields": ("is_approved",)},
+        ),
     )
 
     def save_model(self, request, obj, form, change):
@@ -175,20 +201,22 @@ class CommentAdmin(admin.ModelAdmin):
     list_per_page = 10
     autocomplete_fields = ("article", "multimedia")
     fieldsets = (
-        ("Media Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("article", "multimedia")
-        }),
-
-        ("Comment Details", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("comment", "reply_to")
-        })
+        (
+            "Media Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("article", "multimedia")},
+        ),
+        (
+            "Comment Details",
+            {"classes": ("wide", "extrapretty"), "fields": ("comment", "reply_to")},
+        ),
     )
     search_fields = (
-        "writer__username", "writer__email",
-        "article__title", "multimedia__title",
-        "comment", "reply_to__comment"
+        "writer__username",
+        "writer__email",
+        "article__title",
+        "multimedia__title",
+        "comment",
+        "reply_to__comment",
     )
     date_hierarchy = "created_at"
     ordering = (
@@ -223,18 +251,20 @@ class LoveAdmin(admin.ModelAdmin):
     list_per_page = 10
     autocomplete_fields = ("article", "multimedia")
     fieldsets = (
-        ("Media Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("article", "multimedia")
-        }),
-        ("Love Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("is_loved",)
-        })
+        (
+            "Media Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("article", "multimedia")},
+        ),
+        (
+            "Love Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("is_loved",)},
+        ),
     )
     search_fields = (
-        "lover__username", "lover__email",
-        "article__title", "multimedia__title",
+        "lover__username",
+        "lover__email",
+        "article__title",
+        "multimedia__title",
     )
     date_hierarchy = "created_at"
     ordering = (
@@ -253,36 +283,26 @@ class LoveAdmin(admin.ModelAdmin):
 
 @admin.register(BookmarkMedia)
 class BookmarkMediaAdmin(admin.ModelAdmin):
-    list_display = (
-        "article",
-        "multimedia",
-        "is_bookmarked",
-        "marker",
-        "timestamp"
-    )
-    ordering = (
-        "article",
-        "multimedia",
-        "is_bookmarked",
-        "marker",
-        "timestamp"
-    )
+    list_display = ("article", "multimedia", "is_bookmarked", "marker", "timestamp")
+    ordering = ("article", "multimedia", "is_bookmarked", "marker", "timestamp")
     date_hierarchy = "timestamp"
     list_filter = ("is_bookmarked", "timestamp")
     autocomplete_fields = ("article", "multimedia")
     fieldsets = (
-        ("Media Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("article", "multimedia")
-        }),
-        ("Bookmark Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("is_bookmarked",)
-        })
+        (
+            "Media Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("article", "multimedia")},
+        ),
+        (
+            "Bookmark Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("is_bookmarked",)},
+        ),
     )
     search_fields = (
-        "marker__username", "marker__email",
-        "article__title", "multimedia__title",
+        "marker__username",
+        "marker__email",
+        "article__title",
+        "multimedia__title",
     )
 
     def save_model(self, request, obj, form, change):
@@ -292,36 +312,26 @@ class BookmarkMediaAdmin(admin.ModelAdmin):
 
 @admin.register(PinMedia)
 class PinMediaAdmin(admin.ModelAdmin):
-    list_display = (
-        "article",
-        "multimedia",
-        "is_pinned",
-        "pinner",
-        "timestamp"
-    )
-    ordering = (
-        "article",
-        "multimedia",
-        "is_pinned",
-        "pinner",
-        "timestamp"
-    )
+    list_display = ("article", "multimedia", "is_pinned", "pinner", "timestamp")
+    ordering = ("article", "multimedia", "is_pinned", "pinner", "timestamp")
     date_hierarchy = "timestamp"
     list_filter = ("is_pinned", "timestamp")
     autocomplete_fields = ("article", "multimedia")
     fieldsets = (
-        ("Media Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("article", "multimedia")
-        }),
-        ("Bookmark Information", {
-            "classes": ("wide", "extrapretty"),
-            "fields" : ("is_pinned",)
-        })
+        (
+            "Media Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("article", "multimedia")},
+        ),
+        (
+            "Bookmark Information",
+            {"classes": ("wide", "extrapretty"), "fields": ("is_pinned",)},
+        ),
     )
     search_fields = (
-        "pinner__username", "pinner__email",
-        "article__title", "multimedia__title",
+        "pinner__username",
+        "pinner__email",
+        "article__title",
+        "multimedia__title",
     )
 
     def save_model(self, request, obj, form, change):

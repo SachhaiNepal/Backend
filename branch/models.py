@@ -14,29 +14,23 @@ class Branch(models.Model):
         upload_to="branch",
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)]
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     country = models.ForeignKey(
-        "location.Country",
-        on_delete=models.DO_NOTHING,
-        related_name="BranchCountry"
+        "location.Country", on_delete=models.DO_NOTHING, related_name="BranchCountry"
     )
     province = models.ForeignKey(
-        "location.Province",
-        on_delete=models.DO_NOTHING,
-        related_name="BranchProvince"
+        "location.Province", on_delete=models.DO_NOTHING, related_name="BranchProvince"
     )
     district = models.ForeignKey(
-        "location.District",
-        on_delete=models.DO_NOTHING,
-        related_name="BranchDistrict"
+        "location.District", on_delete=models.DO_NOTHING, related_name="BranchDistrict"
     )
     municipality = models.ForeignKey(
         "location.Municipality",
         on_delete=models.DO_NOTHING,
         related_name="BranchMunicipality",
         null=True,
-        blank=True
+        blank=True,
     )
     municipality_ward = models.OneToOneField(
         "location.MunicipalityWard",
@@ -50,7 +44,7 @@ class Branch(models.Model):
         on_delete=models.DO_NOTHING,
         related_name="BranchVdc",
         null=True,
-        blank=True
+        blank=True,
     )
     vdc_ward = models.OneToOneField(
         "location.VDCWard",
@@ -68,14 +62,14 @@ class Branch(models.Model):
         related_name="BranchApprover",
         null=True,
         blank=True,
-        editable=False
+        editable=False,
     )
     approved_at = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
         related_name="Creator",
-        editable=False
+        editable=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(
@@ -84,7 +78,7 @@ class Branch(models.Model):
         related_name="Modifier",
         null=True,
         blank=True,
-        editable=False
+        editable=False,
     )
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -93,15 +87,23 @@ class Branch(models.Model):
         Require only vdc or municipality
         """
         if not (self.vdc or self.municipality):
-            raise ValidationError("One of the location field (municipality | vdc) must be selected.")
+            raise ValidationError(
+                "One of the location field (municipality | vdc) must be selected."
+            )
         elif self.vdc and self.municipality:
-            raise ValidationError("Both municipality and vdc fields cannot be selected.")
+            raise ValidationError(
+                "Both municipality and vdc fields cannot be selected."
+            )
         elif not (self.vdc_ward or self.municipality_ward):
-            raise ValidationError("One of the location field (municipality | vdc) ward must be selected.")
+            raise ValidationError(
+                "One of the location field (municipality | vdc) ward must be selected."
+            )
         elif self.municipality and self.vdc_ward:
             raise ValidationError("Cannot assign vdc ward for a municipality.")
         elif self.vdc_ward and self.municipality_ward:
-            raise ValidationError("Both municipality and vdc ward fields cannot be selected.")
+            raise ValidationError(
+                "Both municipality and vdc ward fields cannot be selected."
+            )
         elif self.vdc and self.municipality_ward:
             raise ValidationError("Cannot assign municipality ward for a vdc.")
         elif self.image and self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
@@ -117,8 +119,9 @@ class Branch(models.Model):
         return self.name
 
     # delete image if replaced while update
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         if self.pk:
             this_record = Branch.objects.get(pk=self.pk)
             if this_record.image != self.image:

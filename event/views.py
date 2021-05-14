@@ -12,12 +12,15 @@ from event.serializers import *
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    parser_classes = (MultiPartParser, FormParser,)
+    parser_classes = (
+        MultiPartParser,
+        FormParser,
+    )
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
-        if self.action == 'create' or self.action == 'update':
+        if self.action == "create" or self.action == "update":
             return EventPostSerializer
         return super(EventViewSet, self).get_serializer_class()
 
@@ -25,9 +28,9 @@ class EventViewSet(viewsets.ModelViewSet):
         event = self.get_object()
         event.banner.delete()
         event.delete()
-        return Response({
-            "message": "Event deleted successfully"
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"message": "Event deleted successfully"}, status=status.HTTP_204_NO_CONTENT
+        )
 
 
 class EventPhotoViewSet(viewsets.ModelViewSet):
@@ -35,15 +38,19 @@ class EventPhotoViewSet(viewsets.ModelViewSet):
     serializer_class = EventPhotoSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    parser_classes = (MultiPartParser, FormParser,)
+    parser_classes = (
+        MultiPartParser,
+        FormParser,
+    )
 
     def destroy(self, request, *args, **kwargs):
         event_photo = self.get_object()
         event_photo.image.delete()
         event_photo.delete()
-        return Response({
-            "message": "Event photo deleted successfully"
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"message": "Event photo deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
 
 class EventVideoUrlsViewSet(viewsets.ModelViewSet):
@@ -62,9 +69,9 @@ class ToggleEventApprovalView(APIView):
         try:
             event = Event.objects.get(pk=pk)
         except Event.DoesNotExist:
-            return Response({
-                "detail": "Event does not exist."
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Event does not exist."}, status=status.HTTP_404_NOT_FOUND
+            )
         event.is_approved = not event.is_approved
         if event.is_approved:
             event.approved_by = request.user
@@ -73,6 +80,11 @@ class ToggleEventApprovalView(APIView):
             event.approved_by = None
             event.approved_at = None
         event.save()
-        return Response({
-            "message": "Event {} successfully.".format("approved" if event.is_approved else "rejected")
-        }, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {
+                "message": "Event {} successfully.".format(
+                    "approved" if event.is_approved else "rejected"
+                )
+            },
+            status=status.HTTP_204_NO_CONTENT,
+        )

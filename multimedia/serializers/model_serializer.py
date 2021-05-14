@@ -1,9 +1,13 @@
 from rest_framework import serializers
 
 from multimedia.models import (
-    Article, ArticleImage, Multimedia,
-    MultimediaAudio, MultimediaImage,
-    MultimediaVideo, MultimediaVideoUrls
+    Article,
+    ArticleImage,
+    Multimedia,
+    MultimediaAudio,
+    MultimediaImage,
+    MultimediaVideo,
+    MultimediaVideoUrls,
 )
 
 
@@ -50,11 +54,15 @@ class MultimediaSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_approved_at(obj):
-        return obj.approved_at.strftime("%d %B %Y, %I:%M %p") if obj.approved_at else None
+        return (
+            obj.approved_at.strftime("%d %B %Y, %I:%M %p") if obj.approved_at else None
+        )
 
     @staticmethod
     def get_uploaded_at(obj):
-        return obj.uploaded_at.strftime("%d %B %Y, %I:%M %p") if obj.uploaded_at else None
+        return (
+            obj.uploaded_at.strftime("%d %B %Y, %I:%M %p") if obj.uploaded_at else None
+        )
 
     @staticmethod
     def get_updated_at(obj):
@@ -97,11 +105,15 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_approved_at(obj):
-        return obj.approved_at.strftime("%d %B %Y, %I:%M %p") if obj.approved_at else None
+        return (
+            obj.approved_at.strftime("%d %B %Y, %I:%M %p") if obj.approved_at else None
+        )
 
     @staticmethod
     def get_uploaded_at(obj):
-        return obj.uploaded_at.strftime("%d %B %Y, %I:%M %p") if obj.uploaded_at else None
+        return (
+            obj.uploaded_at.strftime("%d %B %Y, %I:%M %p") if obj.uploaded_at else None
+        )
 
     @staticmethod
     def get_updated_at(obj):
