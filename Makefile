@@ -53,3 +53,6 @@ get-token:
 
 isort:
 	isort .
+
+black:
+	black .
