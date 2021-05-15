@@ -5,13 +5,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import Article, BookmarkMedia, Comment, Love, Multimedia
-from multimedia.serializers.article_actions import (
-    CommentPostSerializer,
-    CommentSerializer,
-    LovePostSerializer,
-    LoveSerializer,
-)
+from multimedia.models import (Article, BookmarkMedia, Comment, Love,
+                               Multimedia, PinMedia)
+from multimedia.serializers.article_actions import (CommentPostSerializer,
+                                                    CommentSerializer,
+                                                    LoveSerializer)
 
 
 class LovedArticlesList(APIView):
@@ -116,12 +114,24 @@ class MultimediaExtraStatus(APIView):
         bookmark, created = BookmarkMedia.objects.get_or_create(
             multimedia=multimedia, marker=request.user
         )
-        love_counts = Love.objects.filter(multimedia=multimedia, is_loved=True).count()
+        pin, created = PinMedia.objects.get_or_create(
+            multimedia=multimedia, pinner=request.user
+        )
+        love_count = Love.objects.filter(multimedia=multimedia, is_loved=True).count()
+        bookmark_count = BookmarkMedia.objects.filter(
+            multimedia=multimedia, is_bookmarked=True
+        ).count()
+        pin_count = PinMedia.objects.filter(
+            multimedia=multimedia, is_pinned=True
+        ).count()
         return Response(
             {
                 "loved": love.is_loved,
                 "bookmarked": bookmark.is_bookmarked,
-                "love_count": love_counts,
+                "pinned": pin.is_pinned,
+                "love_count": love_count,
+                "bookmark_count": bookmark_count,
+                "pin_count": pin_count,
             },
             status=status.HTTP_200_OK,
         )
@@ -232,3 +242,59 @@ class PostComment(APIView):
                 status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateOrTogglePinStatusOfMultimedia(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def post(request, pk):
+        try:
+            multimedia = Multimedia.objects.get(pk=pk)
+            pin_media, created = PinMedia.objects.get_or_create(
+                multimedia=multimedia, pinner=request.user
+            )
+            if created:
+                pin_media.is_pinned = True
+            else:
+                pin_media.is_pinned = not pin_media.is_pinned
+            pin_media.save()
+            return Response(
+                {
+                    "success": True,
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Multimedia.DoesNotExist:
+            return Response(
+                {"detail": "Multimedia not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class CreateOrTogglePinStatusOfArticle(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def post(request, pk):
+        try:
+            article = Article.objects.get(pk=pk)
+            pin_media, created = PinMedia.objects.get_or_create(
+                article=article, pinner=request.user
+            )
+            if created:
+                pin_media.is_pinned = True
+            else:
+                pin_media.is_pinned = not pin_media.is_pinned
+            pin_media.save()
+            return Response(
+                {
+                    "success": True,
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Article.DoesNotExist:
+            return Response(
+                {"detail": "Article not found."}, status=status.HTTP_404_NOT_FOUND
+            )

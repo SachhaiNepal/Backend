@@ -8,16 +8,15 @@ from multimedia.views.article import *
 from multimedia.views.media_detail import *
 from multimedia.views.multimedia import *
 from multimedia.views.post_actions import (
-    ArticleExtraStatus,
-    CreateOrToggleBookmarkStatusOfArticle,
+    ArticleExtraStatus, CreateOrToggleBookmarkStatusOfArticle,
     CreateOrToggleBookmarkStatusOfMultimedia,
-    CreateOrToggleLoveStatusOfArticle,
-    CreateOrToggleLoveStatusOfMultimedia,
-    ListArticleComments,
-    ListMultimediaComments,
-    MultimediaExtraStatus,
-    PostComment,
-)
+    CreateOrToggleLoveStatusOfArticle, CreateOrToggleLoveStatusOfMultimedia,
+    CreateOrTogglePinStatusOfArticle, CreateOrTogglePinStatusOfMultimedia,
+    ListArticleComments, ListMultimediaComments, MultimediaExtraStatus,
+    PostComment)
+from multimedia.views.post_list import (ListBookmarkedMediaView,
+                                        ListLovedMediaView,
+                                        ListPinnedMediaView)
 
 router = DefaultRouter()
 router.register(r"multimedia", views.MultimediaViewSet, basename="multimedia")
@@ -42,6 +41,10 @@ urlpatterns += [
         "article/<int:pk>/toggle-bookmark",
         CreateOrToggleBookmarkStatusOfArticle.as_view(),
     ),
+    path(
+        "article/<int:pk>/toggle-pin-status",
+        CreateOrTogglePinStatusOfArticle.as_view(),
+    ),
     path("article-extra-status/<int:pk>", ArticleExtraStatus.as_view()),
     path(
         "multimedia/<int:pk>/toggle-love",
@@ -51,9 +54,16 @@ urlpatterns += [
         "multimedia/<int:pk>/toggle-bookmark",
         CreateOrToggleBookmarkStatusOfMultimedia.as_view(),
     ),
+    path(
+        "multimedia/<int:pk>/toggle-pin-status",
+        CreateOrTogglePinStatusOfMultimedia.as_view(),
+    ),
     path("multimedia-extra-status/<int:pk>", MultimediaExtraStatus.as_view()),
     path("multimedia/<int:pk>/comment", ListMultimediaComments.as_view()),
     path("article/<int:pk>/comment", ListArticleComments.as_view()),
     path("comment", PostComment.as_view()),
+    path("loved-media", ListLovedMediaView.as_view()),
+    path("bookmarked-media", ListBookmarkedMediaView.as_view()),
+    path("pinned-media", ListPinnedMediaView.as_view()),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
