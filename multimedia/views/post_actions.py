@@ -18,8 +18,9 @@ class LovedArticlesList(APIView):
 
     @staticmethod
     def get(request):
+        context = {"request": request}
         loved_articles = Love.objects.filter(multimedia=None)
-        serializer = LoveSerializer(data=loved_articles, many=True)
+        serializer = LoveSerializer(data=loved_articles, many=True, context=context)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -34,12 +35,25 @@ class ArticleExtraStatus(APIView):
         bookmark, created = BookmarkMedia.objects.get_or_create(
             article=article, marker=request.user
         )
-        love_counts = Love.objects.filter(article=article, is_loved=True).count()
+        pin, created = PinMedia.objects.get_or_create(
+            article=article, pinner=request.user
+        )
+        love_count = Love.objects.filter(article=article, is_loved=True).count()
+
+        bookmark_count = BookmarkMedia.objects.filter(
+            article=article, is_bookmarked=True
+        ).count()
+        pin_count = PinMedia.objects.filter(
+            article=article, is_pinned=True
+        ).count()
         return Response(
             {
-                "loved": love.is_loved,
-                "bookmarked": bookmark.is_bookmarked,
-                "love_count": love_counts,
+                "loved"         : love.is_loved,
+                "bookmarked"    : bookmark.is_bookmarked,
+                "pinned"        : pin.is_pinned,
+                "love_count"    : love_count,
+                "bookmark_count": bookmark_count,
+                "pin_count"     : pin_count,
             },
             status=status.HTTP_200_OK,
         )

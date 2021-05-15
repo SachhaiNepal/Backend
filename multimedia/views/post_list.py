@@ -28,12 +28,13 @@ class ListLovedMediaView(APIView):
 
     @staticmethod
     def get(request):
+        context = { "request": request }
         loved_articles = Love.objects.filter(multimedia=None, is_loved=True)
         loved_multimedias = Love.objects.filter(article=None, is_loved=True)
         loved_articles_unique_set = remove_duplicates(loved_articles)
         loved_multimedias_unique_set = remove_duplicates(loved_multimedias)
-        article_serializer = LoveSerializer(loved_articles_unique_set, many=True)
-        multimedia_serializer = LoveSerializer(loved_multimedias_unique_set, many=True)
+        article_serializer = LoveSerializer(loved_articles_unique_set, many=True, context=context)
+        multimedia_serializer = LoveSerializer(loved_multimedias_unique_set, many=True, context=context)
         return Response(
             {
                 "article": article_serializer.data,
@@ -49,6 +50,7 @@ class ListBookmarkedMediaView(APIView):
 
     @staticmethod
     def get(request):
+        context = {"request": request}
         bookmarked_articles = BookmarkMedia.objects.filter(
             multimedia=None, is_bookmarked=True
         )
@@ -58,10 +60,10 @@ class ListBookmarkedMediaView(APIView):
         bookmarked_articles_unique_set = remove_duplicates(bookmarked_articles)
         bookmarked_multimedias_unique_set = remove_duplicates(bookmarked_multimedias)
         article_serializer = BookmarkMediaSerializer(
-            bookmarked_articles_unique_set, many=True
+            bookmarked_articles_unique_set, many=True, context=context
         )
         multimedia_serializer = BookmarkMediaSerializer(
-            bookmarked_multimedias_unique_set, many=True
+            bookmarked_multimedias_unique_set, many=True, context=context
         )
         return Response(
             {
@@ -78,13 +80,14 @@ class ListPinnedMediaView(APIView):
 
     @staticmethod
     def get(request):
+        context = {"request": request}
         pinned_articles = PinMedia.objects.filter(multimedia=None, is_pinned=True)
         pinned_multimedias = PinMedia.objects.filter(article=None, is_pinned=True)
         pinned_articles_unique_set = remove_duplicates(pinned_articles)
         pinned_multimedias_unique_set = remove_duplicates(pinned_multimedias)
-        article_serializer = PinMediaSerializer(pinned_articles_unique_set, many=True)
+        article_serializer = PinMediaSerializer(pinned_articles_unique_set, many=True, context=context)
         multimedia_serializer = PinMediaSerializer(
-            pinned_multimedias_unique_set, many=True
+            pinned_multimedias_unique_set, many=True, context=context
         )
         return Response(
             {
