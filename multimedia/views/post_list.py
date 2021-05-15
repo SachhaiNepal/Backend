@@ -78,13 +78,14 @@ class ListPinnedMediaView(APIView):
 
     @staticmethod
     def get(request):
+        context = {"request": request}
         pinned_articles = PinMedia.objects.filter(multimedia=None, is_pinned=True)
         pinned_multimedias = PinMedia.objects.filter(article=None, is_pinned=True)
         pinned_articles_unique_set = remove_duplicates(pinned_articles)
         pinned_multimedias_unique_set = remove_duplicates(pinned_multimedias)
-        article_serializer = PinMediaSerializer(pinned_articles_unique_set, many=True)
+        article_serializer = PinMediaSerializer(pinned_articles_unique_set, many=True, context=context)
         multimedia_serializer = PinMediaSerializer(
-            pinned_multimedias_unique_set, many=True
+            pinned_multimedias_unique_set, many=True, context=context
         )
         return Response(
             {

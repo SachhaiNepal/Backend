@@ -3,6 +3,7 @@ from rest_framework.exceptions import ValidationError
 
 from multimedia.models import (Article, BookmarkMedia, Comment, Love,
                                Multimedia, PinMedia)
+from multimedia.serializers.model_serializer import ArticleSerializer, MultimediaSerializer
 
 
 class LoveSerializer(serializers.ModelSerializer):
@@ -20,6 +21,9 @@ class BookmarkMediaSerializer(serializers.ModelSerializer):
 
 
 class PinMediaSerializer(serializers.ModelSerializer):
+    article = ArticleSerializer()
+    multimedia = MultimediaSerializer()
+
     class Meta:
         model = PinMedia
         fields = "__all__"
