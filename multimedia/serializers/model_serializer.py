@@ -1,14 +1,9 @@
 from rest_framework import serializers
 
-from multimedia.models import (
-    Article,
-    ArticleImage,
-    Multimedia,
-    MultimediaAudio,
-    MultimediaImage,
-    MultimediaVideo,
-    MultimediaVideoUrls,
-)
+from accounts.serializers import UserWithProfileSerializer
+from multimedia.models import (Article, ArticleImage, Multimedia,
+                               MultimediaAudio, MultimediaImage,
+                               MultimediaVideo, MultimediaVideoUrls)
 
 
 class MultimediaVideoSerializer(serializers.ModelSerializer):
@@ -30,9 +25,11 @@ class MultimediaVideoUrlsSerializer(serializers.ModelSerializer):
 
 
 class MultimediaImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
+
     class Meta:
         model = MultimediaImage
-        fields = "__all__"
+        fields = ["image", "multimedia"]
 
 
 class MultimediaPOTSerializer(serializers.ModelSerializer):
@@ -48,6 +45,7 @@ class MultimediaPOTSerializer(serializers.ModelSerializer):
 
 
 class MultimediaSerializer(serializers.ModelSerializer):
+    uploaded_by = UserWithProfileSerializer()
     approved_at = serializers.SerializerMethodField()
     uploaded_at = serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
@@ -75,9 +73,11 @@ class MultimediaSerializer(serializers.ModelSerializer):
 
 
 class ArticleImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
+
     class Meta:
         model = ArticleImage
-        fields = "__all__"
+        fields = ["image", "article"]
 
 
 class ArticleImageCreateSerializer(serializers.ModelSerializer):
@@ -99,6 +99,7 @@ class ArticlePOSTSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    uploaded_by = UserWithProfileSerializer()
     approved_at = serializers.SerializerMethodField()
     uploaded_at = serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()

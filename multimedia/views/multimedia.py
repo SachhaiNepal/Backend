@@ -7,25 +7,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (
-    Multimedia,
-    MultimediaAudio,
-    MultimediaImage,
-    MultimediaVideo,
-    MultimediaVideoUrls,
-)
+from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
+                               MultimediaVideo, MultimediaVideoUrls)
 from multimedia.serializers.model_serializer import (
-    MultimediaAudioSerializer,
-    MultimediaImageSerializer,
-    MultimediaVideoSerializer,
-    MultimediaVideoUrlsSerializer,
-)
+    MultimediaAudioSerializer, MultimediaImageSerializer,
+    MultimediaVideoSerializer, MultimediaVideoUrlsSerializer)
 from multimedia.serializers.multimedia_list import (
-    AddMultimediaAudioListSerializer,
-    AddMultimediaImageListSerializer,
-    AddMultimediaVideoListSerializer,
-    MultimediaWithMultimediaListCreateSerializer,
-)
+    CreateMultimediaWithMultimediaListSerializer,
+    UpdateMultimediaAudioListSerializer, UpdateMultimediaImageListSerializer,
+    UpdateMultimediaVideoListSerializer)
 from utils.helper import generate_url_for_media_resources
 
 
@@ -56,7 +46,7 @@ class ListMultimediaAudios(APIView):
         """
         multimedia = self.get_object(pk)
         context = {"multimedia_id": multimedia.pk}
-        serializer = AddMultimediaAudioListSerializer(
+        serializer = UpdateMultimediaAudioListSerializer(
             data=request.data, context=context
         )
         if serializer.is_valid():
@@ -117,7 +107,7 @@ class ListMultimediaImages(APIView):
         """
         multimedia = self.get_object(pk)
         context = {"multimedia_id": multimedia.pk}
-        serializer = AddMultimediaImageListSerializer(
+        serializer = UpdateMultimediaImageListSerializer(
             data=request.data, context=context
         )
         if serializer.is_valid():
@@ -155,7 +145,7 @@ class ListMultimediaVideos(APIView):
         """
         multimedia = self.get_object(pk)
         context = {"multimedia_id": multimedia.pk}
-        serializer = AddMultimediaVideoListSerializer(
+        serializer = UpdateMultimediaVideoListSerializer(
             data=request.data, context=context
         )
         if serializer.is_valid():
@@ -183,7 +173,7 @@ class CreateMultimediaWithMultimediaList(APIView):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
-        serializer = MultimediaWithMultimediaListCreateSerializer(
+        serializer = CreateMultimediaWithMultimediaListSerializer(
             data=request.data, context={"request": request}
         )
         if serializer.is_valid():

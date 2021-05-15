@@ -1,23 +1,14 @@
 from django.core.validators import RegexValidator
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
-from multimedia.models import (
-    Multimedia,
-    MultimediaAudio,
-    MultimediaImage,
-    MultimediaVideo,
-    MultimediaVideoUrls,
-)
-from utils.file import (
-    check_audio_size_with_ext,
-    check_image_size_with_ext,
-    check_video_size_with_ext,
-)
+from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
+                               MultimediaVideo, MultimediaVideoUrls)
+from utils.file import (check_audio_size_with_ext, check_image_size_with_ext,
+                        check_video_size_with_ext)
 from utils.helper import get_keys_from_ordered_dict
 
 
-class AddMultimediaImageListSerializer(serializers.Serializer):
+class UpdateMultimediaImageListSerializer(serializers.Serializer):
     image = serializers.ListField(
         child=serializers.FileField(allow_empty_file=False, use_url=True), required=True
     )
@@ -35,10 +26,10 @@ class AddMultimediaImageListSerializer(serializers.Serializer):
             multimedia, created = MultimediaImage.objects.get_or_create(
                 image=image, multimedia=multimedia, **validated_data
             )
-        return AddMultimediaImageListSerializer(**validated_data)
+        return UpdateMultimediaImageListSerializer(**validated_data)
 
 
-class AddMultimediaAudioListSerializer(serializers.Serializer):
+class UpdateMultimediaAudioListSerializer(serializers.Serializer):
     audio = serializers.ListField(
         child=serializers.FileField(
             allow_empty_file=False,
@@ -61,10 +52,10 @@ class AddMultimediaAudioListSerializer(serializers.Serializer):
                 audio=audio,
                 multimedia=multimedia,
             )
-        return AddMultimediaAudioListSerializer(**validated_data)
+        return UpdateMultimediaAudioListSerializer(**validated_data)
 
 
-class AddMultimediaVideoListSerializer(serializers.Serializer):
+class UpdateMultimediaVideoListSerializer(serializers.Serializer):
     video = serializers.ListField(
         child=serializers.FileField(allow_empty_file=False, use_url=False),
         required=False,
@@ -83,10 +74,10 @@ class AddMultimediaVideoListSerializer(serializers.Serializer):
             multimedia, created = MultimediaVideo.objects.get_or_create(
                 video=video, multimedia=multimedia, **validated_data
             )
-        return AddMultimediaVideoListSerializer(**validated_data)
+        return UpdateMultimediaVideoListSerializer(**validated_data)
 
 
-class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
+class CreateMultimediaWithMultimediaListSerializer(serializers.Serializer):
     video = serializers.ListField(
         child=serializers.FileField(allow_empty_file=False, use_url=False),
         required=False,
@@ -196,4 +187,4 @@ class MultimediaWithMultimediaListCreateSerializer(serializers.Serializer):
                     image=image,
                     multimedia=multimedia,
                 )
-        return MultimediaWithMultimediaListCreateSerializer(**validated_data)
+        return CreateMultimediaWithMultimediaListSerializer(**validated_data)

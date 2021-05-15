@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, get_user_model, update_session_auth_hash
+from django.contrib.auth import (authenticate, get_user_model,
+                                 update_session_auth_hash)
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -11,11 +12,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import ResetPasswordCode
-from accounts.serializers import (
-    ResetNewPasswordSerializer,
-    ResetPasswordEmailSerializer,
-    UpdatePasswordSerializer,
-)
+from accounts.serializers import (ResetNewPasswordSerializer,
+                                  ResetPasswordEmailSerializer,
+                                  UpdatePasswordSerializer)
 
 
 class UpdatePassword(APIView):

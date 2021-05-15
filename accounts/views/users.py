@@ -8,20 +8,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Member, MemberBranch, MemberRole, Profile, ProfileImage
-from accounts.serializers import (
-    MemberBranchSerializer,
-    MemberPOSTSerializer,
-    MemberRoleSerializer,
-    MemberSerializer,
-    ProfileImagePostSerializer,
-    ProfileImageSerializer,
-    ProfilePOSTSerializer,
-    ProfileSerializer,
-    RegisterFollowerSerializer,
-    UserCreateSerializer,
-    UserUpdateSerializer,
-)
+from accounts.models import (Member, MemberBranch, MemberRole, Profile,
+                             ProfileImage)
+from accounts.serializers import (MemberBranchSerializer, MemberPOSTSerializer,
+                                  MemberRoleSerializer, MemberSerializer,
+                                  ProfileImagePostSerializer,
+                                  ProfileImageSerializer,
+                                  ProfilePOSTSerializer, ProfileSerializer,
+                                  RegisterFollowerSerializer,
+                                  UserCreateSerializer, UserUpdateSerializer)
 from location.models import Country, District, Province
 
 

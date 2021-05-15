@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from multimedia.models import Article, Comment, Love, Multimedia
+from multimedia.models import (Article, BookmarkMedia, Comment, Love,
+                               Multimedia, PinMedia)
 
 
 class LoveSerializer(serializers.ModelSerializer):
@@ -11,10 +12,18 @@ class LoveSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class LovePostSerializer(serializers.ModelSerializer):
+class BookmarkMediaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Love
+        model = BookmarkMedia
         fields = "__all__"
+        depth = 1
+
+
+class PinMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PinMedia
+        fields = "__all__"
+        depth = 1
 
 
 class CommentSerializer(serializers.ModelSerializer):

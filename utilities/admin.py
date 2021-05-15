@@ -2,13 +2,8 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 
 from backend.settings import MAX_SHOWCASE_GALLERY_IMAGES
-from utilities.models import (
-    AboutUs,
-    AboutUsImage,
-    Service,
-    ShowcaseGallery,
-    ShowcaseSlider,
-)
+from utilities.models import (AboutUs, AboutUsImage, Service, ShowcaseGallery,
+                              ShowcaseSlider)
 
 
 class ShowcaseSliderAdmin(admin.ModelAdmin):

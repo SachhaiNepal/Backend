@@ -2,28 +2,15 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from accounts.views.login import LoginView, LogoutView
-from accounts.views.password import (
-    ResetPasswordConfirm,
-    ResetPasswordRequestCode,
-    UpdatePassword,
-)
-from accounts.views.users import (
-    AddMemberBranch,
-    AddMemberRole,
-    ListFollower,
-    ListMember,
-    ListMemberBranch,
-    ListMemberRole,
-    ListProfile,
-    MemberBranchDetail,
-    MemberDetail,
-    MemberRoleDetail,
-    ProfileDetail,
-    ProfileImageViewSet,
-    RegisterFollower,
-    ToggleMemberApprovalView,
-    UserDetail,
-)
+from accounts.views.password import (ResetPasswordConfirm,
+                                     ResetPasswordRequestCode, UpdatePassword)
+from accounts.views.users import (AddMemberBranch, AddMemberRole, ListFollower,
+                                  ListMember, ListMemberBranch, ListMemberRole,
+                                  ListProfile, MemberBranchDetail,
+                                  MemberDetail, MemberRoleDetail,
+                                  ProfileDetail, ProfileImageViewSet,
+                                  RegisterFollower, ToggleMemberApprovalView,
+                                  UserDetail)
 
 app_name = "accounts"
 

@@ -9,7 +9,6 @@ from rest_framework.views import APIView
 
 from multimedia.serializers.article_list import *
 from multimedia.serializers.model_serializer import ArticleImageSerializer
-from utils.helper import generate_url_for_media_resources
 
 
 class ListArticleImages(APIView):
@@ -24,10 +23,10 @@ class ListArticleImages(APIView):
         """
         Returns list of images for an article
         """
+        context = {"request": request}
         article = self.get_object(pk)
         images = ArticleImage.objects.filter(article=article)
-        serializer = ArticleImageSerializer(images, many=True)
-        serializer = generate_url_for_media_resources(serializer, "image")
+        serializer = ArticleImageSerializer(images, many=True, context=context)
         return Response(
             {"count": images.count(), "data": serializer.data},
             status=status.HTTP_200_OK,
@@ -39,7 +38,9 @@ class ListArticleImages(APIView):
         """
         article = self.get_object(pk)
         context = {"article_id": article.pk}
-        serializer = AddArticleImageListSerializer(data=request.data, context=context)
+        serializer = UpdateArticleImageListSerializer(
+            data=request.data, context=context
+        )
         if serializer.is_valid():
             return Response(
                 {"details": "Images added to article successfully."},
@@ -65,7 +66,7 @@ class CreateArticleWithImageList(APIView):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
-        serializer = ArticleWithImageListCreateSerializer(
+        serializer = CreateArticleWithImageListSerializer(
             data=request.data, context={"request": request}
         )
         if serializer.is_valid():

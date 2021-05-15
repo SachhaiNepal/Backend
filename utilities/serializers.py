@@ -1,12 +1,7 @@
 from rest_framework import serializers
 
-from utilities.models import (
-    AboutUs,
-    AboutUsImage,
-    Service,
-    ShowcaseGallery,
-    ShowcaseSlider,
-)
+from utilities.models import (AboutUs, AboutUsImage, Service, ShowcaseGallery,
+                              ShowcaseSlider)
 
 
 class ShowcaseSliderSerializer(serializers.ModelSerializer):

@@ -2,14 +2,10 @@ import os
 
 from rest_framework import serializers
 
-from backend.settings import (
-    ALLOWED_AUDIO_EXTENSIONS,
-    ALLOWED_IMAGES_EXTENSIONS,
-    ALLOWED_VIDEO_EXTENSIONS,
-    MAX_UPLOAD_AUDIO_SIZE,
-    MAX_UPLOAD_IMAGE_SIZE,
-    MAX_UPLOAD_VIDEO_SIZE,
-)
+from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
+                              ALLOWED_IMAGES_EXTENSIONS,
+                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
+                              MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
 
 
 def check_size(resource, max_size):
@@ -31,7 +27,7 @@ def check_extension(resource, allowed_extensions_array):
     Validates file extension
     Raises serializer validation error if requirement does not match
     """
-    ext = os.path.splitext(resource)[1]
+    ext = resource.name.split(".")[-1]
     if ext not in allowed_extensions_array:
         raise serializers.ValidationError(
             f"Resource extension '{ext}' is not allowed for upload."
