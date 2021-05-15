@@ -4,7 +4,8 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from accounts.models import Member, MemberBranch, MemberRole, Profile, ProfileImage
+from accounts.models import (Member, MemberBranch, MemberRole, Profile,
+                             ProfileImage)
 from branch.models import Branch
 from location.models import Country, District, Province
 

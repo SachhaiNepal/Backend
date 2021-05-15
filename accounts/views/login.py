@@ -7,11 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.serializers import (
-    LoginSerializer,
-    LogoutSerializer,
-    UserWithProfileSerializer,
-)
+from accounts.serializers import (LoginSerializer, LogoutSerializer,
+                                  UserWithProfileSerializer)
 
 
 class LoginView(APIView):
