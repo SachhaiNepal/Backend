@@ -3,21 +3,13 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from utilities.models import (
-    AboutUs,
-    AboutUsImage,
-    Service,
-    ShowcaseGallery,
-    ShowcaseSlider,
-)
-from utilities.serializers import (
-    AboutUsImageSerializer,
-    AboutUsSerializer,
-    ServiceSerializer,
-    ShowcaseGallerySerializer,
-    ShowcaseSliderSerializer,
-    AboutUsListSerializer,
-)
+from utilities.models import (AboutUs, AboutUsImage, Service, ShowcaseGallery,
+                              ShowcaseSlider)
+from utilities.serializers import (AboutUsImageSerializer,
+                                   AboutUsListSerializer, AboutUsSerializer,
+                                   ServiceSerializer,
+                                   ShowcaseGallerySerializer,
+                                   ShowcaseSliderSerializer)
 
 
 class ShowcaseSliderViewSet(viewsets.ModelViewSet):

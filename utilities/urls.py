@@ -1,12 +1,8 @@
 from rest_framework.routers import DefaultRouter
 
-from utilities.views import (
-    AboutUsImageViewSet,
-    AboutUsViewSet,
-    ServiceViewSet,
-    ShowcaseGalleryViewSet,
-    ShowcaseSliderViewSet,
-)
+from utilities.views import (AboutUsImageViewSet, AboutUsViewSet,
+                             ServiceViewSet, ShowcaseGalleryViewSet,
+                             ShowcaseSliderViewSet)
 
 router = DefaultRouter()
 router.register(r"showcase-slider", ShowcaseSliderViewSet, basename="showcase-slider")
