@@ -6,7 +6,12 @@ from utils.file import check_image_size_with_ext
 from utils.helper import get_keys_from_ordered_dict
 
 
-class AddArticleImageListSerializer(serializers.Serializer):
+class UpdateArticleImageListSerializer(serializers.Serializer):
+    """
+    update serializer
+    update list of images into an article
+    """
+
     image = serializers.ListField(
         child=serializers.FileField(allow_empty_file=False, use_url=True), required=True
     )
@@ -24,10 +29,15 @@ class AddArticleImageListSerializer(serializers.Serializer):
             article, created = ArticleImage.objects.get_or_create(
                 image=image, article=article, **validated_data
             )
-        return AddArticleImageListSerializer(**validated_data)
+        return UpdateArticleImageListSerializer(**validated_data)
 
 
-class ArticleWithImageListCreateSerializer(serializers.Serializer):
+class CreateArticleWithImageListSerializer(serializers.Serializer):
+    """
+    create serializer
+    creates an article with image list
+    """
+
     image = serializers.ListField(
         child=serializers.FileField(allow_empty_file=False, use_url=False)
     )
@@ -73,4 +83,4 @@ class ArticleWithImageListCreateSerializer(serializers.Serializer):
                 ArticleImage.objects.create(
                     image=image, article=article, **validated_data
                 )
-        return ArticleWithImageListCreateSerializer(**validated_data)
+        return CreateArticleWithImageListSerializer(**validated_data)

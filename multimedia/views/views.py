@@ -4,12 +4,10 @@ from rest_framework.response import Response
 
 from multimedia import models
 from multimedia.models import MultimediaAudio, MultimediaImage, MultimediaVideo
-from multimedia.serializers.model_serializer import (
-    ArticlePOSTSerializer,
-    ArticleSerializer,
-    MultimediaPOTSerializer,
-    MultimediaSerializer,
-)
+from multimedia.serializers.model_serializer import (ArticlePOSTSerializer,
+                                                     ArticleSerializer,
+                                                     MultimediaPOTSerializer,
+                                                     MultimediaSerializer)
 
 
 class MultimediaViewSet(viewsets.ModelViewSet):
