@@ -1,17 +1,16 @@
+import os
+import random
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-from backend.settings import (
-    ALLOWED_AUDIO_EXTENSIONS,
-    ALLOWED_IMAGES_EXTENSIONS,
-    ALLOWED_VIDEO_EXTENSIONS,
-    MAX_UPLOAD_AUDIO_SIZE,
-    MAX_UPLOAD_IMAGE_SIZE,
-    MAX_UPLOAD_VIDEO_SIZE,
-)
+from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
+                              ALLOWED_IMAGES_EXTENSIONS,
+                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
+                              MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
 
 
 class Media(models.Model):
@@ -60,9 +59,15 @@ class MultimediaVideoUrls(models.Model):
         return self.video_url
 
 
+def upload_multimedia_video_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"multimedias/videos/{instance.multimedia.pk}/{filename}"
+
+
 class MultimediaVideo(models.Model):
     video = models.FileField(
-        upload_to="multimedia/videos",
+        upload_to=upload_multimedia_video_to,
         validators=[FileExtensionValidator(ALLOWED_VIDEO_EXTENSIONS)],
         unique=True,
         verbose_name="Multimedia Video File",
@@ -86,9 +91,15 @@ class MultimediaVideo(models.Model):
         verbose_name = "Multimedia Videos"
 
 
+def upload_multimedia_audio_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"multimedias/audios/{instance.multimedia.pk}/{filename}"
+
+
 class MultimediaAudio(models.Model):
     audio = models.FileField(
-        upload_to="multimedia/audios",
+        upload_to=upload_multimedia_audio_to,
         validators=[FileExtensionValidator(ALLOWED_AUDIO_EXTENSIONS)],
         unique=True,
         verbose_name="Multimedia Audio File",
@@ -112,9 +123,15 @@ class MultimediaAudio(models.Model):
         verbose_name = "Multimedia Audios"
 
 
+def upload_multimedia_image_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"multimedias/images/{instance.multimedia.pk}/{filename}"
+
+
 class MultimediaImage(models.Model):
     image = models.ImageField(
-        upload_to="multimedia/images",
+        upload_to=upload_multimedia_image_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     multimedia = models.ForeignKey(
@@ -143,9 +160,15 @@ class Article(Media):
         return self.title
 
 
+def upload_article_image_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"articles/{instance.article.pk}/{filename}"
+
+
 class ArticleImage(models.Model):
     image = models.ImageField(
-        upload_to="articles",
+        upload_to=upload_article_image_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     article = models.ForeignKey(
@@ -210,6 +233,7 @@ class Comment(models.Model):
 
     class Meta:
         verbose_name_plural = "Comments"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.comment
