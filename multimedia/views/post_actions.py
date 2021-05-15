@@ -18,8 +18,9 @@ class LovedArticlesList(APIView):
 
     @staticmethod
     def get(request):
+        context = {"request": request}
         loved_articles = Love.objects.filter(multimedia=None)
-        serializer = LoveSerializer(data=loved_articles, many=True)
+        serializer = LoveSerializer(data=loved_articles, many=True, context=context)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

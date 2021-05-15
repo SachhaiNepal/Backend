@@ -7,6 +7,9 @@ from multimedia.serializers.model_serializer import ArticleSerializer, Multimedi
 
 
 class LoveSerializer(serializers.ModelSerializer):
+    article = ArticleSerializer()
+    multimedia = MultimediaSerializer()
+
     class Meta:
         model = Love
         fields = "__all__"
@@ -14,6 +17,9 @@ class LoveSerializer(serializers.ModelSerializer):
 
 
 class BookmarkMediaSerializer(serializers.ModelSerializer):
+    article = ArticleSerializer()
+    multimedia = MultimediaSerializer()
+
     class Meta:
         model = BookmarkMedia
         fields = "__all__"
