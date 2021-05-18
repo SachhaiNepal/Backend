@@ -121,6 +121,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = (
+            "id",
             "bio",
             "contact",
             "birth_date",
@@ -143,6 +144,16 @@ class ProfilePOSTSerializer(serializers.ModelSerializer):
 
 class UserWithProfileSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    last_login = serializers.SerializerMethodField()
+    date_joined = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_date_joined(obj):
+        return obj.date_joined.strftime("%d %B, %Y") if obj.date_joined else None
+
+    @staticmethod
+    def get_last_login(obj):
+        return obj.last_login.strftime("%d %B %Y, %I:%M %p") if obj.last_login else None
 
     class Meta:
         model = get_user_model()
