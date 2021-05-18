@@ -5,7 +5,7 @@ from rest_framework import permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from accounts.serializers import (
+from accounts.serializers.user import (
     UserCreateSerializer, UserUpdateSerializer, UserWithProfileSerializer
 )
 

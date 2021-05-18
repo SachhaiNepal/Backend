@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member, MemberRole
-from accounts.serializers import MemberRoleSerializer
+from accounts.serializers.member_role import MemberRoleSerializer
 
 
 class ListMemberRole(APIView):

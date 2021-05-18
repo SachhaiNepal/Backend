@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from multimedia.models import BookmarkMedia, Love, PinMedia
-from multimedia.serializers.article_actions import (BookmarkMediaSerializer,
-                                                    LoveSerializer,
-                                                    PinMediaSerializer)
+from multimedia.serializers.post_action import (
+    BookmarkMediaSerializer,
+    LoveSerializer,
+    PinMediaSerializer
+)
 
 
 def remove_duplicates(media_array):
@@ -37,7 +39,7 @@ class ListLovedMediaView(APIView):
         multimedia_serializer = LoveSerializer(loved_multimedias_unique_set, many=True, context=context)
         return Response(
             {
-                "article": article_serializer.data,
+                "article"   : article_serializer.data,
                 "multimedia": multimedia_serializer.data,
             },
             status=status.HTTP_200_OK,
@@ -50,7 +52,7 @@ class ListBookmarkedMediaView(APIView):
 
     @staticmethod
     def get(request):
-        context = {"request": request}
+        context = { "request": request }
         bookmarked_articles = BookmarkMedia.objects.filter(
             multimedia=None, is_bookmarked=True
         )
@@ -67,7 +69,7 @@ class ListBookmarkedMediaView(APIView):
         )
         return Response(
             {
-                "article": article_serializer.data,
+                "article"   : article_serializer.data,
                 "multimedia": multimedia_serializer.data,
             },
             status=status.HTTP_200_OK,
@@ -80,7 +82,7 @@ class ListPinnedMediaView(APIView):
 
     @staticmethod
     def get(request):
-        context = {"request": request}
+        context = { "request": request }
         pinned_articles = PinMedia.objects.filter(multimedia=None, is_pinned=True)
         pinned_multimedias = PinMedia.objects.filter(article=None, is_pinned=True)
         pinned_articles_unique_set = remove_duplicates(pinned_articles)
@@ -91,7 +93,7 @@ class ListPinnedMediaView(APIView):
         )
         return Response(
             {
-                "article": article_serializer.data,
+                "article"   : article_serializer.data,
                 "multimedia": multimedia_serializer.data,
             },
             status=status.HTTP_200_OK,

@@ -4,36 +4,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (ArticleImage, MultimediaAudio, MultimediaImage,
+from multimedia.models import (MultimediaAudio, MultimediaImage,
                                MultimediaVideo)
-from multimedia.serializers.model_serializer import (ArticleImageSerializer,
+from multimedia.serializers.multimedia import (
                                                      MultimediaAudioSerializer,
                                                      MultimediaImageSerializer,
                                                      MultimediaVideoSerializer)
 from utils.helper import generate_url_for_media_resource
-
-
-class ArticleImageDetailView(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(ArticleImage, pk=pk)
-
-    def get(self, request, pk):
-        article_image = self.get_object(pk)
-        serializer = ArticleImageSerializer(article_image)
-        serializer = generate_url_for_media_resource(serializer.data, "image")
-        return Response(serializer, status=status.HTTP_200_OK)
-
-    def delete(self, request, pk):
-        article_image = self.get_object(pk)
-        article_image.delete()
-        return Response(
-            {"detail": "Article image deleted successfully."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
 
 
 class MultimediaImageDetailView(APIView):
@@ -45,16 +22,16 @@ class MultimediaImageDetailView(APIView):
         return get_object_or_404(MultimediaImage, pk=pk)
 
     def get(self, request, pk):
+        context = {"request": request}
         multimedia_image = self.get_object(pk)
-        serializer = MultimediaImageSerializer(multimedia_image)
-        serializer = generate_url_for_media_resource(serializer.data, "image")
+        serializer = MultimediaImageSerializer(multimedia_image, context=context)
         return Response(serializer, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
         multimedia_image = self.get_object(pk)
         multimedia_image.delete()
         return Response(
-            {"detail": "Multimedia image deleted successfully."},
+            {"success": True},
             status=status.HTTP_204_NO_CONTENT,
         )
 
@@ -77,7 +54,7 @@ class MultimediaAudioDetailView(APIView):
         multimedia_audio = self.get_object(pk)
         multimedia_audio.delete()
         return Response(
-            {"detail": "Multimedia audio deleted successfully."},
+            { "success": True },
             status=status.HTTP_204_NO_CONTENT,
         )
 

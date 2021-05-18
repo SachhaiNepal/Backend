@@ -1,26 +1,30 @@
-from django.conf import settings
-from django.conf.urls.static import static
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from multimedia.views import views
-from multimedia.views.article import *
-from multimedia.views.media_detail import *
-from multimedia.views.multimedia import *
-from multimedia.views.post_actions import (
-    ArticleExtraStatus, CreateOrToggleBookmarkStatusOfArticle,
-    CreateOrToggleBookmarkStatusOfMultimedia,
-    CreateOrToggleLoveStatusOfArticle, CreateOrToggleLoveStatusOfMultimedia,
-    CreateOrTogglePinStatusOfArticle, CreateOrTogglePinStatusOfMultimedia,
-    ListArticleComments, ListMultimediaComments, MultimediaExtraStatus,
-    PostComment)
-from multimedia.views.post_list import (ListBookmarkedMediaView,
-                                        ListLovedMediaView,
-                                        ListPinnedMediaView)
+from multimedia.views.article import ArticleViewSet, CreateArticleWithImageList, ToggleArticleApprovalView
+from multimedia.views.article_image import ListArticleImages, ArticleImageDetailView
+from multimedia.views.bookmark import CreateOrToggleBookmarkStatusOfArticle, CreateOrToggleBookmarkStatusOfMultimedia
+from multimedia.views.comment import ListMultimediaComments, ListArticleComments, PostComment
+from multimedia.views.love import CreateOrToggleLoveStatusOfArticle, CreateOrToggleLoveStatusOfMultimedia
+from multimedia.views.multimedia import (
+    MultimediaViewSet, CreateMultimediaWithMultimediaList,
+    ToggleMultimediaApprovalView
+)
+from multimedia.views.multimedia_media import (
+    ListMultimediaVideos, ListMultimediaAudios, ListMultimediaImages,
+    ListMultimediaVideoUrls
+)
+from multimedia.views.multimedia_media_detail import (
+    MultimediaImageDetailView, MultimediaAudioDetailView,
+    MultimediaVideoDetailView
+)
+from multimedia.views.pin_post import CreateOrTogglePinStatusOfArticle, CreateOrTogglePinStatusOfMultimedia
+from multimedia.views.post_list import ListLovedMediaView, ListBookmarkedMediaView, ListPinnedMediaView
+from multimedia.views.post_status import ArticleStatus, MultimediaStatus
 
 router = DefaultRouter()
-router.register(r"multimedia", views.MultimediaViewSet, basename="multimedia")
-router.register(r"article", views.ArticleViewSet, basename="article")
+router.register(r"multimedia", MultimediaViewSet, basename="multimedia")
+router.register(r"article", ArticleViewSet, basename="article")
 urlpatterns = router.urls
 urlpatterns += [
     path("create-article", CreateArticleWithImageList.as_view()),
@@ -45,7 +49,7 @@ urlpatterns += [
         "article/<int:pk>/toggle-pin-status",
         CreateOrTogglePinStatusOfArticle.as_view(),
     ),
-    path("article-extra-status/<int:pk>", ArticleExtraStatus.as_view()),
+    path("article-status/<int:pk>", ArticleStatus.as_view()),
     path(
         "multimedia/<int:pk>/toggle-love",
         CreateOrToggleLoveStatusOfMultimedia.as_view(),
@@ -58,7 +62,7 @@ urlpatterns += [
         "multimedia/<int:pk>/toggle-pin-status",
         CreateOrTogglePinStatusOfMultimedia.as_view(),
     ),
-    path("multimedia-extra-status/<int:pk>", MultimediaExtraStatus.as_view()),
+    path("multimedia-status/<int:pk>", MultimediaStatus.as_view()),
     path("multimedia/<int:pk>/comment", ListMultimediaComments.as_view()),
     path("article/<int:pk>/comment", ListArticleComments.as_view()),
     path("comment", PostComment.as_view()),
@@ -66,4 +70,3 @@ urlpatterns += [
     path("bookmarked-media", ListBookmarkedMediaView.as_view()),
     path("pinned-media", ListPinnedMediaView.as_view()),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

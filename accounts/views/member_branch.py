@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member, MemberBranch
-from accounts.serializers import MemberBranchSerializer
+from accounts.serializers.member_branch import MemberBranchSerializer
 
 
 class ListMemberBranch(APIView):

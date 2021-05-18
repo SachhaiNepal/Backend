@@ -1,5 +1,4 @@
 from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.routers import DefaultRouter
 
 from accounts.views.login import LoginView, LogoutView
