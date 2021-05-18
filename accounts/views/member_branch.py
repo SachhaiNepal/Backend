@@ -24,22 +24,12 @@ class ListMemberBranch(APIView):
             MemberBranchSerializer(roles, many=True).data, status=status.HTTP_200_OK
         )
 
-
-class AddMemberBranch(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
+    def post(self, request, pk):
+        request.data["member"] = pk
         serializer = MemberBranchSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(
-                {
-                    "message": "Member branch added successfully.",
-                    "data": serializer.data,
-                },
-                status=status.HTTP_201_CREATED,
-            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -56,20 +46,6 @@ class MemberBranchDetail(APIView):
         return Response(
             MemberBranchSerializer(member_branch), status=status.HTTP_200_OK
         )
-
-    def put(self, request, pk):
-        member_branch = self.get_object(pk)
-        serializer = MemberBranchSerializer(member_branch, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Member branch updated successfully.",
-                    "data": MemberBranchSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         role = self.get_object(pk)
