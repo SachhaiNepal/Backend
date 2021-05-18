@@ -1,23 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
-from rest_framework import permissions, status, viewsets
+from rest_framework import permissions, status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from accounts.models import (Member, MemberBranch, MemberRole, Profile,
-                             ProfileImage)
-from accounts.serializers import (MemberBranchSerializer, MemberPOSTSerializer,
-                                  MemberRoleSerializer, MemberSerializer,
-                                  ProfileImagePostSerializer,
-                                  ProfileImageSerializer,
-                                  ProfilePOSTSerializer, ProfileSerializer,
-                                  RegisterFollowerSerializer,
-                                  UserCreateSerializer, UserUpdateSerializer)
-from location.models import Country, District, Province
+from accounts.serializers import (
+    UserCreateSerializer, UserUpdateSerializer, UserWithProfileSerializer
+)
 
 
 class ListFollower(APIView):
@@ -34,9 +24,11 @@ class ListFollower(APIView):
         """
         Return a list of all users.
         """
+        context = {"request": request}
         users = User.objects.all()
         return Response(
-            UserCreateSerializer(users, many=True).data, status=status.HTTP_200_OK
+            UserWithProfileSerializer(users, many=True, context=context).data,
+            status=status.HTTP_200_OK
         )
 
     @staticmethod
@@ -44,8 +36,9 @@ class ListFollower(APIView):
         """
         Creates a brand new user-member(x)
         """
+        context = { "request": request }
         serializer = UserCreateSerializer(
-            data=request.data, context={"request": request}
+            data=request.data, context=context
         )
 
         if serializer.is_valid():
@@ -53,7 +46,8 @@ class ListFollower(APIView):
             user.set_password(serializer.validated_data["password"])
             user.save()
             return Response(
-                UserCreateSerializer(user).data, status=status.HTTP_201_CREATED
+                UserWithProfileSerializer(user, context=context).data,
+                status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -75,13 +69,18 @@ class UserDetail(APIView):
         """
         Returns single user by pk
         """
+        context = { "request": request }
         user = self.get_object(pk)
-        return Response(UserCreateSerializer(user).data, status=status.HTTP_200_OK)
+        return Response(
+            UserWithProfileSerializer(user, context=context).data,
+            status=status.HTTP_200_OK
+        )
 
     def put(self, request, pk):
         """
         Updates user by pk
         """
+        context = { "request": request }
         user = self.get_object(pk)
         serializer = UserUpdateSerializer(
             user, data=request.data, context={"request": request}
@@ -91,7 +90,7 @@ class UserDetail(APIView):
             return Response(
                 {
                     "message": "User updated successfully.",
-                    "data": UserCreateSerializer(self.get_object(pk)).data,
+                    "data": UserWithProfileSerializer(self.get_object(pk), context=context).data,
                 },
                 status=status.HTTP_204_NO_CONTENT,
             )
@@ -101,6 +100,7 @@ class UserDetail(APIView):
         """
         Modifies user by pk
         """
+        context = { "request": request }
         user = self.get_object(pk)
         serializer = UserUpdateSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
@@ -108,7 +108,7 @@ class UserDetail(APIView):
             return Response(
                 {
                     "message": "User patched successfully.",
-                    "data": UserCreateSerializer(self.get_object(pk)).data,
+                    "data": UserWithProfileSerializer(self.get_object(pk), context=context).data,
                 },
                 status=status.HTTP_204_NO_CONTENT,
             )
@@ -120,375 +120,3 @@ class UserDetail(APIView):
         return Response(
             {"message": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
-
-
-class ListMember(APIView):
-    """
-    List Members
-    """
-
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [permissions.IsAdminUser]
-
-    @staticmethod
-    def get(request):
-        """
-        Return a list of all users.
-        """
-        members = Member.objects.all()
-        return Response(
-            MemberSerializer(members, many=True).data, status=status.HTTP_200_OK
-        )
-
-    @staticmethod
-    def post(request):
-        """
-        Creates a brand member(x)
-        """
-        serializer = MemberPOSTSerializer(
-            data=request.data, context={"request": request}
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class MemberDetail(APIView):
-    """
-    Member Detailed Operations
-    * Only staff users are able to access this view.
-    """
-
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [permissions.IsAdminUser]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Member, pk=pk)
-
-    def get(self, request, pk):
-        """
-        Returns list of all members
-        """
-        member = self.get_object(pk)
-        return Response(MemberSerializer(member).data, status=status.HTTP_200_OK)
-
-    def put(self, request, pk):
-        """
-        Updates provided member by pk
-        """
-        member = self.get_object(pk)
-        serializer = MemberPOSTSerializer(
-            member, data=request.data, context={"request": request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {"message": "Member updated successfully.", "data": serializer.data},
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, pk):
-        """
-        Modifies provided member by pk
-        """
-        member = self.get_object(pk)
-        serializer = MemberPOSTSerializer(
-            member, data=request.data, partial=True, context={"request": request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Member patched successfully.",
-                    "data": serializer.data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ToggleMemberApprovalView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, pk):
-        try:
-            member = Member.objects.get(pk=pk)
-            member.is_approved = not member.is_approved
-            if member.is_approved:
-                member.approved_by = request.user
-                member.approved_at = timezone.now()
-            else:
-                member.approved_by = None
-                member.approved_at = None
-            member.save()
-            return Response(
-                {
-                    "message": "Member {} successfully.".format(
-                        "approved" if member.is_approved else "rejected"
-                    )
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        except Member.DoesNotExist:
-            return Response(
-                {"detail": "Member does not exist."}, status=status.HTTP_404_NOT_FOUND
-            )
-
-
-class ListProfile(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get(request, pk):
-        """
-        Return a profile of a user
-        """
-        user = get_object_or_404(get_user_model(), pk=pk)
-        profile = Profile.objects.get(user=user)
-        return Response(ProfileSerializer(profile).data, status=status.HTTP_200_OK)
-
-
-class ProfileDetail(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Profile, pk=pk)
-
-    def get(self, request, pk):
-        """
-        Returns particular profile
-        """
-        profile = self.get_object(pk)
-        return Response(ProfileSerializer(profile).data, status=status.HTTP_200_OK)
-
-    def put(self, request, pk):
-        """
-        Updates provided member by pk
-        """
-        profile = self.get_object(pk)
-        serializer = ProfilePOSTSerializer(profile, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Profile updated successfully.",
-                    "data": ProfileSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, pk):
-        """
-        Modifies provided member by pk
-        """
-        profile = self.get_object(pk)
-        serializer = ProfilePOSTSerializer(profile, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Profile patched successfully.",
-                    "data": ProfileSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ListMemberRole(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Member, pk=pk)
-
-    def get(self, request, pk):
-        member = self.get_object(pk)
-        roles = MemberRole.objects.filter(member=member)
-        return Response(
-            MemberRoleSerializer(roles, many=True).data, status=status.HTTP_200_OK
-        )
-
-
-class AddMemberRole(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        serializer = MemberRoleSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {"message": "Member role added successfully.", "data": serializer.data},
-                status=status.HTTP_201_CREATED,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class MemberRoleDetail(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(MemberRole, pk=pk)
-
-    def get(self, request, pk):
-        role = self.get_object(pk)
-        return Response(MemberRoleSerializer(role), status=status.HTTP_200_OK)
-
-    def put(self, request, pk):
-        role = self.get_object(pk)
-        serializer = MemberRoleSerializer(role, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Member role updated successfully.",
-                    "data": MemberRoleSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        role = self.get_object(pk)
-        role.delete()
-        return Response(
-            {"message": "Member role deleted successfully."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
-
-
-class ListMemberBranch(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Member, pk=pk)
-
-    def get(self, request, pk):
-        member = self.get_object(pk)
-        roles = MemberBranch.objects.filter(member=member)
-        return Response(
-            MemberBranchSerializer(roles, many=True).data, status=status.HTTP_200_OK
-        )
-
-
-class AddMemberBranch(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        serializer = MemberBranchSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Member branch added successfully.",
-                    "data": serializer.data,
-                },
-                status=status.HTTP_201_CREATED,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class MemberBranchDetail(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(MemberBranch, pk=pk)
-
-    def get(self, request, pk):
-        member_branch = self.get_object(pk)
-        return Response(
-            MemberBranchSerializer(member_branch), status=status.HTTP_200_OK
-        )
-
-    def put(self, request, pk):
-        member_branch = self.get_object(pk)
-        serializer = MemberBranchSerializer(member_branch, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Member branch updated successfully.",
-                    "data": MemberBranchSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        role = self.get_object(pk)
-        role.delete()
-        return Response(
-            {"message": "Member branch deleted successfully."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
-
-
-class RegisterFollower(APIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    @staticmethod
-    def post(request):
-        serializer = RegisterFollowerSerializer(data=request.data)
-        if serializer.is_valid():
-            validated_data = serializer.data
-            new_follower = User.objects.create(
-                username=validated_data["username"],
-                email=validated_data["email"],
-                first_name=validated_data["first_name"],
-                last_name=validated_data["last_name"],
-            )
-            new_follower.set_password(validated_data.pop("confirm_password"))
-            new_follower.save()
-            # update profile qualities
-            new_follower.profile.contact = validated_data["contact"]
-            new_follower.profile.birth_date = validated_data["birth_date"]
-            new_follower.profile.current_city = validated_data["current_city"]
-            new_follower.profile.home_town = validated_data["home_town"]
-            new_follower.profile.country = Country.objects.get(
-                id=validated_data["country"]
-            )
-            new_follower.profile.province = Province.objects.get(
-                id=validated_data["province"]
-            )
-            new_follower.profile.district = District.objects.get(
-                id=validated_data["district"]
-            )
-            new_follower.profile.save()
-
-            return Response(
-                {
-                    "message": "Follower registered successfully.",
-                    "user": {
-                        "username": new_follower.username,
-                        "email": new_follower.email,
-                    },
-                },
-                status=status.HTTP_201_CREATED,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProfileImageViewSet(viewsets.ModelViewSet):
-    queryset = ProfileImage.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    serializer_class = ProfileImagePostSerializer

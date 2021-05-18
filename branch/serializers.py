@@ -11,8 +11,6 @@ class BranchSerializer(serializers.ModelSerializer):
 
 
 class BranchPOSTSerializer(serializers.ModelSerializer):
-    contacts = serializers.ListField(child=serializers.IntegerField())
-
     class Meta:
         model = Branch
         fields = "__all__"

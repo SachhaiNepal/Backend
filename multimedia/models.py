@@ -58,6 +58,10 @@ class MultimediaVideoUrls(models.Model):
     def __str__(self):
         return self.video_url
 
+    class Meta:
+        verbose_name = "Multimedia Vide Url"
+        verbose_name_plural = "Multimedia Vide Urls"
+
 
 def upload_multimedia_video_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
@@ -88,7 +92,8 @@ class MultimediaVideo(models.Model):
         super().delete(using, keep_parents)
 
     class Meta:
-        verbose_name = "Multimedia Videos"
+        verbose_name = "Multimedia Video"
+        verbose_name_plural = "Multimedia Videos"
 
 
 def upload_multimedia_audio_to(instance, filename):
@@ -120,7 +125,8 @@ class MultimediaAudio(models.Model):
         super().delete(using, keep_parents)
 
     class Meta:
-        verbose_name = "Multimedia Audios"
+        verbose_name = "Multimedia Audio"
+        verbose_name_plural = "Multimedia Audios"
 
 
 def upload_multimedia_image_to(instance, filename):
@@ -139,7 +145,8 @@ class MultimediaImage(models.Model):
     )
 
     class Meta:
-        verbose_name = "Multimedia Images"
+        verbose_name = "Multimedia Image"
+        verbose_name_plural = "Multimedia Images"
 
     def __str__(self):
         return "{} {}".format(self.multimedia.title, self.image.name)
@@ -176,7 +183,8 @@ class ArticleImage(models.Model):
     )
 
     class Meta:
-        verbose_name = "Article Images"
+        verbose_name = "Article Image"
+        verbose_name_plural = "Article Images"
 
     def __str__(self):
         return "{} {}".format(self.article.title, self.image.name)
