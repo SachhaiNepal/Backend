@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Profile, ProfileImage
-from accounts.serializers import ProfileSerializer, ProfilePOSTSerializer, ProfileImagePostSerializer
+from accounts.serializers.profile import ProfileSerializer, ProfilePOSTSerializer, ProfileImagePostSerializer
 
 
 class UserProfile(APIView):

@@ -1,52 +1,36 @@
 from django.utils import timezone
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from multimedia.serializers.article_list import *
-from multimedia.serializers.model_serializer import ArticleImageSerializer
+from multimedia.serializers.article import ArticleSerializer, ArticlePOSTSerializer
 
 
-class ListArticleImages(APIView):
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.order_by("-uploaded_at")
+    serializer_class = ArticleSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filterset_fields = ["is_approved"]
 
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Article, pk=pk)
+    def get_serializer_class(self):
+        if self.action == "create" or self.action == "update":
+            return ArticlePOSTSerializer
+        return super(ArticleViewSet, self).get_serializer_class()
 
-    def get(self, request, pk):
-        """
-        Returns list of images for an article
-        """
-        context = {"request": request}
-        article = self.get_object(pk)
-        images = ArticleImage.objects.filter(article=article)
-        serializer = ArticleImageSerializer(images, many=True, context=context)
+    def destroy(self, request, *args, **kwargs):
+        article = self.get_object()
+        article_images = ArticleImage.objects.filter(article=article)
+        for image in article_images:
+            image.delete()
         return Response(
-            {"count": images.count(), "data": serializer.data},
-            status=status.HTTP_200_OK,
+            {"message": "Article deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
         )
-
-    def put(self, request, pk):
-        """
-        Adds list of images to an article
-        """
-        article = self.get_object(pk)
-        context = {"article_id": article.pk}
-        serializer = UpdateArticleImageListSerializer(
-            data=request.data, context=context
-        )
-        if serializer.is_valid():
-            return Response(
-                {"details": "Images added to article successfully."},
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateArticleWithImageList(APIView):

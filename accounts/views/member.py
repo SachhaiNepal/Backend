@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member
-from accounts.serializers import MemberSerializer, MemberPOSTSerializer
+from accounts.serializers.member import MemberSerializer, MemberPOSTSerializer
 
 
 class ListMember(APIView):

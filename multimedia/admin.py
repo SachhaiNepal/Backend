@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from multimedia.models import *
+from multimedia.sub_models.article_media import ArticleImage
+from multimedia.sub_models.multimedia_media import MultimediaVideo, MultimediaAudio, MultimediaImage
+from multimedia.sub_models.post import Article, Multimedia
+from multimedia.sub_models.post_action import PinMedia, BookmarkMedia, Love, Comment
 
 
 class MultimediaVideoAdmin(admin.StackedInline):

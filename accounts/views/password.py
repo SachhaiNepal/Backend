@@ -1,6 +1,8 @@
 from django.conf import settings
-from django.contrib.auth import (authenticate, get_user_model,
-                                 update_session_auth_hash)
+from django.contrib.auth import (
+    authenticate, get_user_model,
+    update_session_auth_hash
+)
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -12,9 +14,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import ResetPasswordCode
-from accounts.serializers import (ResetNewPasswordSerializer,
-                                  ResetPasswordEmailSerializer,
-                                  UpdatePasswordSerializer)
+from accounts.serializers.password import (
+    ResetNewPasswordSerializer,
+    ResetPasswordEmailSerializer,
+    UpdatePasswordSerializer
+)
 
 
 class UpdatePassword(APIView):
@@ -27,7 +31,7 @@ class UpdatePassword(APIView):
         Update password for authenticated user
         """
         serializer = UpdatePasswordSerializer(
-            data=request.data, context={"request": request}
+            data=request.data, context={ "request": request }
         )
         if serializer.is_valid(raise_exception=True):
             username = request.user.username
@@ -44,17 +48,17 @@ class UpdatePassword(APIView):
                     token.delete()
                     update_session_auth_hash(request, request.user)
                     return Response(
-                        {"message": "Update password success."},
+                        { "message": "Update password success." },
                         status=status.HTTP_204_NO_CONTENT,
                     )
                 else:
                     return Response(
-                        {"detail": "Wrong existing password."},
+                        { "detail": "Wrong existing password." },
                         status=status.HTTP_403_FORBIDDEN,
                     )
             except get_user_model().DoesNotExist:
                 return Response(
-                    {"detail": "User does not exist."},
+                    { "detail": "User does not exist." },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         else:
@@ -88,9 +92,9 @@ class ResetPasswordRequestCode(APIView):
                 message = render_to_string(
                     "reset_email.html",
                     {
-                        "user": user.username,
+                        "user"  : user.username,
                         "domain": current_site.domain,
-                        "code": code,
+                        "code"  : code,
                     },
                 )
                 send_mail(
@@ -101,12 +105,12 @@ class ResetPasswordRequestCode(APIView):
                     html_message=message,
                 )
                 return Response(
-                    {"detail": "Reset-password link sent to provided mail address."},
+                    { "detail": "Reset-password link sent to provided mail address." },
                     status=status.HTTP_202_ACCEPTED,
                 )
             except get_user_model().DoesNotExist:
                 return Response(
-                    {"detail": "User not found."}, status=status.HTTP_400_BAD_REQUEST
+                    { "detail": "User not found." }, status=status.HTTP_400_BAD_REQUEST
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -131,11 +135,11 @@ class ConfirmResetPassword(APIView):
                 user.save()
                 reset_password_code.delete()
                 return Response(
-                    {"message": "Reset password success."}, status=status.HTTP_200_OK
+                    { "message": "Reset password success." }, status=status.HTTP_200_OK
                 )
             except ResetPasswordCode.DoesNotExist:
                 return Response(
-                    {"detail": "Code not found."}, status=status.HTTP_404_NOT_FOUND
+                    { "detail": "Code not found." }, status=status.HTTP_404_NOT_FOUND
                 )
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

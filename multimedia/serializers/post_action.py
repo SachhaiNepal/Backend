@@ -3,7 +3,8 @@ from rest_framework.exceptions import ValidationError
 
 from multimedia.models import (Article, BookmarkMedia, Comment, Love,
                                Multimedia, PinMedia)
-from multimedia.serializers.model_serializer import ArticleSerializer, MultimediaSerializer
+from multimedia.serializers.article import ArticleSerializer
+from multimedia.serializers.multimedia import MultimediaSerializer
 
 
 class LoveSerializer(serializers.ModelSerializer):

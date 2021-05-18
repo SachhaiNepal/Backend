@@ -1,159 +1,46 @@
 from django.utils import timezone
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo, MultimediaVideoUrls)
-from multimedia.serializers.model_serializer import (
-    MultimediaAudioSerializer, MultimediaImageSerializer,
-    MultimediaVideoSerializer, MultimediaVideoUrlsSerializer)
-from multimedia.serializers.multimedia_list import (
-    CreateMultimediaWithMultimediaListSerializer,
-    UpdateMultimediaAudioListSerializer, UpdateMultimediaImageListSerializer,
-    UpdateMultimediaVideoListSerializer)
-from utils.helper import generate_url_for_media_resources
+                               MultimediaVideo)
+
+from multimedia.serializers.multimedia import MultimediaSerializer, MultimediaPOSTSerializer
+from multimedia.serializers.multimedia_list import CreateMultimediaWithMultimediaListSerializer
 
 
-class ListMultimediaAudios(APIView):
+class MultimediaViewSet(viewsets.ModelViewSet):
+    queryset = Multimedia.objects.order_by("-uploaded_at")
+    serializer_class = MultimediaSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filterset_fields = ["is_approved"]
 
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Multimedia, pk=pk)
+    def get_serializer_class(self):
+        if self.action == "create" or self.action == "update":
+            return MultimediaPOSTSerializer
+        return super(MultimediaViewSet, self).get_serializer_class()
 
-    def get(self, request, pk):
-        """
-        Returns list of audios for an multimedia
-        """
-        multimedia = self.get_object(pk)
-        multimedia_audios = MultimediaAudio.objects.filter(multimedia=multimedia)
-        serializer = MultimediaAudioSerializer(multimedia_audios, many=True)
-        serializer = generate_url_for_media_resources(serializer, "audio")
-        return Response(
-            {"count": multimedia_audios.count(), "data": serializer.data},
-            status=status.HTTP_200_OK,
-        )
-
-    def put(self, request, pk):
-        """
-        Adds multiple audios to a multimedia
-        """
-        multimedia = self.get_object(pk)
-        context = {"multimedia_id": multimedia.pk}
-        serializer = UpdateMultimediaAudioListSerializer(
-            data=request.data, context=context
-        )
-        if serializer.is_valid():
-            return Response(
-                {"details": "Audios added to multimedia successfully."},
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ListMultimediaVideoUrls(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Multimedia, pk=pk)
-
-    def get(self, request, pk):
-        """
-        Returns list of images for a multimedia
-        """
-        multimedia = self.get_object(pk)
-        multimedia_video_urls = MultimediaVideoUrls.objects.filter(
-            multimedia=multimedia
-        )
-        serializer = MultimediaVideoUrlsSerializer(multimedia_video_urls, many=True)
-        return Response(
-            {"count": multimedia_video_urls.count(), "data": serializer.data},
-            status=status.HTTP_200_OK,
-        )
-
-
-class ListMultimediaImages(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Multimedia, pk=pk)
-
-    def get(self, request, pk):
-        """
-        Returns list of images for a multimedia
-        """
-        multimedia = self.get_object(pk)
+    def destroy(self, request, *args, **kwargs):
+        multimedia = self.get_object()
         multimedia_images = MultimediaImage.objects.filter(multimedia=multimedia)
-        serializer = MultimediaImageSerializer(multimedia_images, many=True)
-        serializer = generate_url_for_media_resources(serializer, "image")
-        return Response(
-            {"count": multimedia_images.count(), "data": serializer.data},
-            status=status.HTTP_200_OK,
-        )
-
-    def put(self, request, pk):
-        """
-        Adds multiple images to a multimedia
-        """
-        multimedia = self.get_object(pk)
-        context = {"multimedia_id": multimedia.pk}
-        serializer = UpdateMultimediaImageListSerializer(
-            data=request.data, context=context
-        )
-        if serializer.is_valid():
-            return Response(
-                {"details": "Images added to multimedia successfully."},
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ListMultimediaVideos(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(Multimedia, pk=pk)
-
-    def get(self, request, pk):
-        """
-        Returns list of videos for a multimedia
-        """
-        multimedia = self.get_object(pk)
+        for image in multimedia_images:
+            image.delete()
+        multimedia_audios = MultimediaAudio.objects.filter(multimedia=multimedia)
+        for audio in multimedia_audios:
+            audio.delete()
         multimedia_videos = MultimediaVideo.objects.filter(multimedia=multimedia)
-        serializer = MultimediaVideoSerializer(multimedia_videos, many=True)
-        serializer = generate_url_for_media_resources(serializer, "video")
+        for video in multimedia_videos:
+            video.delete()
+        multimedia.delete()
         return Response(
-            {"count": multimedia_videos.count(), "data": serializer.data},
-            status=status.HTTP_200_OK,
+            {"message": "Multimedia deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT,
         )
-
-    def put(self, request, pk):
-        """
-        Adds multiple videos to a multimedia
-        """
-        multimedia = self.get_object(pk)
-        context = {"multimedia_id": multimedia.pk}
-        serializer = UpdateMultimediaVideoListSerializer(
-            data=request.data, context=context
-        )
-        if serializer.is_valid():
-            return Response(
-                {"details": "Videos added to multimedia successfully."},
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateMultimediaWithMultimediaList(APIView):
