@@ -24,19 +24,12 @@ class ListMemberRole(APIView):
             MemberRoleSerializer(roles, many=True).data, status=status.HTTP_200_OK
         )
 
-
-class CreateMemberRole(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
+    def post(self, request, pk):
+        request.data["member"] = pk
         serializer = MemberRoleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(
-                {"message": "Member role added successfully.", "data": serializer.data},
-                status=status.HTTP_201_CREATED,
-            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -51,20 +44,6 @@ class MemberRoleDetail(APIView):
     def get(self, request, pk):
         role = self.get_object(pk)
         return Response(MemberRoleSerializer(role), status=status.HTTP_200_OK)
-
-    def put(self, request, pk):
-        role = self.get_object(pk)
-        serializer = MemberRoleSerializer(role, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Member role updated successfully.",
-                    "data": MemberRoleSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         role = self.get_object(pk)
