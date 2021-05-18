@@ -4,9 +4,9 @@ from rest_framework.routers import DefaultRouter
 
 from accounts.views.login import LoginView, LogoutView
 from accounts.views.member import ListMember, MemberDetail, ToggleMemberApprovalView
-from accounts.views.member_branch import ListMemberBranch, AddMemberBranch, MemberBranchDetail
-from accounts.views.member_role import ListMemberRole, CreateMemberRole, MemberRoleDetail
-from accounts.views.password import (ResetPasswordConfirm,
+from accounts.views.member_branch import ListMemberBranch, MemberBranchDetail
+from accounts.views.member_role import ListMemberRole, MemberRoleDetail
+from accounts.views.password import (ConfirmResetPassword,
                                      ResetPasswordRequestCode, UpdatePassword)
 from accounts.views.profile import ProfileImageViewSet, UserProfile, ProfileDetail
 from accounts.views.register_follower import RegisterFollower
@@ -20,38 +20,40 @@ urlpatterns = router.urls
 
 urlpatterns += [
     path("register-follower", RegisterFollower.as_view(), name="register-follower"),
+
     path("user", ListFollower.as_view(), name="users-list"),
-    path("member", ListMember.as_view(), name="members-list"),
     path("user/<int:pk>", UserDetail.as_view(), name="user-detail"),
+
+    path("member", ListMember.as_view(), name="members-list"),
     path("member/<int:pk>", MemberDetail.as_view(), name="member-detail"),
-    path("member/<int:pk>/role", ListMemberRole.as_view(), name="member-list-role"),
-    path("role", CreateMemberRole.as_view(), name="member-create-role"),
-    path("role/<int:pk>", MemberRoleDetail.as_view(), name="member-detail-role"),
-    path("member/<int:pk>/branch", ListMemberBranch.as_view(), name="member-list-role"),
-    path("member-branch", AddMemberBranch.as_view(), name="member-create-role"),
+
+    path("member/<int:pk>/role", ListMemberRole.as_view(), name="member-role-list"),
+    path("member-role/<int:pk>", MemberRoleDetail.as_view(), name="member-role-detail"),
+
+    path("member/<int:pk>/branch", ListMemberBranch.as_view(), name="member-branch-list"),
+    path("member-branch/<int:pk>", MemberBranchDetail.as_view(), name="member-branch-detail"),
+
     path(
-        "member-branch/<int:pk>",
-        MemberBranchDetail.as_view(),
-        name="member-detail-role",
+        "member/<int:pk>/toggle-approval",
+        ToggleMemberApprovalView.as_view(),
+        name="member-toggle-approval",
     ),
+
     path("user/<int:pk>/profile", UserProfile.as_view(), name="profile-list"),
     path("profile/<int:pk>", ProfileDetail.as_view(), name="profile-detail"),
-    path("login", LoginView.as_view(), name="s_login"),
-    path("logout", LogoutView.as_view(), name="s_logout"),
-    path("user/update-password", UpdatePassword.as_view(), name="update-password"),
+
+    path("login", LoginView.as_view(), name="user-login"),
+    path("logout", LogoutView.as_view(), name="user-logout"),
+
+    path("update-password", UpdatePassword.as_view(), name="update-password"),
     path(
-        "user/reset-password",
+        "reset-password",
         ResetPasswordRequestCode.as_view(),
         name="reset-password-request",
     ),
     path(
-        "user/reset-password/<str:code>/",
-        ResetPasswordConfirm.as_view(),
-        name="reset-password-confirm",
-    ),
-    path(
-        "member/<int:pk>/toggle-approval",
-        ToggleMemberApprovalView.as_view(),
-        name="member-approval-toggle",
-    ),
+        "reset-password/<str:code>/",
+        ConfirmResetPassword.as_view(),
+        name="confirm-reset-password",
+    )
 ]
