@@ -111,9 +111,9 @@ class ResetPasswordRequestCode(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ResetPasswordConfirm(APIView):
+class ConfirmResetPassword(APIView):
     """
-    Reset Password Confirm
+    Confirm Reset Password
     """
 
     permission_classes = ()
