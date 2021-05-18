@@ -119,6 +119,10 @@ class AboutUsImage(models.Model):
         AboutUs, on_delete=models.CASCADE, related_name="about_us_images"
     )
 
+    class Meta:
+        verbose_name = "About Us Image"
+        verbose_name_plural = "About Us Images"
+
     def __str__(self):
         return self.image.name
 
