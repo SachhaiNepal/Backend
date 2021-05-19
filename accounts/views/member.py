@@ -6,8 +6,9 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import Member
+from accounts.models import Member, MemberBranch
 from accounts.serializers.member import MemberSerializer, MemberPOSTSerializer
+from accounts.sub_models.member_role import MemberRole
 
 
 class ListMember(APIView):
@@ -63,40 +64,16 @@ class MemberDetail(APIView):
         member = self.get_object(pk)
         return Response(MemberSerializer(member).data, status=status.HTTP_200_OK)
 
-    def put(self, request, pk):
-        """
-        Updates provided member by pk
-        """
+    def delete(self, request, pk):
         member = self.get_object(pk)
-        serializer = MemberPOSTSerializer(
-            member, data=request.data, context={"request": request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {"message": "Member updated successfully.", "data": serializer.data},
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, pk):
-        """
-        Modifies provided member by pk
-        """
-        member = self.get_object(pk)
-        serializer = MemberPOSTSerializer(
-            member, data=request.data, partial=True, context={"request": request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "Member patched successfully.",
-                    "data": serializer.data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        member_roles = MemberRole.objects.filter(member=member)
+        member_branches = MemberBranch.objects.filter(member=member)
+        [member_role.delete() for member_role in member_roles]
+        [member_branch.delete() for member_branch in member_branches]
+        member.delete()
+        return Response({
+            "success": True,
+        }, status=status.HTTP_200_OK)
 
 
 class ToggleMemberApprovalView(APIView):
