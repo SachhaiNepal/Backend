@@ -24,14 +24,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = (
             "id",
-            "bio",
-            "contact",
-            "birth_date",
-            "current_city",
-            "home_town",
-            "country",
-            "province",
-            "district",
+            "bio", "contact", "birth_date",
+            "current_city", "home_town",
+            "country", "province", "district",
             "last_updated",
             "profile_images",
         )

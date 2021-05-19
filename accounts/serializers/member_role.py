@@ -4,11 +4,11 @@ from accounts.models import MemberRole, MemberBranch
 from branch.models import Branch
 
 
-# class MemberRoleListSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MemberRole
-#         fields = "__all__"
-#         depth = 1
+class MemberRoleListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberRole
+        fields = "__all__"
+        depth = 1
 
 
 class MemberRoleSerializer(serializers.ModelSerializer):

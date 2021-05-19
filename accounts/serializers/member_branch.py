@@ -4,6 +4,13 @@ from accounts.models import MemberBranch
 from branch.models import Branch
 
 
+class MemberBranchListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberBranch
+        fields = "__all__"
+        depth = 1
+
+
 class MemberBranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberBranch
