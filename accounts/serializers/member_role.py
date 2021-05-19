@@ -4,6 +4,13 @@ from accounts.models import MemberRole, MemberBranch
 from branch.models import Branch
 
 
+# class MemberRoleListSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MemberRole
+#         fields = "__all__"
+#         depth = 1
+
+
 class MemberRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberRole
@@ -22,7 +29,7 @@ class MemberRoleSerializer(serializers.ModelSerializer):
         member_branches = MemberBranch.objects.filter(member=member)
         found = False
         for member_branch in member_branches:
-            if member_branch.id == branch_id:
+            if member_branch.branch == branch_id:
                 found = True
         if not found:
             raise serializers.ValidationError(

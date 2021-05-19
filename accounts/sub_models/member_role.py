@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from accounts.sub_models.member import Member
@@ -8,7 +9,7 @@ from utils.constants import MEMBER_ROLE_CHOICES
 
 class MemberRole(models.Model):
     member = models.ForeignKey(
-        Member, on_delete=models.CASCADE, related_name="member_role"
+        Member, on_delete=models.CASCADE, related_name="member_roles"
     )
     role_name = models.CharField(max_length=18, choices=MEMBER_ROLE_CHOICES)
     from_date = models.DateField()
@@ -32,7 +33,7 @@ class MemberRole(models.Model):
         member_branches = MemberBranch.objects.filter(member=selected_member)
         found = False
         for member_branch in member_branches:
-            if member_branch.id == selected_branch:
+            if member_branch.branch == selected_branch:
                 found = True
         if not found:
             raise ValidationError("Member not registered in selected branch.")
