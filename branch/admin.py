@@ -46,7 +46,7 @@ class BranchAdmin(admin.ModelAdmin):
             "Branch Information",
             {
                 "classes": ("wide", "extrapretty"),
-                "fields": ("name", "contact", "image", "is_main"),
+                "fields": ("name", "contact", "cover_image", "is_main"),
             },
         ),
         (
@@ -91,7 +91,7 @@ class BranchAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
-        obj.image.delete()
+        obj.cover_image.delete()
         obj.delete()
 
 

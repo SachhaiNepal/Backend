@@ -1,3 +1,6 @@
+import os
+import random
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
@@ -7,11 +10,17 @@ from phonenumber_field.modelfields import PhoneNumberField
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 
 
+def upload_branch_cover_image(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"branch/{instance.name}/cover_images/{filename}"
+
+
 class Branch(models.Model):
     name = models.CharField(max_length=64, unique=True)
     slogan = models.TextField(blank=True, null=True, max_length=512)
-    image = models.ImageField(
-        upload_to="branch",
+    cover_image = models.ImageField(
+        upload_to=upload_branch_cover_image,
         null=True,
         blank=True,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
@@ -106,7 +115,7 @@ class Branch(models.Model):
             )
         elif self.vdc and self.municipality_ward:
             raise ValidationError("Cannot assign municipality ward for a vdc.")
-        elif self.image and self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+        elif self.cover_image and self.cover_image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
 
     class Meta:
@@ -124,11 +133,11 @@ class Branch(models.Model):
     ):
         if self.pk:
             this_record = Branch.objects.get(pk=self.pk)
-            if this_record.image != self.image:
-                this_record.image.delete(save=False)
+            if this_record.cover_image != self.cover_image:
+                this_record.cover_image.delete(save=False)
         super(Branch, self).save(force_insert, force_update, using, update_fields)
 
     def delete(self, using=None, keep_parents=False):
-        if self.image:
-            self.image.delete()
+        if self.cover_image:
+            self.cover_image.delete()
         super().delete(using, keep_parents)
