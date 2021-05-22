@@ -21,7 +21,7 @@ class BranchViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         branch = self.get_object()
-        branch.image.delete()
+        branch.cover_image.delete()
         branch.delete()
         return Response(
             {"message": "Branch deleted successfully"},
@@ -51,6 +51,7 @@ class ToggleBranchApprovalView(APIView):
         branch.save()
         return Response(
             {
+                "success": True,
                 "message": "Branch {} successfully.".format(
                     "approved" if branch.is_approved else "rejected"
                 )

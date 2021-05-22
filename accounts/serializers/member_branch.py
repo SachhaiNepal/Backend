@@ -16,7 +16,7 @@ class MemberBranchListSerializer(serializers.ModelSerializer):
             "date_of_membership",
             "member_branch_roles"
         )
-        depth = 1
+        depth = 2
 
 
 class MemberBranchSerializer(serializers.ModelSerializer):

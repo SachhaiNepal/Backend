@@ -18,6 +18,7 @@ class EventViewSet(viewsets.ModelViewSet):
     )
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    filterset_fields = ["organizer"]
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":

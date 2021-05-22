@@ -13,7 +13,7 @@ class BranchSerializer(serializers.ModelSerializer):
 class BranchPOSTSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
-        fields = "__all__"
+        exclude = ["is_approved", "is_main"]
 
     # object level validation
     def validate(self, data):
