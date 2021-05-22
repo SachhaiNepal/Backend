@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from accounts.views.login import LoginView, LogoutView
 from accounts.views.member import ListMember, MemberDetail, ToggleMemberApprovalView
-from accounts.views.member_branch import ListMemberBranch, MemberBranchDetail
+from accounts.views.member_branch import ListMemberBranch, MemberBranchViewSet
 from accounts.views.member_role import ListMemberRole, MemberRoleDetail
 from accounts.views.password import (ConfirmResetPassword,
                                      ResetPasswordRequestCode, UpdatePassword)
@@ -15,6 +15,7 @@ app_name = "accounts"
 
 router = DefaultRouter()
 router.register(r"profile-image", ProfileImageViewSet, basename="profile-image")
+router.register(r"member-branch", MemberBranchViewSet, basename="profile-image")
 urlpatterns = router.urls
 
 urlpatterns += [
@@ -30,7 +31,7 @@ urlpatterns += [
     path("member-role/<int:pk>", MemberRoleDetail.as_view(), name="member-role-detail"),
 
     path("member/<int:pk>/branch", ListMemberBranch.as_view(), name="member-branch-list"),
-    path("member-branch/<int:pk>", MemberBranchDetail.as_view(), name="member-branch-detail"),
+    # path("member-branch/<int:pk>", MemberBranchDetail.as_view(), name="member-branch-detail"),
 
     path(
         "member/<int:pk>/toggle-approval",

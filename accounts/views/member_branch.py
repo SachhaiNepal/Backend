@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -33,24 +33,14 @@ class ListMemberBranch(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MemberBranchDetail(APIView):
+class MemberBranchViewSet(viewsets.ModelViewSet):
+    queryset = MemberBranch.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filterset_fields = ['member', "branch"]
 
-    @staticmethod
-    def get_object(pk):
-        return get_object_or_404(MemberBranch, pk=pk)
-
-    def get(self, request, pk):
-        member_branch = self.get_object(pk)
-        return Response(
-            MemberBranchSerializer(member_branch), status=status.HTTP_200_OK
-        )
-
-    def delete(self, request, pk):
-        role = self.get_object(pk)
-        role.delete()
-        return Response(
-            {"message": "Member branch deleted successfully."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return MemberBranchListSerializer
+        else:
+            return MemberBranchSerializer
