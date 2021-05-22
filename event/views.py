@@ -43,6 +43,7 @@ class EventPhotoViewSet(viewsets.ModelViewSet):
         MultiPartParser,
         FormParser,
     )
+    filterset_fields = ["event"]
 
     def destroy(self, request, *args, **kwargs):
         event_photo = self.get_object()
@@ -59,6 +60,7 @@ class EventVideoUrlsViewSet(viewsets.ModelViewSet):
     serializer_class = EventVideoUrlsSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    filterset_fields = ["event"]
 
 
 class ToggleEventApprovalView(APIView):
