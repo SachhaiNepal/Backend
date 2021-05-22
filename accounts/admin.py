@@ -148,7 +148,7 @@ class MemberRoleInline(admin.StackedInline):
                     "role_name",
                     "from_date",
                     "to_date",
-                    "branch",
+                    "member_branch",
                 ),
             },
         ),
@@ -158,14 +158,14 @@ class MemberRoleInline(admin.StackedInline):
 class MemberRoleAdmin(admin.ModelAdmin):
     list_display = (
         "member",
-        "branch",
+        "member_branch",
         "role_name",
         "from_date",
         "to_date",
     )
     ordering = (
         "member",
-        "branch",
+        "member_branch",
         "role_name",
         "from_date",
         "to_date",
@@ -186,7 +186,7 @@ class MemberBranchAdmin(admin.ModelAdmin):
     list_filter = ("member", "date_of_membership")
     search_fields = ("member__user__username", "member__user__email")
 
-    autocomplete_fields = ["member"]
+    autocomplete_fields = ["member", "branch"]
 
 
 class MemberAdmin(admin.ModelAdmin):
