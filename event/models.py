@@ -21,7 +21,7 @@ EVENT_TYPE = (
 
 class Event(models.Model):
     title = models.CharField(max_length=64, unique=True)
-    description = models.TextField(blank=True, null=True, max_length=512)
+    description = models.TextField(max_length=512, unique=True)
     venue = models.CharField(max_length=64)
     start_date = models.DateField()
     duration = models.IntegerField()
@@ -36,39 +36,39 @@ class Event(models.Model):
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     country = models.ForeignKey(
-        "location.Country", on_delete=models.DO_NOTHING, related_name="EventCountry"
+        "location.Country", on_delete=models.DO_NOTHING, related_name="country_events"
     )
     province = models.ForeignKey(
-        "location.Province", on_delete=models.DO_NOTHING, related_name="EventProvince"
+        "location.Province", on_delete=models.DO_NOTHING, related_name="province_events"
     )
     district = models.ForeignKey(
-        "location.District", on_delete=models.DO_NOTHING, related_name="EventDistrict"
+        "location.District", on_delete=models.DO_NOTHING, related_name="district_events"
     )
     municipality = models.ForeignKey(
         "location.Municipality",
         on_delete=models.DO_NOTHING,
-        related_name="EventMunicipality",
+        related_name="municipality_events",
         null=True,
         blank=True,
     )
     municipality_ward = models.ForeignKey(
         "location.MunicipalityWard",
         on_delete=models.DO_NOTHING,
-        related_name="EventMunicipalityWardNumber",
+        related_name="municipality_ward_events",
         null=True,
         blank=True,
     )
     vdc = models.ForeignKey(
         "location.VDC",
         on_delete=models.DO_NOTHING,
-        related_name="EventVdc",
+        related_name="vdc_events",
         null=True,
         blank=True,
     )
     vdc_ward = models.ForeignKey(
         "location.VDCWard",
         on_delete=models.DO_NOTHING,
-        related_name="EventVdcWardNumber",
+        related_name="vdc_ward_events",
         null=True,
         blank=True,
     )
@@ -76,7 +76,7 @@ class Event(models.Model):
     organizer = models.ForeignKey(
         "branch.Branch",
         on_delete=models.CASCADE,
-        related_name="EventOrganizer",
+        related_name="branch_events",
         null=False,
         blank=False,
     )
@@ -86,7 +86,7 @@ class Event(models.Model):
     created_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
-        related_name="EventCreator",
+        related_name="events_created",
         null=True,
         blank=True,
         editable=False,
@@ -94,7 +94,7 @@ class Event(models.Model):
     updated_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
-        related_name="EventModifier",
+        related_name="events_updated",
         null=True,
         blank=True,
         editable=False,
@@ -102,7 +102,7 @@ class Event(models.Model):
     approved_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
-        related_name="EventApprover",
+        related_name="events_approved",
         null=True,
         blank=True,
         editable=False,
