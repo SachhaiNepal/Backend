@@ -47,13 +47,6 @@ class EventPostSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class EventSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Event
-        fields = "__all__"
-        depth = 1
-
-
 class EventPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventPhoto
@@ -79,3 +72,42 @@ class EventVideoUrlsSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventVideoUrls
         fields = "__all__"
+
+
+class EventSerializer(serializers.ModelSerializer):
+    images = EventPhotoSerializer(many=True, read_only=True)
+    video_urls = EventVideoUrlsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Event
+        fields = [
+            "id",
+            "title",
+            "description",
+            "venue",
+            "start_date",
+            "duration",
+            "time_of_day",
+            "type",
+            "is_approved",
+            "is_main",
+            "banner",
+            "country",
+            "province",
+            "district",
+            "municipality",
+            "municipality_ward",
+            "vdc",
+            "vdc_ward",
+            "contact",
+            "organizer",
+            "created_at",
+            "updated_at",
+            "approved_at",
+            "created_by",
+            "updated_by",
+            "approved_by",
+            "images",
+            "video_urls"
+        ]
+        depth = 1
