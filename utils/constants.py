@@ -7,6 +7,18 @@ MEMBER_ROLE_CHOICES = (
     ("Maintainer", "Maintainer"),
 )
 
+TIME_OF_DAY = (
+    ("Morning", "Morning"),
+    ("Afternoon", "Afternoon"),
+    ("Evening", "Evening"),
+)
+
+EVENT_TYPE = (
+    ("Satsang", "Satsang"),
+    ("General Meeting", "General Meeting"),
+    ("Board Meeting", "Board Meeting"),
+)
+
 COUNTRIES = (
     ("AFG", "Afghanistan"),
     ("IND", "India"),

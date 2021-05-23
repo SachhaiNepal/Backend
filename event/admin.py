@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from event.models import Event
+from event.sub_models.event import Event
 
 
 @admin.register(Event)

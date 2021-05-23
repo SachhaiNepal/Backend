@@ -31,7 +31,7 @@ def upload_multimedia_image_to(instance, filename):
 
 class MultimediaVideoUrls(models.Model):
     multimedia = models.ForeignKey(
-        Multimedia, on_delete=models.CASCADE, related_name="video_urls"
+        Multimedia, on_delete=models.CASCADE, related_name="multimedia_video_urls"
     )
     video_url = models.URLField()
 
@@ -51,7 +51,7 @@ class MultimediaVideo(models.Model):
         verbose_name="Multimedia Video File",
     )
     multimedia = models.ForeignKey(
-        Multimedia, on_delete=models.CASCADE, related_name="multimedia_video"
+        Multimedia, on_delete=models.CASCADE, related_name="multimedia_videos"
     )
 
     def __str__(self):
@@ -78,7 +78,7 @@ class MultimediaAudio(models.Model):
         verbose_name="Multimedia Audio File",
     )
     multimedia = models.ForeignKey(
-        Multimedia, on_delete=models.CASCADE, related_name="multimedia_audio"
+        Multimedia, on_delete=models.CASCADE, related_name="multimedia_audios"
     )
 
     def __str__(self):
@@ -103,7 +103,7 @@ class MultimediaImage(models.Model):
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     multimedia = models.ForeignKey(
-        Multimedia, on_delete=models.CASCADE, related_name="multimedia_image"
+        Multimedia, on_delete=models.CASCADE, related_name="multimedia_images"
     )
 
     class Meta:

@@ -1,8 +1,8 @@
-from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 from backend.settings import MAX_UPLOAD_IMAGE_SIZE
-from event.models import Event, EventPhoto, EventVideoUrls
+from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlsSerializer
+from event.sub_models.event import Event
 from utils.file import check_size
 
 
@@ -11,7 +11,8 @@ class EventPostSerializer(serializers.ModelSerializer):
         model = Event
         fields = "__all__"
 
-    def validate_banner(self, obj):
+    @staticmethod
+    def validate_banner(obj):
         check_size(obj, MAX_UPLOAD_IMAGE_SIZE)
         return obj
 
@@ -47,67 +48,11 @@ class EventPostSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class EventPhotoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EventPhoto
-        fields = "__all__"
-
-    def validate_image(self, obj):
-        check_size(obj, MAX_UPLOAD_IMAGE_SIZE)
-        return obj
-
-
-class EventVideoUrlsSerializer(serializers.ModelSerializer):
-    video_urls = serializers.ListField(
-        child=serializers.URLField(
-            validators=[
-                RegexValidator(
-                    regex=r"https:\/\/www\.youtube\.com\/*",
-                    message="URL must be sourced from youtube.",
-                )
-            ]
-        )
-    )
-
-    class Meta:
-        model = EventVideoUrls
-        fields = "__all__"
-
-
 class EventSerializer(serializers.ModelSerializer):
     images = EventPhotoSerializer(many=True, read_only=True)
     video_urls = EventVideoUrlsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Event
-        fields = [
-            "id",
-            "title",
-            "description",
-            "venue",
-            "start_date",
-            "duration",
-            "time_of_day",
-            "type",
-            "is_approved",
-            "is_main",
-            "banner",
-            "country",
-            "province",
-            "district",
-            "municipality",
-            "municipality_ward",
-            "vdc",
-            "vdc_ward",
-            "contact",
-            "organizer",
-            "created_at",
-            "updated_at",
-            "approved_at",
-            "created_by",
-            "updated_by",
-            "approved_by",
-            "images",
-            "video_urls"
-        ]
+        fields = "__all__"
         depth = 1

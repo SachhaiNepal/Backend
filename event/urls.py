@@ -1,7 +1,9 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from event.views import EventViewSet, EventPhotoViewSet, EventVideoUrlsViewSet, ToggleEventApprovalView
+from event.views.event import EventViewSet, ToggleEventApprovalView
+
+from event.views.event_media import EventPhotoViewSet, EventVideoUrlsViewSet
 
 
 router = DefaultRouter()

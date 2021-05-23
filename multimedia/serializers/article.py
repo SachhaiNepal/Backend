@@ -15,34 +15,6 @@ class ArticlePOSTSerializer(serializers.ModelSerializer):
         return branch
 
 
-class ArticleSerializer(serializers.ModelSerializer):
-    uploaded_by = UserWithProfileSerializer()
-    approved_at = serializers.SerializerMethodField()
-    uploaded_at = serializers.SerializerMethodField()
-    updated_at = serializers.SerializerMethodField()
-
-    @staticmethod
-    def get_approved_at(obj):
-        return (
-            obj.approved_at.strftime("%d %B %Y, %I:%M %p") if obj.approved_at else None
-        )
-
-    @staticmethod
-    def get_uploaded_at(obj):
-        return (
-            obj.uploaded_at.strftime("%d %B %Y, %I:%M %p") if obj.uploaded_at else None
-        )
-
-    @staticmethod
-    def get_updated_at(obj):
-        return obj.updated_at.strftime("%d %B %Y, %I:%M %p") if obj.updated_at else None
-
-    class Meta:
-        model = Article
-        fields = "__all__"
-        depth = 1
-
-
 class ArticleImageSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True)
 
@@ -55,3 +27,13 @@ class ArticleImageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleImage
         exclude = ["article"]
+
+
+class ArticleSerializer(serializers.ModelSerializer):
+    article_images = ArticleImageSerializer(many=True, read_only=True)
+    uploaded_by = UserWithProfileSerializer()
+
+    class Meta:
+        model = Article
+        fields = "__all__"
+        depth = 1
