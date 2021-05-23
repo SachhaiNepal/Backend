@@ -1,17 +1,17 @@
 from django.utils import timezone
-from rest_framework import viewsets, status
+from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from event.serializers.event import EventSerializer, EventPostSerializer
+from event.serializers.event import EventPostSerializer, EventSerializer
 from event.sub_models.event import Event
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all().order_by('-created_at')
+    queryset = Event.objects.all().order_by("-created_at")
     serializer_class = EventSerializer
     parser_classes = (
         MultiPartParser,

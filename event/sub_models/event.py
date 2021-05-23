@@ -8,7 +8,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
-from utils.constants import TIME_OF_DAY, EVENT_TYPE
+from utils.constants import EVENT_TYPE, TIME_OF_DAY
 
 
 def upload_event_banner_to(instance, filename):
@@ -110,7 +110,7 @@ class Event(models.Model):
         permissions = [
             ("approve_event", "Can toggle approval status of event"),
         ]
-        ordering = ('-created_at',)
+        ordering = ("-created_at",)
 
     def clean(self):
         """

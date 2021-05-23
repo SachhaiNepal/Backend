@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from multimedia.models import Article, ArticleImage
+
 from accounts.serializers.user import UserWithProfileSerializer
+from multimedia.models import Article, ArticleImage
 
 
 class ArticlePOSTSerializer(serializers.ModelSerializer):

@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from accounts.serializers.user import UserWithProfileSerializer
-from multimedia.models import (Multimedia,
-                               MultimediaAudio, MultimediaImage,
+from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
                                MultimediaVideo, MultimediaVideoUrls)
 
 
@@ -56,4 +55,3 @@ class MultimediaSerializer(serializers.ModelSerializer):
         model = Multimedia
         fields = "__all__"
         depth = 1
-

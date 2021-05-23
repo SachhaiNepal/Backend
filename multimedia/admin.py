@@ -2,9 +2,12 @@ from django.contrib import admin
 from django.utils import timezone
 
 from multimedia.sub_models.article_media import ArticleImage
-from multimedia.sub_models.multimedia_media import MultimediaVideo, MultimediaAudio, MultimediaImage
+from multimedia.sub_models.multimedia_media import (MultimediaAudio,
+                                                    MultimediaImage,
+                                                    MultimediaVideo)
 from multimedia.sub_models.post import Article, Multimedia
-from multimedia.sub_models.post_action import PinMedia, BookmarkMedia, Love, Comment
+from multimedia.sub_models.post_action import (BookmarkMedia, Comment, Love,
+                                               PinMedia)
 
 
 class MultimediaVideoAdmin(admin.StackedInline):

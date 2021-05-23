@@ -25,11 +25,16 @@ class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = [
-            "id", "user",
-            "is_approved", "approved_by", "approved_at",
-            "created_by", "created_at",
-            "updated_by", "updated_at",
-            "member_branches"
+            "id",
+            "user",
+            "is_approved",
+            "approved_by",
+            "approved_at",
+            "created_by",
+            "created_at",
+            "updated_by",
+            "updated_at",
+            "member_branches",
         ]
         depth = 1
 

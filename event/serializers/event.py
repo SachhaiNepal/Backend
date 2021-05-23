@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
 from backend.settings import MAX_UPLOAD_IMAGE_SIZE
-from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlSerializer, EventVideoSerializer
+from event.serializers.event_media import (EventPhotoSerializer,
+                                           EventVideoSerializer,
+                                           EventVideoUrlSerializer)
 from event.sub_models.event import Event
 from utils.file import check_size
 

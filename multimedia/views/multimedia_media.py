@@ -5,11 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import Multimedia, MultimediaAudio, MultimediaVideoUrls, MultimediaImage, MultimediaVideo
-from multimedia.serializers.multimedia import (
-    MultimediaAudioSerializer, MultimediaVideoUrlsSerializer,
-    MultimediaImageSerializer, MultimediaVideoSerializer
-)
+from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
+                               MultimediaVideo, MultimediaVideoUrls)
+from multimedia.serializers.multimedia import (MultimediaAudioSerializer,
+                                               MultimediaImageSerializer,
+                                               MultimediaVideoSerializer,
+                                               MultimediaVideoUrlsSerializer)
 from utils.helper import generate_url_for_media_resources
 
 

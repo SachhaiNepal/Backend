@@ -5,10 +5,9 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-from backend.settings import (
-    ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE,
-    ALLOWED_VIDEO_EXTENSIONS
-)
+from backend.settings import (ALLOWED_IMAGES_EXTENSIONS,
+                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE,
+                              MAX_UPLOAD_VIDEO_SIZE)
 from event.sub_models.event import Event
 
 

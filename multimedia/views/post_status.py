@@ -5,10 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (
-    Article, BookmarkMedia, Love,
-    Multimedia, PinMedia
-)
+from multimedia.models import (Article, BookmarkMedia, Love, Multimedia,
+                               PinMedia)
 
 
 class ArticleStatus(APIView):
@@ -30,17 +28,15 @@ class ArticleStatus(APIView):
         bookmark_count = BookmarkMedia.objects.filter(
             article=article, is_bookmarked=True
         ).count()
-        pin_count = PinMedia.objects.filter(
-            article=article, is_pinned=True
-        ).count()
+        pin_count = PinMedia.objects.filter(article=article, is_pinned=True).count()
         return Response(
             {
-                "loved"         : love.is_loved,
-                "bookmarked"    : bookmark.is_bookmarked,
-                "pinned"        : pin.is_pinned,
-                "love_count"    : love_count,
+                "loved": love.is_loved,
+                "bookmarked": bookmark.is_bookmarked,
+                "pinned": pin.is_pinned,
+                "love_count": love_count,
                 "bookmark_count": bookmark_count,
-                "pin_count"     : pin_count,
+                "pin_count": pin_count,
             },
             status=status.HTTP_200_OK,
         )
@@ -71,12 +67,12 @@ class MultimediaStatus(APIView):
         ).count()
         return Response(
             {
-                "loved"         : love.is_loved,
-                "bookmarked"    : bookmark.is_bookmarked,
-                "pinned"        : pin.is_pinned,
-                "love_count"    : love_count,
+                "loved": love.is_loved,
+                "bookmarked": bookmark.is_bookmarked,
+                "pinned": pin.is_pinned,
+                "love_count": love_count,
                 "bookmark_count": bookmark_count,
-                "pin_count"     : pin_count,
+                "pin_count": pin_count,
             },
             status=status.HTTP_200_OK,
         )

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 
 from event.sub_models.event import Event
-from event.sub_models.event_action import EventInterest, EventComment
+from event.sub_models.event_action import EventComment, EventInterest
 from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
 
 

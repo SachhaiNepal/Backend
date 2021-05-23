@@ -4,12 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (MultimediaAudio, MultimediaImage,
-                               MultimediaVideo)
-from multimedia.serializers.multimedia import (
-                                                     MultimediaAudioSerializer,
-                                                     MultimediaImageSerializer,
-                                                     MultimediaVideoSerializer)
+from multimedia.models import MultimediaAudio, MultimediaImage, MultimediaVideo
+from multimedia.serializers.multimedia import (MultimediaAudioSerializer,
+                                               MultimediaImageSerializer,
+                                               MultimediaVideoSerializer)
 from utils.helper import generate_url_for_media_resource
 
 
@@ -54,7 +52,7 @@ class MultimediaAudioDetailView(APIView):
         multimedia_audio = self.get_object(pk)
         multimedia_audio.delete()
         return Response(
-            { "success": True },
+            {"success": True},
             status=status.HTTP_204_NO_CONTENT,
         )
 

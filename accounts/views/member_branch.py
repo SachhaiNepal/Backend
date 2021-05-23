@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member, MemberBranch
-from accounts.serializers.member_branch import MemberBranchSerializer, MemberBranchListSerializer
+from accounts.serializers.member_branch import (MemberBranchListSerializer,
+                                                MemberBranchSerializer)
 
 
 class ListMemberBranch(APIView):
@@ -21,7 +22,8 @@ class ListMemberBranch(APIView):
         member = self.get_object(pk)
         member_branches = MemberBranch.objects.filter(member=member)
         return Response(
-            MemberBranchListSerializer(member_branches, many=True).data, status=status.HTTP_200_OK
+            MemberBranchListSerializer(member_branches, many=True).data,
+            status=status.HTTP_200_OK,
         )
 
     def post(self, request, pk):
@@ -37,7 +39,7 @@ class MemberBranchViewSet(viewsets.ModelViewSet):
     queryset = MemberBranch.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    filterset_fields = ['member', "branch"]
+    filterset_fields = ["member", "branch"]
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:

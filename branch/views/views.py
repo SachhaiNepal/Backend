@@ -54,7 +54,7 @@ class ToggleBranchApprovalView(APIView):
                 "success": True,
                 "message": "Branch {} successfully.".format(
                     "approved" if branch.is_approved else "rejected"
-                )
+                ),
             },
             status=status.HTTP_204_NO_CONTENT,
         )

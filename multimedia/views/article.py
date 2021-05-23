@@ -6,8 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from multimedia.serializers.article import (ArticlePOSTSerializer,
+                                            ArticleSerializer)
 from multimedia.serializers.article_list import *
-from multimedia.serializers.article import ArticleSerializer, ArticlePOSTSerializer
 
 
 class ArticleViewSet(viewsets.ModelViewSet):

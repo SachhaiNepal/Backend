@@ -22,7 +22,6 @@ class UpdatePasswordSerializer(serializers.Serializer):
         return data
 
 
-
 class ResetPasswordEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 

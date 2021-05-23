@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import Love, Article, Multimedia
+from multimedia.models import Article, Love, Multimedia
 from multimedia.serializers.post_action import LoveSerializer
 
 
@@ -15,7 +15,7 @@ class LovedArticlesList(APIView):
 
     @staticmethod
     def get(request):
-        context = { "request": request }
+        context = {"request": request}
         loved_articles = Love.objects.filter(multimedia=None)
         serializer = LoveSerializer(data=loved_articles, many=True, context=context)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -28,7 +28,7 @@ class LovedMultimediaList(APIView):
 
     @staticmethod
     def get(request):
-        context = { "request": request }
+        context = {"request": request}
         loved_multimedias = Love.objects.filter(article=None)
         serializer = LoveSerializer(data=loved_multimedias, many=True, context=context)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -58,7 +58,7 @@ class CreateOrToggleLoveStatusOfArticle(APIView):
             )
         except Article.DoesNotExist:
             return Response(
-                { "detail": "Article not found." }, status=status.HTTP_404_NOT_FOUND
+                {"detail": "Article not found."}, status=status.HTTP_404_NOT_FOUND
             )
 
 
@@ -86,5 +86,5 @@ class CreateOrToggleLoveStatusOfMultimedia(APIView):
             )
         except Multimedia.DoesNotExist:
             return Response(
-                { "detail": "Multimedia not found." }, status=status.HTTP_404_NOT_FOUND
+                {"detail": "Multimedia not found."}, status=status.HTTP_404_NOT_FOUND
             )

@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from phonenumber_field.serializerfields import PhoneNumberField
-
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
 from accounts.models import Profile
 from accounts.serializers.profile import ProfileSerializer
-from location.models import Country, Province, District
+from location.models import Country, District, Province
 
 
 class RegisterFollowerSerializer(serializers.Serializer):

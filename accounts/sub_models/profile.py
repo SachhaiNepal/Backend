@@ -23,7 +23,9 @@ class Profile(models.Model):
         get_user_model(), on_delete=models.CASCADE, editable=False
     )
     bio = models.TextField(null=True, blank=True, max_length=1024)
-    contact = PhoneNumberField(unique=True, null=True, blank=True, help_text="valid nepali phone number")
+    contact = PhoneNumberField(
+        unique=True, null=True, blank=True, help_text="valid nepali phone number"
+    )
     birth_date = models.DateField(null=True, blank=True)
     current_city = models.CharField(max_length=512, blank=True, null=True)
     home_town = models.CharField(max_length=512, blank=True, null=True)

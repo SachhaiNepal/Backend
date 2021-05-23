@@ -4,8 +4,10 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlSerializer, EventVideoSerializer
-from event.sub_models.event_media import EventPhoto, EventVideoUrl, EventVideo
+from event.serializers.event_media import (EventPhotoSerializer,
+                                           EventVideoSerializer,
+                                           EventVideoUrlSerializer)
+from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
 
 
 class EventPhotoViewSet(viewsets.ModelViewSet):
@@ -53,6 +55,6 @@ class EventVideoViewSet(viewsets.ModelViewSet):
         event_video.video.delete()
         event_video.delete()
         return Response(
-            { "message": "Event video deleted." },
+            {"message": "Event video deleted."},
             status=status.HTTP_204_NO_CONTENT,
         )

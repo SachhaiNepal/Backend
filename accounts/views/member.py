@@ -2,12 +2,12 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member, MemberBranch
-from accounts.serializers.member import MemberSerializer, MemberPOSTSerializer
+from accounts.serializers.member import MemberPOSTSerializer, MemberSerializer
 from accounts.sub_models.member_role import MemberRole
 
 
@@ -71,9 +71,12 @@ class MemberDetail(APIView):
         [member_role.delete() for member_role in member_roles]
         [member_branch.delete() for member_branch in member_branches]
         member.delete()
-        return Response({
-            "success": True,
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "success": True,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class ToggleMemberApprovalView(APIView):

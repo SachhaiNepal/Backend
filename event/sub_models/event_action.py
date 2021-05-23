@@ -32,10 +32,7 @@ class EventInterest(models.Model):
 
 class EventComment(models.Model):
     event = models.ForeignKey(
-        Event,
-        on_delete=models.CASCADE,
-        related_name="event_comments",
-        editable=False
+        Event, on_delete=models.CASCADE, related_name="event_comments", editable=False
     )
     writer = models.ForeignKey(
         Member,

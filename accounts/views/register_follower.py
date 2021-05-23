@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.serializers.user import RegisterFollowerSerializer
-from location.models import Country, Province, District
+from location.models import Country, District, Province
 
 
 class RegisterFollower(APIView):

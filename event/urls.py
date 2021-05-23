@@ -2,10 +2,10 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from event.views.event import EventViewSet, ToggleEventApprovalView
-from event.views.event_action import EventInterestViewSet, EventCommentViewSet, EventStatistics
-
-from event.views.event_media import EventPhotoViewSet, EventVideoUrlsViewSet, EventVideoViewSet
-
+from event.views.event_action import (EventCommentViewSet,
+                                      EventInterestViewSet, EventStatistics)
+from event.views.event_media import (EventPhotoViewSet, EventVideoUrlsViewSet,
+                                     EventVideoViewSet)
 
 router = DefaultRouter()
 router.register(r"event", EventViewSet, basename="event")

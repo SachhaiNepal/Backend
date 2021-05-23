@@ -5,9 +5,10 @@ from rest_framework import permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from accounts.serializers.user import (
-    UserCreateSerializer, UserUpdateSerializer, UserWithProfileSerializer
-)
+
+from accounts.serializers.user import (UserCreateSerializer,
+                                       UserUpdateSerializer,
+                                       UserWithProfileSerializer)
 
 
 class ListFollower(APIView):
@@ -28,7 +29,7 @@ class ListFollower(APIView):
         users = User.objects.all()
         return Response(
             UserWithProfileSerializer(users, many=True, context=context).data,
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
 
     @staticmethod
@@ -36,10 +37,8 @@ class ListFollower(APIView):
         """
         Creates a brand new user-member(x)
         """
-        context = { "request": request }
-        serializer = UserCreateSerializer(
-            data=request.data, context=context
-        )
+        context = {"request": request}
+        serializer = UserCreateSerializer(data=request.data, context=context)
 
         if serializer.is_valid():
             user = serializer.save()
@@ -47,7 +46,7 @@ class ListFollower(APIView):
             user.save()
             return Response(
                 UserWithProfileSerializer(user, context=context).data,
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -69,18 +68,18 @@ class UserDetail(APIView):
         """
         Returns single user by pk
         """
-        context = { "request": request }
+        context = {"request": request}
         user = self.get_object(pk)
         return Response(
             UserWithProfileSerializer(user, context=context).data,
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
 
     def put(self, request, pk):
         """
         Updates user by pk
         """
-        context = { "request": request }
+        context = {"request": request}
         user = self.get_object(pk)
         serializer = UserUpdateSerializer(
             user, data=request.data, context={"request": request}
@@ -90,7 +89,9 @@ class UserDetail(APIView):
             return Response(
                 {
                     "message": "User updated successfully.",
-                    "data": UserWithProfileSerializer(self.get_object(pk), context=context).data,
+                    "data": UserWithProfileSerializer(
+                        self.get_object(pk), context=context
+                    ).data,
                 },
                 status=status.HTTP_204_NO_CONTENT,
             )
@@ -100,7 +101,7 @@ class UserDetail(APIView):
         """
         Modifies user by pk
         """
-        context = { "request": request }
+        context = {"request": request}
         user = self.get_object(pk)
         serializer = UserUpdateSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
@@ -108,7 +109,9 @@ class UserDetail(APIView):
             return Response(
                 {
                     "message": "User patched successfully.",
-                    "data": UserWithProfileSerializer(self.get_object(pk), context=context).data,
+                    "data": UserWithProfileSerializer(
+                        self.get_object(pk), context=context
+                    ).data,
                 },
                 status=status.HTTP_204_NO_CONTENT,
             )

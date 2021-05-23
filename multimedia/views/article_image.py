@@ -40,7 +40,7 @@ class ArticleImageDetailView(APIView):
         return get_object_or_404(ArticleImage, pk=pk)
 
     def get(self, request, pk):
-        context = { "request": request }
+        context = {"request": request}
         article_image = self.get_object(pk)
         serializer = ArticleImageSerializer(article_image, context=context)
         return Response(serializer, status=status.HTTP_200_OK)

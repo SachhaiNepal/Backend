@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from accounts.models import MemberRole, MemberBranch
+from accounts.models import MemberBranch, MemberRole
 from accounts.sub_models.member import Member
 
 
@@ -13,7 +13,6 @@ class MemberRoleListSerializer(serializers.ModelSerializer):
 
 
 class MemberRoleSerializer(serializers.ModelSerializer):
-
     def validate(self, validated_data):
         from_date = validated_data.get("from_date")
         to_date = validated_data.get("to_date")

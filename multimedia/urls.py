@@ -1,25 +1,33 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from multimedia.views.article import ArticleViewSet, CreateArticleWithImageList, ToggleArticleApprovalView
-from multimedia.views.article_image import ListArticleImages, ArticleImageDetailView
-from multimedia.views.bookmark import CreateOrToggleBookmarkStatusOfArticle, CreateOrToggleBookmarkStatusOfMultimedia
-from multimedia.views.comment import ListMultimediaComments, ListArticleComments, PostComment
-from multimedia.views.love import CreateOrToggleLoveStatusOfArticle, CreateOrToggleLoveStatusOfMultimedia
-from multimedia.views.multimedia import (
-    MultimediaViewSet, CreateMultimediaWithMultimediaList,
-    ToggleMultimediaApprovalView
-)
-from multimedia.views.multimedia_media import (
-    ListMultimediaVideos, ListMultimediaAudios, ListMultimediaImages,
-    ListMultimediaVideoUrls
-)
+from multimedia.views.article import (ArticleViewSet,
+                                      CreateArticleWithImageList,
+                                      ToggleArticleApprovalView)
+from multimedia.views.article_image import (ArticleImageDetailView,
+                                            ListArticleImages)
+from multimedia.views.bookmark import (
+    CreateOrToggleBookmarkStatusOfArticle,
+    CreateOrToggleBookmarkStatusOfMultimedia)
+from multimedia.views.comment import (ListArticleComments,
+                                      ListMultimediaComments, PostComment)
+from multimedia.views.love import (CreateOrToggleLoveStatusOfArticle,
+                                   CreateOrToggleLoveStatusOfMultimedia)
+from multimedia.views.multimedia import (CreateMultimediaWithMultimediaList,
+                                         MultimediaViewSet,
+                                         ToggleMultimediaApprovalView)
+from multimedia.views.multimedia_media import (ListMultimediaAudios,
+                                               ListMultimediaImages,
+                                               ListMultimediaVideos,
+                                               ListMultimediaVideoUrls)
 from multimedia.views.multimedia_media_detail import (
-    MultimediaImageDetailView, MultimediaAudioDetailView,
-    MultimediaVideoDetailView
-)
-from multimedia.views.pin_post import CreateOrTogglePinStatusOfArticle, CreateOrTogglePinStatusOfMultimedia
-from multimedia.views.post_list import ListLovedMediaView, ListBookmarkedMediaView, ListPinnedMediaView
+    MultimediaAudioDetailView, MultimediaImageDetailView,
+    MultimediaVideoDetailView)
+from multimedia.views.pin_post import (CreateOrTogglePinStatusOfArticle,
+                                       CreateOrTogglePinStatusOfMultimedia)
+from multimedia.views.post_list import (ListBookmarkedMediaView,
+                                        ListLovedMediaView,
+                                        ListPinnedMediaView)
 from multimedia.views.post_status import ArticleStatus, MultimediaStatus
 
 router = DefaultRouter()

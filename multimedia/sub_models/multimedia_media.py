@@ -5,10 +5,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-from backend.settings import (
-    ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_VIDEO_SIZE, ALLOWED_AUDIO_EXTENSIONS,
-    MAX_UPLOAD_AUDIO_SIZE, ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
-)
+from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
+                              ALLOWED_IMAGES_EXTENSIONS,
+                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
+                              MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
 from multimedia.sub_models.post import Multimedia
 
 
@@ -28,6 +28,7 @@ def upload_multimedia_image_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
     return f"multimedias/images/{instance.multimedia.pk}/{filename}"
+
 
 class MultimediaVideoUrls(models.Model):
     multimedia = models.ForeignKey(

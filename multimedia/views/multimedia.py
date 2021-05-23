@@ -8,9 +8,10 @@ from rest_framework.views import APIView
 
 from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
                                MultimediaVideo)
-
-from multimedia.serializers.multimedia import MultimediaSerializer, MultimediaPOSTSerializer
-from multimedia.serializers.multimedia_list import CreateMultimediaWithMultimediaListSerializer
+from multimedia.serializers.multimedia import (MultimediaPOSTSerializer,
+                                               MultimediaSerializer)
+from multimedia.serializers.multimedia_list import \
+    CreateMultimediaWithMultimediaListSerializer
 
 
 class MultimediaViewSet(viewsets.ModelViewSet):

@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from multimedia.models import Article, Comment, Multimedia
-from multimedia.serializers.post_action import CommentSerializer, CommentPostSerializer
+from multimedia.serializers.post_action import (CommentPostSerializer,
+                                                CommentSerializer)
 
 
 class ListArticleComments(APIView):
@@ -21,7 +22,7 @@ class ListArticleComments(APIView):
         article = self.get_object(pk)
         comments = Comment.objects.filter(article=article)
         serializer = CommentSerializer(comments, many=True)
-        return Response({ "data": serializer.data }, status=status.HTTP_200_OK)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
 class ListMultimediaComments(APIView):
@@ -36,7 +37,7 @@ class ListMultimediaComments(APIView):
         multimedia = self.get_object(pk)
         comments = Comment.objects.filter(multimedia=multimedia)
         serializer = CommentSerializer(comments, many=True)
-        return Response({ "data": serializer.data }, status=status.HTTP_200_OK)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
 class PostComment(APIView):
@@ -46,7 +47,7 @@ class PostComment(APIView):
     @staticmethod
     def post(request):
         serializer = CommentPostSerializer(
-            data=request.data, context={ "request": request }
+            data=request.data, context={"request": request}
         )
         if serializer.is_valid():
             print(request.user)
@@ -54,7 +55,7 @@ class PostComment(APIView):
             print(serializer)
             serializer.save()
             return Response(
-                { "success": True, "comment": serializer.data },
+                {"success": True, "comment": serializer.data},
                 status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import PinMedia, Multimedia
+from multimedia.models import Multimedia, PinMedia
 
 
 class CreateOrTogglePinStatusOfMultimedia(APIView):
@@ -31,7 +31,7 @@ class CreateOrTogglePinStatusOfMultimedia(APIView):
             )
         except Multimedia.DoesNotExist:
             return Response(
-                { "detail": "Multimedia not found." }, status=status.HTTP_404_NOT_FOUND
+                {"detail": "Multimedia not found."}, status=status.HTTP_404_NOT_FOUND
             )
 
 
@@ -59,5 +59,5 @@ class CreateOrTogglePinStatusOfArticle(APIView):
             )
         except Article.DoesNotExist:
             return Response(
-                { "detail": "Article not found." }, status=status.HTTP_404_NOT_FOUND
+                {"detail": "Article not found."}, status=status.HTTP_404_NOT_FOUND
             )
