@@ -35,8 +35,12 @@ class EventVideo(models.Model):
         validators=[FileExtensionValidator(ALLOWED_VIDEO_EXTENSIONS)],
     )
 
+    class Meta:
+        verbose_name = "Event Video"
+        verbose_name_plural = "Event Videos"
+
     def __str__(self):
-        return "{} - {}".format(self.event.title, self.image.name)
+        return "{} - {}".format(self.event.title, self.video.name)
 
     def clean(self):
         if self.video.size / 1000 > MAX_UPLOAD_VIDEO_SIZE:
@@ -58,6 +62,10 @@ class EventPhoto(models.Model):
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
 
+    class Meta:
+        verbose_name = "Event Image"
+        verbose_name_plural = "Event Image"
+
     def __str__(self):
         return "{} - {}".format(self.event.title, self.image.name)
 
@@ -76,5 +84,9 @@ class EventVideoUrl(models.Model):
     )
     video_url = models.URLField(unique=True)
 
+    class Meta:
+        verbose_name = "Event Video URL"
+        verbose_name_plural = "Event URLs"
+
     def __str__(self):
-        return self.video_url
+        return "{} - {}".format(self.event.title, self.video_url)
