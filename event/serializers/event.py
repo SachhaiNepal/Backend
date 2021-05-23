@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from backend.settings import MAX_UPLOAD_IMAGE_SIZE
-from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlsSerializer, EventVideoSerializer
+from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlSerializer, EventVideoSerializer
 from event.sub_models.event import Event
 from utils.file import check_size
 
@@ -50,7 +50,7 @@ class EventPostSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     images = EventPhotoSerializer(many=True, read_only=True)
-    video_urls = EventVideoUrlsSerializer(many=True, read_only=True)
+    video_urls = EventVideoUrlSerializer(many=True, read_only=True)
     videos = EventVideoSerializer(many=True, read_only=True)
 
     class Meta:

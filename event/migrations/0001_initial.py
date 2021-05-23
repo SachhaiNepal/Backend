@@ -200,7 +200,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="EventVideoUrls",
+            name="EventVideoUrl",
             fields=[
                 (
                     "id",

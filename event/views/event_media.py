@@ -4,8 +4,8 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlsSerializer, EventVideoSerializer
-from event.sub_models.event_media import EventPhoto, EventVideoUrls, EventVideo
+from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlSerializer, EventVideoSerializer
+from event.sub_models.event_media import EventPhoto, EventVideoUrl, EventVideo
 
 
 class EventPhotoViewSet(viewsets.ModelViewSet):
@@ -30,8 +30,8 @@ class EventPhotoViewSet(viewsets.ModelViewSet):
 
 
 class EventVideoUrlsViewSet(viewsets.ModelViewSet):
-    queryset = EventVideoUrls.objects.all()
-    serializer_class = EventVideoUrlsSerializer
+    queryset = EventVideoUrl.objects.all()
+    serializer_class = EventVideoUrlSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     filterset_fields = ["event"]

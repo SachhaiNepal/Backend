@@ -70,7 +70,7 @@ class EventPhoto(models.Model):
         super().delete(using, keep_parents)
 
 
-class EventVideoUrls(models.Model):
+class EventVideoUrl(models.Model):
     event = models.ForeignKey(
         Event, on_delete=models.CASCADE, related_name="video_urls"
     )
