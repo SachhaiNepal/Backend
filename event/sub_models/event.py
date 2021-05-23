@@ -1,3 +1,6 @@
+import os
+import random
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
@@ -6,6 +9,12 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 from utils.constants import TIME_OF_DAY, EVENT_TYPE
+
+
+def upload_event_banner_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"events/{instance.event.pk}/banner/{filename}"
 
 
 class Event(models.Model):
@@ -19,7 +28,7 @@ class Event(models.Model):
     is_approved = models.BooleanField(default=False)
     is_main = models.BooleanField(default=False)
     banner = models.ImageField(
-        upload_to="events",
+        upload_to=upload_event_banner_to,
         null=True,
         blank=True,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],

@@ -1,3 +1,6 @@
+import os
+import random
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
@@ -7,6 +10,12 @@ from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
+
+
+def upload_profile_image_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"users/{instance.pk}/profile_images/{filename}"
 
 
 class Profile(models.Model):
@@ -62,7 +71,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 class ProfileImage(models.Model):
     image = models.ImageField(
-        upload_to="follower/profile",
+        upload_to=upload_profile_image_to,
         null=True,
         blank=True,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
