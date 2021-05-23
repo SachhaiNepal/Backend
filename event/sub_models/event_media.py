@@ -28,7 +28,7 @@ class EventVideo(models.Model):
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
-        related_name="event_videos",
+        related_name="videos",
     )
     video = models.FileField(
         upload_to=upload_event_video_to,

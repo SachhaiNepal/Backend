@@ -4,8 +4,8 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlsSerializer
-from event.sub_models.event_media import EventPhoto, EventVideoUrls
+from event.serializers.event_media import EventPhotoSerializer, EventVideoUrlsSerializer, EventVideoSerializer
+from event.sub_models.event_media import EventPhoto, EventVideoUrls, EventVideo
 
 
 class EventPhotoViewSet(viewsets.ModelViewSet):
@@ -24,7 +24,7 @@ class EventPhotoViewSet(viewsets.ModelViewSet):
         event_photo.image.delete()
         event_photo.delete()
         return Response(
-            {"message": "Event photo deleted successfully"},
+            {"message": "Event image deleted."},
             status=status.HTTP_204_NO_CONTENT,
         )
 
@@ -35,3 +35,24 @@ class EventVideoUrlsViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     filterset_fields = ["event"]
+
+
+class EventVideoViewSet(viewsets.ModelViewSet):
+    queryset = EventVideo.objects.all()
+    serializer_class = EventVideoSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    parser_classes = (
+        MultiPartParser,
+        FormParser,
+    )
+    filterset_fields = ["event"]
+
+    def destroy(self, request, *args, **kwargs):
+        event_video = self.get_object()
+        event_video.video.delete()
+        event_video.delete()
+        return Response(
+            { "message": "Event video deleted." },
+            status=status.HTTP_204_NO_CONTENT,
+        )

@@ -3,12 +3,13 @@ from rest_framework.routers import DefaultRouter
 
 from event.views.event import EventViewSet, ToggleEventApprovalView
 
-from event.views.event_media import EventPhotoViewSet, EventVideoUrlsViewSet
+from event.views.event_media import EventPhotoViewSet, EventVideoUrlsViewSet, EventVideoViewSet
 
 
 router = DefaultRouter()
 router.register(r"event", EventViewSet, basename="event")
 router.register(r"event-image", EventPhotoViewSet, basename="event-image")
+router.register(r"event-video", EventVideoViewSet, basename="event-video")
 router.register(r"event-video-url", EventVideoUrlsViewSet, basename="event-video-url")
 # router.register(r"interested-event", EventInterestViewSet, basename="event-interest")
 # router.register(r"going-event", EventGoingViewSet, basename="event-going")
