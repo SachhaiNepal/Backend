@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.utils import timezone
 
 from event.sub_models.event import Event
+from event.sub_models.event_action import EventInterest, EventComment
+from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
 
 
 @admin.register(Event)
@@ -110,3 +112,10 @@ class EventAdmin(admin.ModelAdmin):
     def delete_model(self, request, obj):
         obj.banner.delete()
         obj.delete()
+
+
+admin.site.register(EventPhoto)
+admin.site.register(EventVideo)
+admin.site.register(EventVideoUrl)
+admin.site.register(EventInterest)
+admin.site.register(EventComment)
