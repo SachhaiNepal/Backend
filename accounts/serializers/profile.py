@@ -8,7 +8,7 @@ class ProfileImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProfileImage
-        fields = ["image"]
+        fields = "__all__"
 
 
 class ProfileImagePostSerializer(serializers.ModelSerializer):
@@ -18,23 +18,11 @@ class ProfileImagePostSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    profile_images = ProfileImageSerializer(many=True)
+    profile_images = ProfileImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
-        fields = (
-            "id",
-            "bio",
-            "contact",
-            "birth_date",
-            "current_city",
-            "home_town",
-            "country",
-            "province",
-            "district",
-            "last_updated",
-            "profile_images",
-        )
+        fields = "__all__"
         depth = 1
 
 

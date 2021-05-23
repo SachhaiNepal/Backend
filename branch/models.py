@@ -13,7 +13,8 @@ from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 def upload_branch_cover_image(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    return f"branch/{instance.pk}/cover_images/{filename}"
+    branch_name = instance.name.replace(" ", "")
+    return f"branch/{branch_name}/cover_images/{filename}"
 
 
 class Branch(models.Model):

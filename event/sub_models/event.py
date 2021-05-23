@@ -14,7 +14,8 @@ from utils.constants import EVENT_TYPE, TIME_OF_DAY
 def upload_event_banner_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    return f"events/{instance.event.pk}/banner/{filename}"
+    event_name = instance.title.replace(" ", "")
+    return f"events/{event_name}/banner/{filename}"
 
 
 class Event(models.Model):
