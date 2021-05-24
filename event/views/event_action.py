@@ -28,6 +28,9 @@ class EventInterestViewSet(viewsets.ModelViewSet):
 
 
 class EventStatistics(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get(request, pk):
         event = get_object_or_404(Event, pk=pk)
@@ -39,3 +42,41 @@ class EventStatistics(APIView):
             {"going_count": going_count, "interested_count": interested_count},
             status=status.HTTP_201_CREATED,
         )
+
+
+class ToggleEventInterestedStatus(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def post(request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        user = request.user
+        user_event_interest, created = EventInterest.objects.get_or_create(event=event, follower=user)
+        if created:
+            user_event_interest.interested = True
+        else:
+            user_event_interest.interested = not user_event_interest.interested
+        user_event_interest.save()
+        return Response({
+            "message": "Event interest toggled."
+        }, status=status.HTTP_200_OK)
+
+
+class ToggleEventGoingStatus(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def post(request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        user = request.user
+        user_event_interest, created = EventInterest.objects.get_or_create(event=event, follower=user)
+        if created:
+            user_event_interest.going = True
+        else:
+            user_event_interest.going = not user_event_interest.going
+        user_event_interest.save()
+        return Response({
+            "message": "Event going status toggled."
+        }, status=status.HTTP_200_OK)

@@ -2,8 +2,10 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from event.views.event import EventViewSet, ToggleEventApprovalView
-from event.views.event_action import (EventCommentViewSet,
-                                      EventInterestViewSet, EventStatistics)
+from event.views.event_action import (
+    EventCommentViewSet,
+    EventInterestViewSet, EventStatistics, ToggleEventInterestedStatus, ToggleEventGoingStatus
+)
 from event.views.event_media import (EventPhotoViewSet, EventVideoUrlsViewSet,
                                      EventVideoViewSet)
 
@@ -18,5 +20,7 @@ urlpatterns = router.urls
 
 urlpatterns += [
     path("event/<int:pk>/toggle-approval", ToggleEventApprovalView.as_view()),
+    path("event/<int:pk>/toggle-interested", ToggleEventInterestedStatus.as_view()),
+    path("event/<int:pk>/toggle-going", ToggleEventGoingStatus.as_view()),
     path("event/<int:pk>/interest-statistics", EventStatistics.as_view()),
 ]
