@@ -65,7 +65,7 @@ class Branch(models.Model):
     )
     contact = PhoneNumberField(unique=True)
     is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
-    is_approved = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.SET_NULL,
@@ -74,7 +74,7 @@ class Branch(models.Model):
         blank=True,
         editable=False,
     )
-    approved_at = models.DateTimeField(null=True, blank=True)
+    approved_at = models.DateTimeField(null=True, blank=True, editable=False)
     created_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,

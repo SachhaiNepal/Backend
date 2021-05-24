@@ -26,8 +26,8 @@ class Event(models.Model):
     duration = models.IntegerField()
     time_of_day = models.CharField(max_length=10, choices=TIME_OF_DAY)
     type = models.CharField(max_length=15, choices=EVENT_TYPE)
-    is_approved = models.BooleanField(default=False)
-    is_main = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
+    is_main = models.BooleanField(default=False, editable=False)
     banner = models.ImageField(
         upload_to=upload_event_banner_to,
         null=True,

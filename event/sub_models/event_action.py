@@ -9,15 +9,17 @@ class EventInterest(models.Model):
         Event,
         on_delete=models.CASCADE,
         related_name="interested_event",
+        editable=False
     )
     follower = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="interested_followers",
+        editable=False
     )
-    going = models.BooleanField(default=False)
-    interested = models.BooleanField(default=False)
-    attended = models.BooleanField(default=False)
+    going = models.BooleanField(default=False, editable=False)
+    interested = models.BooleanField(default=False, editable=False)
+    attended = models.BooleanField(default=False, editable=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

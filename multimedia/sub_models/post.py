@@ -32,14 +32,14 @@ class Media(models.Model):
 
 
 class Multimedia(Media):
-    is_approved = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
         return self.title
 
 
 class Article(Media):
-    is_approved = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
         return self.title
