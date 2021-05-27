@@ -38,7 +38,7 @@ class Member(models.Model):
     class Meta:
         verbose_name_plural = "Members"
         permissions = [
-            ("approve_member", "Can toggle approval status of member"),
+            ("can_approve_member", "Can toggle Member Approval Status"),
         ]
 
     def __str__(self):

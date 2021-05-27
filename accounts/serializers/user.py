@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from accounts.models import Profile
+from accounts.serializers.member import UserMemberSerializer
 from accounts.serializers.profile import ProfileSerializer
 from location.models import Country, District, Province
 
@@ -79,34 +80,17 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         fields = ("username", "first_name", "last_name", "email")
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = "__all__"
+
+
 class UserWithProfileSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
-    last_login = serializers.SerializerMethodField()
-    date_joined = serializers.SerializerMethodField()
-
-    @staticmethod
-    def get_date_joined(obj):
-        return obj.date_joined.strftime("%d %B, %Y") if obj.date_joined else None
-
-    @staticmethod
-    def get_last_login(obj):
-        return obj.last_login.strftime("%d %B %Y, %I:%M %p") if obj.last_login else None
+    member = UserMemberSerializer()
 
     class Meta:
         model = get_user_model()
         depth = 1
-        fields = (
-            "date_joined",
-            "email",
-            "first_name",
-            "groups",
-            "id",
-            "is_active",
-            "is_staff",
-            "is_superuser",
-            "last_login",
-            "last_name",
-            "user_permissions",
-            "username",
-            "profile",
-        )
+        fields = "__all__"

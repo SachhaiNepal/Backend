@@ -9,7 +9,7 @@ class MemberBranchListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MemberBranch
-        fields = ("id", "member", "branch", "date_of_membership", "member_branch_roles")
+        exclude = ["member"]
         depth = 2
 
 

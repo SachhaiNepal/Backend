@@ -8,7 +8,7 @@ from accounts.sub_models.member import Member
 class MemberRoleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberRole
-        fields = "__all__"
+        exclude = ["member", "member_branch"]
         depth = 2
 
 
