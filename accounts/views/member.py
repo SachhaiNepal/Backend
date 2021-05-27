@@ -2,11 +2,15 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import (
+    IsAdminUser, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly,
+    DjangoModelPermissions
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Member, MemberBranch
+from accounts.permissions import CanApproveMember
 from accounts.serializers.member import MemberPOSTSerializer, MemberSerializer
 from accounts.sub_models.member_role import MemberRole
 
@@ -17,14 +21,18 @@ class ListMember(APIView):
     """
 
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, DjangoModelPermissionsOrAnonReadOnly]
 
     @staticmethod
-    def get(request):
+    def get_queryset():
+        return Member.objects.all()
+
+    def get(self, request):
         """
         Return a list of all users.
         """
-        members = Member.objects.all()
+        members = self.get_queryset()
+
         return Response(
             MemberSerializer(members, many=True).data, status=status.HTTP_200_OK
         )
@@ -51,7 +59,9 @@ class MemberDetail(APIView):
     """
 
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, DjangoModelPermissions]
+
+    queryset = Member.objects.all()
 
     @staticmethod
     def get_object(pk):
@@ -81,7 +91,7 @@ class MemberDetail(APIView):
 
 class ToggleMemberApprovalView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanApproveMember]
 
     def post(self, request, pk):
         try:
