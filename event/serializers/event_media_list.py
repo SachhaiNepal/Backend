@@ -17,13 +17,11 @@ class AddEventImageListSerializer(serializers.Serializer):
         return obj
 
     def create(self, validated_data):
-        images = validated_data.get('images')
-        event_id = self.context.get('event_id')
+        images = validated_data.get("images")
+        event_id = self.context.get("event_id")
         event = get_object_or_404(Event, pk=event_id)
         for image in images:
-            EventPhoto.objects.create(
-                image=image, event=event
-            )
+            EventPhoto.objects.create(image=image, event=event)
         return event
 
 
@@ -40,13 +38,11 @@ class AddEventVideoUrlListSerializer(serializers.Serializer):
     )
 
     def create(self, validated_data):
-        video_urls = validated_data.get('video_urls')
-        event_id = self.context.get('event_id')
+        video_urls = validated_data.get("video_urls")
+        event_id = self.context.get("event_id")
         event = get_object_or_404(Event, pk=event_id)
         for video_url in video_urls:
-            EventVideoUrl.objects.create(
-                video_url=video_url, event=event
-            )
+            EventVideoUrl.objects.create(video_url=video_url, event=event)
         return event
 
 
@@ -61,11 +57,9 @@ class AddEventVideoListSerializer(serializers.Serializer):
         return obj
 
     def create(self, validated_data):
-        videos = validated_data.get('videos')
-        event_id = self.context.get('event_id')
+        videos = validated_data.get("videos")
+        event_id = self.context.get("event_id")
         event = get_object_or_404(Event, pk=event_id)
         for video in videos:
-            EventVideo.objects.create(
-                video=video, event=event
-            )
+            EventVideo.objects.create(video=video, event=event)
         return event

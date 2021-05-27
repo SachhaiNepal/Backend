@@ -6,16 +6,13 @@ from event.sub_models.event import Event
 
 class EventInterest(models.Model):
     event = models.ForeignKey(
-        Event,
-        on_delete=models.CASCADE,
-        related_name="interested_event",
-        editable=False
+        Event, on_delete=models.CASCADE, related_name="interested_event", editable=False
     )
     follower = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="interested_followers",
-        editable=False
+        editable=False,
     )
     going = models.BooleanField(default=False, editable=False)
     interested = models.BooleanField(default=False, editable=False)

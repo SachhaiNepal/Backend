@@ -52,15 +52,17 @@ class ToggleEventInterestedStatus(APIView):
     def post(request, pk):
         event = get_object_or_404(Event, pk=pk)
         user = request.user
-        user_event_interest, created = EventInterest.objects.get_or_create(event=event, follower=user)
+        user_event_interest, created = EventInterest.objects.get_or_create(
+            event=event, follower=user
+        )
         if created:
             user_event_interest.interested = True
         else:
             user_event_interest.interested = not user_event_interest.interested
         user_event_interest.save()
-        return Response({
-            "message": "Event interest toggled."
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Event interest toggled."}, status=status.HTTP_200_OK
+        )
 
 
 class ToggleEventGoingStatus(APIView):
@@ -71,12 +73,14 @@ class ToggleEventGoingStatus(APIView):
     def post(request, pk):
         event = get_object_or_404(Event, pk=pk)
         user = request.user
-        user_event_interest, created = EventInterest.objects.get_or_create(event=event, follower=user)
+        user_event_interest, created = EventInterest.objects.get_or_create(
+            event=event, follower=user
+        )
         if created:
             user_event_interest.going = True
         else:
             user_event_interest.going = not user_event_interest.going
         user_event_interest.save()
-        return Response({
-            "message": "Event going status toggled."
-        }, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Event going status toggled."}, status=status.HTTP_200_OK
+        )
