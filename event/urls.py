@@ -6,8 +6,10 @@ from event.views.event_action import (
     EventCommentViewSet,
     EventInterestViewSet, EventStatistics, ToggleEventInterestedStatus, ToggleEventGoingStatus
 )
-from event.views.event_media import (EventPhotoViewSet, EventVideoUrlsViewSet,
-                                     EventVideoViewSet)
+from event.views.event_media import (
+    EventPhotoViewSet, EventVideoUrlsViewSet,
+    EventVideoViewSet, AddEventPhotoListView, AddEventVideoUrlsListView, AddEventVideoListView
+)
 
 router = DefaultRouter()
 router.register(r"event", EventViewSet, basename="event")
@@ -23,4 +25,7 @@ urlpatterns += [
     path("event/<int:pk>/toggle-interested", ToggleEventInterestedStatus.as_view()),
     path("event/<int:pk>/toggle-going", ToggleEventGoingStatus.as_view()),
     path("event/<int:pk>/interest-statistics", EventStatistics.as_view()),
+    path("event/<int:pk>/image-list", AddEventPhotoListView.as_view()),
+    path("event/<int:pk>/video-url-list", AddEventVideoUrlsListView.as_view()),
+    path("event/<int:pk>/video-list", AddEventVideoListView.as_view())
 ]

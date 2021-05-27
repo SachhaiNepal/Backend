@@ -3,10 +3,15 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from event.serializers.event_media import (EventPhotoSerializer,
                                            EventVideoSerializer,
                                            EventVideoUrlSerializer)
+from event.serializers.event_media_list import (
+    AddEventImageListSerializer, AddEventVideoListSerializer,
+    AddEventVideoUrlListSerializer
+)
 from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
 
 
@@ -58,3 +63,46 @@ class EventVideoViewSet(viewsets.ModelViewSet):
             {"message": "Event video deleted."},
             status=status.HTTP_204_NO_CONTENT,
         )
+
+
+class AddEventPhotoListView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk):
+        serializer = AddEventImageListSerializer(data=request.data, context={ "event_id": pk})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "detail": "Images list added."
+            }, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AddEventVideoUrlsListView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk):
+        serializer = AddEventVideoUrlListSerializer(data=request.data, context={ "event_id": pk })
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "detail": "Video urls list added."
+            }, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AddEventVideoListView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk):
+        serializer = AddEventVideoListSerializer(data=request.data, context={ "event_id": pk })
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "detail": "Videos list added."
+            }, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

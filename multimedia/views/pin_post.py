@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from multimedia.models import Multimedia, PinMedia
+from multimedia.sub_models.post import Article
 
 
 class CreateOrTogglePinStatusOfMultimedia(APIView):
