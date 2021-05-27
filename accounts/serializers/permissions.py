@@ -11,12 +11,8 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 
 class AssignPermissionSerializer(serializers.Serializer):
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=get_user_model().objects.all()
-    )
-    permission = serializers.PrimaryKeyRelatedField(
-        queryset=Permission.objects.all()
-    )
+    user = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
+    permission = serializers.PrimaryKeyRelatedField(queryset=Permission.objects.all())
 
 
 class UserPermissionSerializer(serializers.Serializer):
@@ -25,4 +21,3 @@ class UserPermissionSerializer(serializers.Serializer):
     codename = serializers.CharField()
     content_type = serializers.IntegerField()
     is_assigned = serializers.BooleanField()
-

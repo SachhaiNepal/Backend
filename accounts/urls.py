@@ -11,7 +11,8 @@ from accounts.views.password import (ConfirmResetPassword,
 from accounts.views.profile import (ProfileDetail, ProfileImageViewSet,
                                     UserProfile)
 from accounts.views.register_follower import RegisterFollower
-from accounts.views.user_permission import ListUserPermission, UserPermissionDetail
+from accounts.views.user_permission import (ListUserPermission,
+                                            UserPermissionDetail)
 from accounts.views.users import ListFollower, UserDetail
 
 app_name = "accounts"
@@ -54,5 +55,5 @@ urlpatterns += [
         name="confirm-reset-password",
     ),
     path("user-permission", ListUserPermission.as_view(), name="user-permission"),
-    path("magic/<int:pk>", UserPermissionDetail.as_view(), name="magic")
+    path("magic/<int:pk>", UserPermissionDetail.as_view(), name="magic"),
 ]

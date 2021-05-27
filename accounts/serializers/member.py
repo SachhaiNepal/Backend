@@ -9,7 +9,7 @@ class UserMemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Member
-        exclude = ['user']
+        exclude = ["user"]
         depth = 1
 
 

@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('multimedia', '0001_initial'),
+        ("multimedia", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='article',
-            name='is_approved',
+            model_name="article",
+            name="is_approved",
             field=models.BooleanField(default=False, editable=False),
         ),
         migrations.AlterField(
-            model_name='multimedia',
-            name='is_approved',
+            model_name="multimedia",
+            name="is_approved",
             field=models.BooleanField(default=False, editable=False),
         ),
     ]

@@ -6,12 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0001_initial'),
+        ("accounts", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='member',
-            options={'permissions': [('can_approve_member', 'Can toggle Approval Status')], 'verbose_name_plural': 'Members'},
+            name="member",
+            options={
+                "permissions": [("can_approve_member", "Can toggle Approval Status")],
+                "verbose_name_plural": "Members",
+            },
         ),
     ]

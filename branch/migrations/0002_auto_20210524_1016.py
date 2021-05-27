@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('branch', '0001_initial'),
+        ("branch", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='branch',
-            name='approved_at',
+            model_name="branch",
+            name="approved_at",
             field=models.DateTimeField(blank=True, editable=False, null=True),
         ),
         migrations.AlterField(
-            model_name='branch',
-            name='is_approved',
+            model_name="branch",
+            name="is_approved",
             field=models.BooleanField(default=False, editable=False),
         ),
     ]
