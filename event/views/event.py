@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from event.serializers.event import EventPostSerializer, EventSerializer
-from event.sub_models.event import Event
+from event.serializers.event import EventPostSerializer, EventSerializer, EventBannerImageSerializer
+from event.sub_models.event import Event, EventBannerImage
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -53,5 +53,22 @@ class ToggleEventApprovalView(APIView):
                     "approved" if event.is_approved else "rejected"
                 )
             },
+            status=status.HTTP_204_NO_CONTENT,
+        )
+
+
+class EventBannerImageViewSet(viewsets.ModelViewSet):
+    queryset = EventBannerImage.objects.all().order_by("-timestamp")
+    serializer_class = EventBannerImageSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    filterset_fields = ["event"]
+
+    def destroy(self, request, *args, **kwargs):
+        event_banner = self.get_object()
+        event_banner.image.delete()
+        event_banner.delete()
+        return Response(
+            {"message": "Event banner image deleted."},
             status=status.HTTP_204_NO_CONTENT,
         )
