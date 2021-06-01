@@ -13,7 +13,7 @@ class LoadCountriesView(APIView):
             country, created = Country.objects.get_or_create(name=value)
             if created:
                 country.save()
-        return Response({ "success": True }, status=status.HTTP_200_OK)
+        return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class LoadProvincesView(APIView):
@@ -26,7 +26,7 @@ class LoadProvincesView(APIView):
             )
             if created:
                 obj.save()
-        return Response({ "success": True }, status=status.HTTP_200_OK)
+        return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class LoadDistrictsView(APIView):
@@ -40,4 +40,4 @@ class LoadDistrictsView(APIView):
             )
             if created:
                 obj.save()
-        return Response({ "success": True }, status=status.HTTP_200_OK)
+        return Response({"success": True}, status=status.HTTP_200_OK)

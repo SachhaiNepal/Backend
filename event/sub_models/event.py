@@ -137,7 +137,9 @@ class Event(models.Model):
 
 
 class EventBannerImage(models.Model):
-    event = models.ForeignKey("Event", on_delete=models.CASCADE, related_name="banner_images")
+    event = models.ForeignKey(
+        "Event", on_delete=models.CASCADE, related_name="banner_images"
+    )
     image = models.ImageField(
         upload_to=upload_event_banner_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],

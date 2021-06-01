@@ -124,7 +124,9 @@ class Branch(models.Model):
 
 
 class BranchImage(models.Model):
-    branch = models.ForeignKey("Branch", on_delete=models.CASCADE, related_name="images")
+    branch = models.ForeignKey(
+        "Branch", on_delete=models.CASCADE, related_name="images"
+    )
     image = models.ImageField(
         upload_to=upload_branch_image_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],

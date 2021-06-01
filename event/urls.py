@@ -1,7 +1,8 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from event.views.event import EventViewSet, ToggleEventApprovalView, EventBannerImageViewSet
+from event.views.event import (EventBannerImageViewSet, EventViewSet,
+                               ToggleEventApprovalView)
 from event.views.event_action import (EventCommentViewSet,
                                       EventInterestViewSet, EventStatistics,
                                       ToggleEventGoingStatus,

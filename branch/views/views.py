@@ -13,13 +13,19 @@ class BranchViewSet(viewsets.ModelViewSet):
     serializer_class = BranchSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    search_fields = ['name']
+    search_fields = ["name"]
     filterset_fields = [
-        "country", "province", "district",
-        "municipality", "municipality_ward",
-        "vdc", "vdc_ward",
-        "is_main", "is_approved",
-        "approved_by", "created_by"
+        "country",
+        "province",
+        "district",
+        "municipality",
+        "municipality_ward",
+        "vdc",
+        "vdc_ward",
+        "is_main",
+        "is_approved",
+        "approved_by",
+        "created_by",
     ]
 
     def get_serializer_class(self):

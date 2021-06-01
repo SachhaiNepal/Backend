@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, filters
+from rest_framework import filters, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAdminUser
 
@@ -11,7 +11,7 @@ class CountryViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
+    search_fields = ["name"]
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
@@ -25,7 +25,7 @@ class ProvinceViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['name']
+    search_fields = ["name"]
     filterset_fields = ["country"]
 
     def get_serializer_class(self):
@@ -40,7 +40,7 @@ class DistrictViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['name']
+    search_fields = ["name"]
     filterset_fields = ["province"]
 
     def get_serializer_class(self):
@@ -55,7 +55,7 @@ class MunicipalityViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['name']
+    search_fields = ["name"]
     filterset_fields = ["district"]
 
     def get_serializer_class(self):
@@ -71,7 +71,7 @@ class MunicipalityWardViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = serializers.MunicipalityWardSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['name']
+    search_fields = ["name"]
     filterset_fields = ["municipality"]
 
 
@@ -80,7 +80,7 @@ class VDCViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['name']
+    search_fields = ["name"]
     filterset_fields = ["district"]
 
     def get_serializer_class(self):
@@ -96,5 +96,5 @@ class VDCWardViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = serializers.VDCWardSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['name']
+    search_fields = ["name"]
     filterset_fields = ["vdc"]

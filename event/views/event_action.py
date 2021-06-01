@@ -5,10 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from event.serializers.event_action import (
-    EventCommentSerializer,
-    EventInterestSerializer, EventCommentPostSerializer
-)
+from event.serializers.event_action import (EventCommentPostSerializer,
+                                            EventCommentSerializer,
+                                            EventInterestSerializer)
 from event.sub_models.event import Event
 from event.sub_models.event_action import EventComment, EventInterest
 

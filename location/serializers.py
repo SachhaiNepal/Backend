@@ -92,4 +92,3 @@ class CountryPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
         fields = "__all__"
-

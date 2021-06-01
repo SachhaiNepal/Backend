@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0001_initial'),
+        ("event", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='eventbannerimage',
-            name='timestamp',
+            model_name="eventbannerimage",
+            name="timestamp",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

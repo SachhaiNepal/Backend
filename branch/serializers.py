@@ -7,7 +7,6 @@ from utils.validate_location import validate_location
 
 
 class BranchImageSerializer(serializers.ModelSerializer):
-
     @staticmethod
     def validate_image(obj):
         check_size(obj, MAX_UPLOAD_IMAGE_SIZE)
