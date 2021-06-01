@@ -13,7 +13,7 @@ from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 def upload_branch_image_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    branch_name = instance.name.replace(" ", "")
+    branch_name = instance.branch.name.replace(" ", "")
     return f"branch/{branch_name}/images/{filename}"
 
 
@@ -129,6 +129,9 @@ class BranchImage(models.Model):
         upload_to=upload_branch_image_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
+    timestamp = models.DateTimeField(auto_now=True)
+
+    ordering = "-timestamp"
 
     def delete(self, using=None, keep_parents=False):
         if self.image:
