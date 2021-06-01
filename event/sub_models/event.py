@@ -14,7 +14,7 @@ from utils.constants import EVENT_TYPE, TIME_OF_DAY
 def upload_event_banner_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    event_name = instance.title.replace(" ", "")
+    event_name = instance.event.title.replace(" ", "")
     return f"events/{event_name}/banner/{filename}"
 
 
@@ -142,6 +142,7 @@ class EventBannerImage(models.Model):
         upload_to=upload_event_banner_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
+    timestamp = models.DateTimeField(auto_now=True)
 
     def delete(self, using=None, keep_parents=False):
         if self.image:

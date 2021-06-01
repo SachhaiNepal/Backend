@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from event.views.event import EventViewSet, ToggleEventApprovalView
+from event.views.event import EventViewSet, ToggleEventApprovalView, EventBannerImageViewSet
 from event.views.event_action import (EventCommentViewSet,
                                       EventInterestViewSet, EventStatistics,
                                       ToggleEventGoingStatus,
@@ -14,6 +14,7 @@ from event.views.event_media import (AddEventPhotoListView,
 
 router = DefaultRouter()
 router.register(r"event", EventViewSet, basename="event")
+router.register(r"event-banner", EventBannerImageViewSet, basename="event-banner")
 router.register(r"event-image", EventPhotoViewSet, basename="event-image")
 router.register(r"event-video", EventVideoViewSet, basename="event-video")
 router.register(r"event-video-url", EventVideoUrlsViewSet, basename="event-video-url")
