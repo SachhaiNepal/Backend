@@ -58,7 +58,7 @@ class ToggleEventApprovalView(APIView):
 
 
 class EventBannerImageViewSet(viewsets.ModelViewSet):
-    queryset = EventBannerImage.objects.all().order_by("-timestamp")
+    queryset = EventBannerImage.objects.all()
     serializer_class = EventBannerImageSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]

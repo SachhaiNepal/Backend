@@ -144,6 +144,8 @@ class EventBannerImage(models.Model):
     )
     timestamp = models.DateTimeField(auto_now=True)
 
+    ordering = "-timestamp"
+
     def delete(self, using=None, keep_parents=False):
         if self.image:
             self.image.delete()
