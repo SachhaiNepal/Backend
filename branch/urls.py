@@ -6,6 +6,7 @@ from branch.views.views import *
 
 router = DefaultRouter()
 router.register(r"branch", BranchViewSet, basename="branch")
+router.register(r"branch-image", BranchImageViewSet, basename="branch-image")
 urlpatterns = router.urls
 
 urlpatterns += [

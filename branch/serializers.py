@@ -1,9 +1,26 @@
 from rest_framework import serializers
 
-from branch.models import Branch
+from backend.settings import MAX_UPLOAD_IMAGE_SIZE
+from branch.models import Branch, BranchImage
+from utils.file import check_size
+from utils.validate_location import validate_location
+
+
+class BranchImageSerializer(serializers.ModelSerializer):
+
+    @staticmethod
+    def validate_image(obj):
+        check_size(obj, MAX_UPLOAD_IMAGE_SIZE)
+        return obj
+
+    class Meta:
+        model = BranchImage
+        fields = "__all__"
 
 
 class BranchSerializer(serializers.ModelSerializer):
+    images = BranchImageSerializer()
+
     class Meta:
         model = Branch
         fields = "__all__"
@@ -20,36 +37,7 @@ class BranchPOSTSerializer(serializers.ModelSerializer):
         """
         Check if both vdc and municipality are selected
         """
-        municipality = data.get("municipality")
-        vdc = data.get("vdc")
-        municipality_ward = data.get("municipality_ward")
-        vdc_ward = data.get("vdc_ward")
-
-        if not municipality and not vdc:
-            raise serializers.ValidationError(
-                "One of the municipality or vdc must be assigned."
-            )
-        if not municipality_ward and not vdc_ward:
-            raise serializers.ValidationError(
-                "One of the municipality or vdc ward must be assigned."
-            )
-        if municipality and vdc:
-            raise serializers.ValidationError(
-                "Both municipality and vdc cannot be assigned."
-            )
-        if municipality_ward and vdc_ward:
-            raise serializers.ValidationError(
-                "Both municipality or vdc ward cannot be assigned."
-            )
-        if municipality and vdc_ward:
-            raise serializers.ValidationError(
-                "Municipality and vdc ward is not an expected location combination."
-            )
-        if vdc and municipality_ward:
-            raise serializers.ValidationError(
-                "Vdc and municipality ward is not an expected location combination."
-            )
-        return data
+        return validate_location(data)
 
     def create(self, validated_data):
         validated_data["created_by"] = self.context["request"].user

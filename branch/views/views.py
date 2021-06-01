@@ -57,3 +57,20 @@ class ToggleBranchApprovalView(APIView):
             },
             status=status.HTTP_204_NO_CONTENT,
         )
+
+
+class BranchImageViewSet(viewsets.ModelViewSet):
+    queryset = BranchImage.objects.all()
+    serializer_class = BranchImageSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    filterset_fields = ["branch"]
+
+    def destroy(self, request, *args, **kwargs):
+        branch_image = self.get_object()
+        branch_image.image.delete()
+        branch_image.delete()
+        return Response(
+            {"message": "Branch image deleted."},
+            status=status.HTTP_204_NO_CONTENT,
+        )
