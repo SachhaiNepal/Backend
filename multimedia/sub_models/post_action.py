@@ -30,7 +30,7 @@ class Comment(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE,
-        related_name="CommentReplies",
+        related_name="replies",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

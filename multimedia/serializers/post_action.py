@@ -46,23 +46,17 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = "__all__"
+        exclude = ["article", "multimedia", "reply_to"]
         depth = 1
 
 
 class CommentPostSerializer(serializers.ModelSerializer):
-    article = serializers.PrimaryKeyRelatedField(
-        queryset=Article.objects.all(), required=False
-    )
-    multimedia = serializers.PrimaryKeyRelatedField(
-        queryset=Multimedia.objects.all(), required=False
-    )
-
     class Meta:
         model = Comment
-        fields = ["article", "multimedia", "comment"]
+        fields = "__all__"
 
     def validate(self, validated_data):
+        print(validated_data)
         if validated_data.get("article") and validated_data.get("multimedia"):
             raise ValidationError("Both media types cannot be selected.")
         elif not validated_data.get("article") and not validated_data.get("multimedia"):
@@ -72,4 +66,4 @@ class CommentPostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data["writer"] = self.context["request"].user
-        return Comment.objects.create(**validated_data)
+        return super().create(validated_data)
