@@ -19,7 +19,7 @@ class BranchImageSerializer(serializers.ModelSerializer):
 
 
 class BranchSerializer(serializers.ModelSerializer):
-    images = BranchImageSerializer()
+    images = BranchImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Branch
