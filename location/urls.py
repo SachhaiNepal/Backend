@@ -18,10 +18,7 @@ router.register(r"vdc-ward", viewset=VDCWardViewSet, basename="vdc-ward")
 urlpatterns = router.urls
 
 urlpatterns += [
-    path("load-countries", load_countries),
-    path("load-provinces", load_provinces_of_nepal),
-    path("load-districts", load_districts_of_nepal),
-    # TODO: yet to be implemented
-    # path("municipality/<int:pk>/ward", ListMunicipalityWard.as_view()),
-    # path("vdc/<int:pk>/ward", ListVdcWard.as_view())
+    path("load-countries", LoadCountriesView.as_view()),
+    path("load-provinces", LoadProvincesView.as_view()),
+    path("load-districts", LoadDistrictsView.as_view()),
 ]

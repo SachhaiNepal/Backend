@@ -11,7 +11,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "venue",
-        "organizer",
+        "branch",
         "start_date",
         "duration",
         "time_of_day",
@@ -34,8 +34,7 @@ class EventAdmin(admin.ModelAdmin):
                 "fields": (
                     "title",
                     "description",
-                    "banner",
-                    "organizer",
+                    "branch",
                     "contact",
                     "venue",
                     "start_date",
@@ -108,10 +107,6 @@ class EventAdmin(admin.ModelAdmin):
                 obj.approved_by = request.user
                 obj.approved_at = timezone.now()
         super().save_model(request, obj, form, change)
-
-    def delete_model(self, request, obj):
-        obj.banner.delete()
-        obj.delete()
 
 
 admin.site.register(EventPhoto)

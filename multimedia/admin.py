@@ -206,16 +206,6 @@ class CommentAdmin(admin.ModelAdmin):
     )
     list_per_page = 10
     autocomplete_fields = ("article", "multimedia")
-    fieldsets = (
-        (
-            "Media Information",
-            {"classes": ("wide", "extrapretty"), "fields": ("article", "multimedia")},
-        ),
-        (
-            "Comment Details",
-            {"classes": ("wide", "extrapretty"), "fields": ("comment", "reply_to")},
-        ),
-    )
     search_fields = (
         "writer__username",
         "writer__email",

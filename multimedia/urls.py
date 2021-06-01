@@ -9,8 +9,7 @@ from multimedia.views.article_image import (ArticleImageDetailView,
 from multimedia.views.bookmark import (
     CreateOrToggleBookmarkStatusOfArticle,
     CreateOrToggleBookmarkStatusOfMultimedia)
-from multimedia.views.comment import (ListArticleComments,
-                                      ListMultimediaComments, PostComment)
+from multimedia.views.comment import CommentViewSet
 from multimedia.views.love import (CreateOrToggleLoveStatusOfArticle,
                                    CreateOrToggleLoveStatusOfMultimedia)
 from multimedia.views.multimedia import (CreateMultimediaWithMultimediaList,
@@ -33,6 +32,7 @@ from multimedia.views.post_status import ArticleStatus, MultimediaStatus
 router = DefaultRouter()
 router.register(r"multimedia", MultimediaViewSet, basename="multimedia")
 router.register(r"article", ArticleViewSet, basename="article")
+router.register(r"comment", CommentViewSet, basename="comment")
 urlpatterns = router.urls
 urlpatterns += [
     path("create-article", CreateArticleWithImageList.as_view()),
@@ -71,9 +71,6 @@ urlpatterns += [
         CreateOrTogglePinStatusOfMultimedia.as_view(),
     ),
     path("multimedia-status/<int:pk>", MultimediaStatus.as_view()),
-    path("multimedia/<int:pk>/comment", ListMultimediaComments.as_view()),
-    path("article/<int:pk>/comment", ListArticleComments.as_view()),
-    path("comment", PostComment.as_view()),
     path("loved-media", ListLovedMediaView.as_view()),
     path("bookmarked-media", ListBookmarkedMediaView.as_view()),
     path("pinned-media", ListPinnedMediaView.as_view()),

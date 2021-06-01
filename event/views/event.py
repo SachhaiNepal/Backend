@@ -19,20 +19,12 @@ class EventViewSet(viewsets.ModelViewSet):
     )
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ["organizer"]
+    filterset_fields = ["branch", "is_approved"]
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":
             return EventPostSerializer
         return super(EventViewSet, self).get_serializer_class()
-
-    def destroy(self, request, *args, **kwargs):
-        event = self.get_object()
-        event.banner.delete()
-        event.delete()
-        return Response(
-            {"message": "Event deleted successfully"}, status=status.HTTP_204_NO_CONTENT
-        )
 
 
 class ToggleEventApprovalView(APIView):

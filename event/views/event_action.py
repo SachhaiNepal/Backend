@@ -5,18 +5,25 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from event.serializers.event_action import (EventCommentSerializer,
-                                            EventInterestSerializer)
+from event.serializers.event_action import (
+    EventCommentSerializer,
+    EventInterestSerializer, EventCommentPostSerializer
+)
 from event.sub_models.event import Event
 from event.sub_models.event_action import EventComment, EventInterest
 
 
 class EventCommentViewSet(viewsets.ModelViewSet):
     queryset = EventComment.objects.all()
-    serializer_class = EventCommentSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     filterset_fields = ["event"]
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return EventCommentSerializer
+        else:
+            return EventCommentPostSerializer
 
 
 class EventInterestViewSet(viewsets.ModelViewSet):

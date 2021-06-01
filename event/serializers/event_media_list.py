@@ -1,6 +1,8 @@
 from django.core.validators import RegexValidator
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
+from rest_framework.validators import UniqueValidator
 
 from event.sub_models.event import Event
 from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
@@ -36,6 +38,13 @@ class AddEventVideoUrlListSerializer(serializers.Serializer):
             ]
         ),
     )
+
+    def validate_video_urls(self, value):
+        for v in value:
+            event_video_url = EventVideoUrl.objects.filter(video_url=v)
+            if event_video_url.count() > 0:
+                raise ValidationError("This field must be unique")
+        return value
 
     def create(self, validated_data):
         video_urls = validated_data.get("video_urls")
