@@ -28,12 +28,6 @@ class Event(models.Model):
     type = models.CharField(max_length=15, choices=EVENT_TYPE)
     is_approved = models.BooleanField(default=False, editable=False)
     is_main = models.BooleanField(default=False, editable=False)
-    banner = models.ImageField(
-        upload_to=upload_event_banner_to,
-        null=True,
-        blank=True,
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
-    )
     country = models.ForeignKey(
         "location.Country", on_delete=models.DO_NOTHING, related_name="country_events"
     )
@@ -72,7 +66,7 @@ class Event(models.Model):
         blank=True,
     )
     contact = PhoneNumberField(unique=True)
-    organizer = models.ForeignKey(
+    branch = models.ForeignKey(
         "branch.Branch",
         on_delete=models.CASCADE,
         related_name="branch_events",
@@ -137,23 +131,19 @@ class Event(models.Model):
             )
         elif self.vdc and self.municipality_ward:
             raise ValidationError("Cannot assign municipality ward for a vdc.")
-        elif self.banner and self.banner.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
-            raise ValidationError("Image size exceeds max image upload size.")
 
     def __str__(self):
         return self.title
 
-    # delete banner if replaced while update
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
-        if self.pk:
-            this_record = Event.objects.get(pk=self.pk)
-            if this_record.banner != self.banner:
-                this_record.banner.delete(save=False)
-        super(Event, self).save(force_insert, force_update, using, update_fields)
+
+class EventBannerImage(models.Model):
+    event = models.ForeignKey("Event", on_delete=models.CASCADE, related_name="banner_images")
+    image = models.ImageField(
+        upload_to=upload_event_banner_to,
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
+    )
 
     def delete(self, using=None, keep_parents=False):
-        if self.banner:
-            self.banner.delete()
+        if self.image:
+            self.image.delete()
         super().delete(using, keep_parents)
