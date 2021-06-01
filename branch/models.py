@@ -10,22 +10,16 @@ from phonenumber_field.modelfields import PhoneNumberField
 from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 
 
-def upload_branch_cover_image(instance, filename):
+def upload_branch_image_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
     branch_name = instance.name.replace(" ", "")
-    return f"branch/{branch_name}/cover_images/{filename}"
+    return f"branch/{branch_name}/images/{filename}"
 
 
 class Branch(models.Model):
     name = models.CharField(max_length=64, unique=True)
     slogan = models.TextField(blank=True, null=True, max_length=512)
-    cover_image = models.ImageField(
-        upload_to=upload_branch_cover_image,
-        null=True,
-        blank=True,
-        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
-    )
     country = models.ForeignKey(
         "location.Country", on_delete=models.DO_NOTHING, related_name="BranchCountry"
     )
@@ -42,6 +36,7 @@ class Branch(models.Model):
         null=True,
         blank=True,
     )
+    # single branch for municipality_ward
     municipality_ward = models.OneToOneField(
         "location.MunicipalityWard",
         on_delete=models.DO_NOTHING,
@@ -56,6 +51,7 @@ class Branch(models.Model):
         null=True,
         blank=True,
     )
+    # single branch for vdc_ward
     vdc_ward = models.OneToOneField(
         "location.VDCWard",
         on_delete=models.DO_NOTHING,
@@ -94,7 +90,7 @@ class Branch(models.Model):
 
     def clean(self):
         """
-        Require only vdc or municipality
+        Require only vdc or municipality fields
         """
         if not (self.vdc or self.municipality):
             raise ValidationError(
@@ -116,8 +112,6 @@ class Branch(models.Model):
             )
         elif self.vdc and self.municipality_ward:
             raise ValidationError("Cannot assign municipality ward for a vdc.")
-        elif self.cover_image and self.cover_image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
-            raise ValidationError("Image size exceeds max image upload size.")
 
     class Meta:
         verbose_name_plural = "Branches"
@@ -128,17 +122,15 @@ class Branch(models.Model):
     def __str__(self):
         return self.name
 
-    # delete image if replaced while update
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
-        if self.pk:
-            this_record = Branch.objects.get(pk=self.pk)
-            if this_record.cover_image != self.cover_image:
-                this_record.cover_image.delete(save=False)
-        super(Branch, self).save(force_insert, force_update, using, update_fields)
+
+class BranchImage(models.Model):
+    branch = models.ForeignKey("Branch", on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(
+        upload_to=upload_branch_image_to,
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
+    )
 
     def delete(self, using=None, keep_parents=False):
-        if self.cover_image:
-            self.cover_image.delete()
+        if self.image:
+            self.image.delete()
         super().delete(using, keep_parents)

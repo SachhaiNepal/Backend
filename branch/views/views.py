@@ -9,24 +9,23 @@ from branch.serializers import *
 
 
 class BranchViewSet(viewsets.ModelViewSet):
-    queryset = Branch.objects.all()
+    queryset = Branch.objects.all().order_by("-created_at")
     serializer_class = BranchSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    search_fields = ['name']
+    filterset_fields = [
+        "country", "province", "district",
+        "municipality", "municipality_ward",
+        "vdc", "vdc_ward",
+        "is_main", "is_approved",
+        "approved_by", "created_by"
+    ]
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":
             return BranchPOSTSerializer
         return super(BranchViewSet, self).get_serializer_class()
-
-    def destroy(self, request, *args, **kwargs):
-        branch = self.get_object()
-        branch.cover_image.delete()
-        branch.delete()
-        return Response(
-            {"message": "Branch deleted successfully"},
-            status=status.HTTP_204_NO_CONTENT,
-        )
 
 
 class ToggleBranchApprovalView(APIView):
