@@ -17,7 +17,7 @@ class MemberRoleSerializer(serializers.ModelSerializer):
         from_date = validated_data.get("from_date")
         to_date = validated_data.get("to_date")
         if from_date > to_date or from_date == to_date:
-            raise ValidationError("To date must be smaller than from date.")
+            raise ValidationError("'to_date' must be ahead of 'from_date'")
         return validated_data
 
     class Meta:

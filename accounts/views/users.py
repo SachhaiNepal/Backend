@@ -1,28 +1,26 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, generics, filters
+from rest_framework import filters, generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.serializers.user import (
-    UserCreateSerializer,
-    UserUpdateSerializer,
-    UserWithProfileSerializer, UserSerializer
-)
+from accounts.serializers.user import (UserCreateSerializer,
+                                       UserUpdateSerializer,
+                                       UserWithProfileSerializer)
 
 
 class ListUsersView(generics.ListAPIView):
     """
     Gets all the users in the database
     """
-    queryset = User.objects.all().order_by("-date_joined")
+
+    queryset = get_user_model().objects.all().order_by("-date_joined")
     serializer_class = UserWithProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username']
-    filterset_fields = ['is_staff']
+    search_fields = ["username", "first_name", "last_name"]
+    filterset_fields = ["is_staff"]
 
 
 class ListFollower(APIView):
@@ -33,18 +31,6 @@ class ListFollower(APIView):
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAdminUser]
-
-    @staticmethod
-    def get(request):
-        """
-        Return a list of all users.
-        """
-        context = {"request": request}
-        users = User.objects.all()
-        return Response(
-            UserWithProfileSerializer(users, many=True, context=context).data,
-            status=status.HTTP_200_OK,
-        )
 
     @staticmethod
     def post(request):

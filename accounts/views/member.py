@@ -1,5 +1,5 @@
 from django.utils import timezone
-from rest_framework import status
+from rest_framework import filters, generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import (DjangoModelPermissions,
@@ -14,6 +14,19 @@ from accounts.serializers.member import MemberPOSTSerializer, MemberSerializer
 from accounts.sub_models.member_role import MemberRole
 
 
+class MemberFilterView(generics.ListAPIView):
+    """
+    Gets all the users in the database
+    """
+
+    queryset = Member.objects.all().order_by("-created_at")
+    serializer_class = MemberSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["user__username", "user__first_name", "user__last_name"]
+    filterset_fields = ["is_staff"]
+
+
 class ListMember(APIView):
     """
     List Members
@@ -25,16 +38,6 @@ class ListMember(APIView):
     @staticmethod
     def get_queryset():
         return Member.objects.all()
-
-    def get(self, request):
-        """
-        Return a list of all users.
-        """
-        members = self.get_queryset()
-
-        return Response(
-            MemberSerializer(members, many=True).data, status=status.HTTP_200_OK
-        )
 
     @staticmethod
     def post(request):

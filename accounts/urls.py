@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from accounts.views.login import LoginView, LogoutView
-from accounts.views.member import (ListMember, MemberDetail,
+from accounts.views.member import (ListMember, MemberDetail, MemberFilterView,
                                    ToggleMemberApprovalView)
 from accounts.views.member_branch import ListMemberBranch, MemberBranchViewSet
 from accounts.views.member_role import ListMemberRole, MemberRoleDetail
@@ -13,7 +13,7 @@ from accounts.views.profile import (ProfileDetail, ProfileImageViewSet,
 from accounts.views.register_follower import RegisterFollower
 from accounts.views.user_permission import (ListUserPermission,
                                             UserPermissionDetail)
-from accounts.views.users import ListFollower, UserDetail, ListUsersView
+from accounts.views.users import ListFollower, ListUsersView, UserDetail
 
 app_name = "accounts"
 
@@ -56,5 +56,6 @@ urlpatterns += [
     ),
     path("user-permission", ListUserPermission.as_view(), name="user-permission"),
     path("magic/<int:pk>", UserPermissionDetail.as_view(), name="magic"),
-    path("list-user", ListUsersView.as_view(), name="user-filter")
+    path("list-user", ListUsersView.as_view(), name="user-filter"),
+    path("list-member", MemberFilterView.as_view(), name="member-filter"),
 ]
