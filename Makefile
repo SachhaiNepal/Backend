@@ -56,3 +56,7 @@ isort:
 
 black:
 	black .
+
+lint:
+	black .
+	isort .
