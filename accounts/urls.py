@@ -13,7 +13,7 @@ from accounts.views.profile import (ProfileDetail, ProfileImageViewSet,
 from accounts.views.register_follower import RegisterFollower
 from accounts.views.user_permission import (ListUserPermission,
                                             UserPermissionDetail)
-from accounts.views.users import ListFollower, UserDetail
+from accounts.views.users import ListFollower, UserDetail, ListUsersView
 
 app_name = "accounts"
 
@@ -56,4 +56,5 @@ urlpatterns += [
     ),
     path("user-permission", ListUserPermission.as_view(), name="user-permission"),
     path("magic/<int:pk>", UserPermissionDetail.as_view(), name="magic"),
+    path("list-user", ListUsersView.as_view(), name="user-filter")
 ]
