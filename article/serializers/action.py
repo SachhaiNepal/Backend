@@ -35,12 +35,6 @@ class BookmarkSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    created_at = serializers.SerializerMethodField()
-
-    @staticmethod
-    def get_created_at(obj):
-        return obj.created_at.strftime("%d %B %Y, %I:%M %p") if obj.created_at else None
-
     class Meta:
         model = Comment
         exclude = ["article", "reply_to"]
