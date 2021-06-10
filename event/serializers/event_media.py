@@ -5,6 +5,7 @@ from backend.settings import (ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE,
                               MAX_UPLOAD_VIDEO_SIZE)
 from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
 from utils.file import check_extension, check_size
+from utils.helper import get_youtube_video_data
 
 
 class EventVideoSerializer(serializers.ModelSerializer):
@@ -41,3 +42,15 @@ class EventVideoUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventVideoUrl
         fields = "__all__"
+
+
+class EventVideoListSerializer(serializers.ModelSerializer):
+    yt_info = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_yt_info(obj):
+        return get_youtube_video_data(obj.video_url)
+
+    class Meta:
+        model = EventVideoUrl
+        fields = ["id", "video_url", "yt_info", "event"]
