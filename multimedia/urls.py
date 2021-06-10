@@ -1,77 +1,48 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from multimedia.views.article import (ArticleViewSet,
-                                      CreateArticleWithImageList,
-                                      ToggleArticleApprovalView)
-from multimedia.views.article_image import (ArticleImageDetailView,
-                                            ListArticleImages)
-from multimedia.views.bookmark import (
-    CreateOrToggleBookmarkStatusOfArticle,
-    CreateOrToggleBookmarkStatusOfMultimedia)
+from multimedia.views.action import (ApprovalView, BookmarkView, LoveView,
+                                     MultimediaStatusForMe, PinView)
 from multimedia.views.comment import CommentViewSet
-from multimedia.views.love import (CreateOrToggleLoveStatusOfArticle,
-                                   CreateOrToggleLoveStatusOfMultimedia)
-from multimedia.views.multimedia import (CreateMultimediaWithMultimediaList,
-                                         MultimediaViewSet,
-                                         ToggleMultimediaApprovalView)
-from multimedia.views.multimedia_media import (ListMultimediaAudios,
-                                               ListMultimediaImages,
-                                               ListMultimediaVideos,
-                                               ListMultimediaVideoUrls)
-from multimedia.views.multimedia_media_detail import (
-    MultimediaAudioDetailView, MultimediaImageDetailView,
-    MultimediaVideoDetailView)
-from multimedia.views.pin_post import (CreateOrTogglePinStatusOfArticle,
-                                       CreateOrTogglePinStatusOfMultimedia)
-from multimedia.views.post_list import (ListBookmarkedMediaView,
-                                        ListLovedMediaView,
-                                        ListPinnedMediaView)
-from multimedia.views.post_status import ArticleStatus, MultimediaStatus
+from multimedia.views.list import ListBookmarkedView, ListLovedView
+from multimedia.views.media import (MultimediaAudioViewSet,
+                                    MultimediaImageViewSet,
+                                    MultimediaVideoUrlViewSet,
+                                    MultimediaVideoViewSet)
+from multimedia.views.multimedia import (MultimediaViewSet,
+                                         MultimediaWithMediaListView)
 
 router = DefaultRouter()
 router.register(r"multimedia", MultimediaViewSet, basename="multimedia")
-router.register(r"article", ArticleViewSet, basename="article")
-router.register(r"comment", CommentViewSet, basename="comment")
+router.register(
+    r"multimedia-image", MultimediaImageViewSet, basename="multimedia-image"
+)
+router.register(
+    r"multimedia-audio", MultimediaAudioViewSet, basename="multimedia-audio"
+)
+router.register(
+    r"multimedia-video", MultimediaVideoViewSet, basename="multimedia-video"
+)
+router.register(
+    r"multimedia-video-url", MultimediaVideoUrlViewSet, basename="multimedia-video-url"
+)
+router.register(r"multimedia-comment", CommentViewSet, basename="multimedia-comment")
 urlpatterns = router.urls
+
+
 urlpatterns += [
-    path("create-article", CreateArticleWithImageList.as_view()),
-    path("create-multimedia", CreateMultimediaWithMultimediaList.as_view()),
-    path("article/<int:pk>/image", ListArticleImages.as_view()),
-    path("multimedia/<int:pk>/video", ListMultimediaVideos.as_view()),
-    path("multimedia/<int:pk>/audio", ListMultimediaAudios.as_view()),
-    path("multimedia/<int:pk>/image", ListMultimediaImages.as_view()),
-    path("multimedia/<int:pk>/video-url", ListMultimediaVideoUrls.as_view()),
-    path("article-image/<int:pk>", ArticleImageDetailView.as_view()),
-    path("multimedia-image/<int:pk>", MultimediaImageDetailView.as_view()),
-    path("multimedia-audio/<int:pk>", MultimediaAudioDetailView.as_view()),
-    path("multimedia-video/<int:pk>", MultimediaVideoDetailView.as_view()),
-    path("multimedia/<int:pk>/toggle-approval", ToggleMultimediaApprovalView.as_view()),
-    path("article/<int:pk>/toggle-approval", ToggleArticleApprovalView.as_view()),
-    path("article/<int:pk>/toggle-love", CreateOrToggleLoveStatusOfArticle.as_view()),
+    path("create-multimedia", MultimediaWithMediaListView.as_view()),
+    path("multimedia/<int:pk>/approve", ApprovalView.as_view()),
+    path("multimedia/<int:pk>/pin", PinView.as_view()),
     path(
-        "article/<int:pk>/toggle-bookmark",
-        CreateOrToggleBookmarkStatusOfArticle.as_view(),
+        "multimedia/<int:pk>/love",
+        LoveView.as_view(),
     ),
     path(
-        "article/<int:pk>/toggle-pin-status",
-        CreateOrTogglePinStatusOfArticle.as_view(),
+        "multimedia/<int:pk>/bookmark",
+        BookmarkView.as_view(),
     ),
-    path("article-status/<int:pk>", ArticleStatus.as_view()),
-    path(
-        "multimedia/<int:pk>/toggle-love",
-        CreateOrToggleLoveStatusOfMultimedia.as_view(),
-    ),
-    path(
-        "multimedia/<int:pk>/toggle-bookmark",
-        CreateOrToggleBookmarkStatusOfMultimedia.as_view(),
-    ),
-    path(
-        "multimedia/<int:pk>/toggle-pin-status",
-        CreateOrTogglePinStatusOfMultimedia.as_view(),
-    ),
-    path("multimedia-status/<int:pk>", MultimediaStatus.as_view()),
-    path("loved-media", ListLovedMediaView.as_view()),
-    path("bookmarked-media", ListBookmarkedMediaView.as_view()),
-    path("pinned-media", ListPinnedMediaView.as_view()),
+    path("multimedia/<int:pk>/status", MultimediaStatusForMe.as_view()),
+    path("loved-media", ListLovedView.as_view()),
+    path("bookmarked-media", ListBookmarkedView.as_view()),
 ]

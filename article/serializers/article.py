@@ -1,19 +1,19 @@
 from rest_framework import serializers
 
 from accounts.serializers.user import UserWithProfileSerializer
-from multimedia.models import Article, ArticleImage
+from article.models import Article, ArticleImage
 
 
-class ArticlePOSTSerializer(serializers.ModelSerializer):
+class ArticleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = "__all__"
         read_only_fields = ("is_approved",)
 
     def create(self, validated_data):
-        validated_data["uploaded_by"] = self.context["request"].user
-        branch = Article.objects.create(**validated_data)
-        return branch
+        validated_data["created_by"] = self.context["request"].user
+        article = Article.objects.create(**validated_data)
+        return article
 
 
 class ArticleImageSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class ArticleImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ArticleImage
-        fields = ["image", "article"]
+        fields = ["id", "image", "article"]
 
 
 class ArticleImageCreateSerializer(serializers.ModelSerializer):
@@ -31,8 +31,8 @@ class ArticleImageCreateSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    article_images = ArticleImageSerializer(many=True, read_only=True)
-    uploaded_by = UserWithProfileSerializer()
+    images = ArticleImageSerializer(many=True, read_only=True)
+    created_by = UserWithProfileSerializer()
 
     class Meta:
         model = Article

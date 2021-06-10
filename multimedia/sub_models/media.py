@@ -9,7 +9,7 @@ from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
                               ALLOWED_IMAGES_EXTENSIONS,
                               ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
                               MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
-from multimedia.sub_models.post import Multimedia
+from multimedia.sub_models.multimedia import Multimedia
 
 
 def upload_multimedia_video_to(instance, filename):
@@ -30,7 +30,7 @@ def upload_multimedia_image_to(instance, filename):
     return f"multimedias/images/{instance.multimedia.pk}/{filename}"
 
 
-class MultimediaVideoUrls(models.Model):
+class MultimediaVideoUrl(models.Model):
     multimedia = models.ForeignKey(
         Multimedia, on_delete=models.CASCADE, related_name="multimedia_video_urls"
     )

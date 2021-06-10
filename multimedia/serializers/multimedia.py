@@ -2,7 +2,20 @@ from rest_framework import serializers
 
 from accounts.serializers.user import UserWithProfileSerializer
 from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo, MultimediaVideoUrls)
+                               MultimediaVideo, MultimediaVideoUrl)
+from utils.helper import get_youtube_video_data
+
+
+class MultimediaVideoUrlDetailSerializer(serializers.ModelSerializer):
+    yt_info = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_yt_info(obj):
+        return get_youtube_video_data(obj.video_url)
+
+    class Meta:
+        model = MultimediaVideoUrl
+        fields = ["id", "yt_info", "video_url"]
 
 
 class MultimediaVideoSerializer(serializers.ModelSerializer):
@@ -19,7 +32,7 @@ class MultimediaAudioSerializer(serializers.ModelSerializer):
 
 class MultimediaVideoUrlsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MultimediaVideoUrls
+        model = MultimediaVideoUrl
         fields = "__all__"
 
 
