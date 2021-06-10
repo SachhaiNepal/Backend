@@ -1,17 +1,16 @@
 from rest_framework import serializers
 
 from accounts.models import Profile, ProfileImage
+from accounts.sub_models.profile import CoverImage
 
 
-class ProfileImageSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(use_url=True)
-
+class CoverImagePostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProfileImage
+        model = CoverImage
         fields = "__all__"
 
 
-class ProfileImagePostSerializer(serializers.ModelSerializer):
+class ProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileImage
         fields = "__all__"
@@ -19,6 +18,7 @@ class ProfileImagePostSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     profile_images = ProfileImageSerializer(many=True, read_only=True)
+    cover_images = CoverImagePostSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile

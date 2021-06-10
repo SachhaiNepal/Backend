@@ -1,4 +1,3 @@
-from multimedia.sub_models.article_media import *
-from multimedia.sub_models.multimedia_media import *
-from multimedia.sub_models.post import *
-from multimedia.sub_models.post_action import *
+from multimedia.sub_models.action import *
+from multimedia.sub_models.media import *
+from multimedia.sub_models.multimedia import *

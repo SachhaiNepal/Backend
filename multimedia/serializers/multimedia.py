@@ -1,34 +1,11 @@
 from rest_framework import serializers
 
 from accounts.serializers.user import UserWithProfileSerializer
-from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo, MultimediaVideoUrls)
-
-
-class MultimediaVideoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MultimediaVideo
-        fields = "__all__"
-
-
-class MultimediaAudioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MultimediaAudio
-        fields = "__all__"
-
-
-class MultimediaVideoUrlsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MultimediaVideoUrls
-        fields = "__all__"
-
-
-class MultimediaImageSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(use_url=True)
-
-    class Meta:
-        model = MultimediaImage
-        fields = "__all__"
+from multimedia.models import Multimedia
+from multimedia.serializers.media import (
+    ImageSerializer,
+    AudioSerializer, VideoSerializer, VideoUrlSerializer
+)
 
 
 class MultimediaPOSTSerializer(serializers.ModelSerializer):
@@ -44,10 +21,10 @@ class MultimediaPOSTSerializer(serializers.ModelSerializer):
 
 
 class MultimediaSerializer(serializers.ModelSerializer):
-    multimedia_images = MultimediaImageSerializer(many=True, read_only=True)
-    multimedia_videos = MultimediaVideoSerializer(many=True, read_only=True)
-    multimedia_video_urls = MultimediaVideoUrlsSerializer(many=True, read_only=True)
-    multimedia_audios = MultimediaAudioSerializer(many=True, read_only=True)
+    multimedia_images = ImageSerializer(many=True, read_only=True)
+    multimedia_videos = VideoSerializer(many=True, read_only=True)
+    multimedia_video_urls = VideoUrlSerializer(many=True, read_only=True)
+    multimedia_audios = AudioSerializer(many=True, read_only=True)
 
     uploaded_by = UserWithProfileSerializer()
 

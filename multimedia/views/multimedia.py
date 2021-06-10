@@ -1,4 +1,3 @@
-from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -6,16 +5,17 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo)
+from multimedia.models import (Multimedia, Sound, Image,
+                               Video)
+from multimedia.serializers.list import MultimediaWithMediaListSerializer
 from multimedia.serializers.multimedia import (MultimediaPOSTSerializer,
                                                MultimediaSerializer)
-from multimedia.serializers.multimedia_list import \
-    CreateMultimediaWithMultimediaListSerializer
+from multimedia.sub_models.media import VideoUrl
+from utils.helper import get_youtube_video_data
 
 
 class MultimediaViewSet(viewsets.ModelViewSet):
-    queryset = Multimedia.objects.order_by("-uploaded_at")
+    queryset = Multimedia.objects.all()
     serializer_class = MultimediaSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -28,23 +28,20 @@ class MultimediaViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         multimedia = self.get_object()
-        multimedia_images = MultimediaImage.objects.filter(multimedia=multimedia)
+        multimedia_images = Image.objects.filter(multimedia=multimedia)
         for image in multimedia_images:
             image.delete()
-        multimedia_audios = MultimediaAudio.objects.filter(multimedia=multimedia)
+        multimedia_audios = Sound.objects.filter(multimedia=multimedia)
         for audio in multimedia_audios:
             audio.delete()
-        multimedia_videos = MultimediaVideo.objects.filter(multimedia=multimedia)
+        multimedia_videos = Video.objects.filter(multimedia=multimedia)
         for video in multimedia_videos:
             video.delete()
         multimedia.delete()
-        return Response(
-            {"message": "Multimedia deleted successfully."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CreateMultimediaWithMultimediaList(APIView):
+class MultimediaWithMediaListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     parser_classes = (
@@ -52,54 +49,53 @@ class CreateMultimediaWithMultimediaList(APIView):
         FormParser,
     )
 
-    @staticmethod
-    def post(request):
-        if request.user.is_anonymous:
-            return Response(
-                {
-                    "details": "User must be logged in.",
-                },
-                status=status.HTTP_403_FORBIDDEN,
-            )
-        serializer = CreateMultimediaWithMultimediaListSerializer(
-            data=request.data, context={"request": request}
-        )
+    def post(self, request):
+        user = request.user
+        serializer = MultimediaWithMediaListSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            validated_data = serializer.validated_data
+            title = validated_data.get("title")
+            description = validated_data.get("description")
+            videos = validated_data.get("video")
+            video_urls = validated_data.get("video_url")
+            audios = validated_data.get("sound")
+            images = validated_data.get("image")
+            multimedia = Multimedia.objects.create(
+                title=title,
+                description=description,
+                uploaded_by=user,
+            )
+            if videos:
+                for video in videos:
+                    Video.objects.create(
+                        video=video,
+                        multimedia=multimedia,
+                    )
+
+            if video_urls:
+                for video_url in video_urls:
+                    yt_info = get_youtube_video_data(video_url)
+                    VideoUrl.objects.create(
+                        video_url=video_url,
+                        multimedia=multimedia,
+                        yt_info=yt_info
+                    )
+
+            if audios:
+                for audio in audios:
+                    Sound.objects.create(
+                        audio=audio,
+                        multimedia=multimedia,
+                    )
+
+            if images:
+                for image in images:
+                    Image.objects.create(
+                        image=image,
+                        multimedia=multimedia,
+                    )
             return Response(
-                {"success": "True", "message": "Multimedia Created Successfully."},
-                status=status.HTTP_201_CREATED,
+                MultimediaSerializer(multimedia).data,
+                status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ToggleMultimediaApprovalView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def post(request, pk):
-        try:
-            multimedia = Multimedia.objects.get(pk=pk)
-        except Multimedia.DoesNotExist:
-            return Response(
-                {"detail": "Multimedia does not exist."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        multimedia.is_approved = not multimedia.is_approved
-        if multimedia.is_approved:
-            multimedia.approved_by = request.user
-            multimedia.approved_at = timezone.now()
-        else:
-            multimedia.approved_by = None
-            multimedia.approved_at = None
-        multimedia.save()
-        return Response(
-            {
-                "success": True,
-                "message": "Multimedia {} successfully.".format(
-                    "approved" if multimedia.is_approved else "rejected"
-                ),
-            },
-            status=status.HTTP_204_NO_CONTENT,
-        )

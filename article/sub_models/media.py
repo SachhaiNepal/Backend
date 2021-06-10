@@ -20,10 +20,12 @@ class ArticleImage(models.Model):
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
     article = models.ForeignKey(
-        "Article", related_name="article_images", on_delete=models.CASCADE
+        "Article", related_name="images", on_delete=models.CASCADE
     )
+    created_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ["created_at"]
         verbose_name = "Article Image"
         verbose_name_plural = "Article Images"
 

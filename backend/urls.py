@@ -12,6 +12,7 @@ urlpatterns = [
     path("api/", include("accounts.urls")),
     path("api/", include("branch.urls")),
     path("api/", include("multimedia.urls")),
+    path("api/", include("article.urls")),
     path("api/", include("location.urls")),
     path("api/", include("advertise.urls")),
     path("api/", include("event.urls")),

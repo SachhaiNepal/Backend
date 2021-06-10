@@ -1,6 +1,8 @@
 from django.utils import timezone
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.filters import SearchFilter
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -20,7 +22,9 @@ class EventViewSet(viewsets.ModelViewSet):
     )
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ["branch", "is_approved"]
+    search_fields = ["title", "description", "created_by__username"]
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update":

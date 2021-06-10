@@ -44,8 +44,16 @@ class EventStatistics(APIView):
         interested_count = EventInterest.objects.filter(
             interested=True, event=event
         ).count()
+        my_interest, created = EventInterest.objects.get_or_create(
+            event=event, follower=request.user
+        )
         return Response(
-            {"going_count": going_count, "interested_count": interested_count},
+            {
+                "going_count": going_count,  # total going count
+                "interested_count": interested_count,  # total interested count
+                "going": my_interest.going,
+                "interested": my_interest.interested,
+            },
             status=status.HTTP_201_CREATED,
         )
 
