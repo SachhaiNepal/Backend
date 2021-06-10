@@ -245,6 +245,7 @@ class ResetPasswordCodeAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(CoverImage)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(MemberRole, MemberRoleAdmin)
 admin.site.register(MemberBranch, MemberBranchAdmin)

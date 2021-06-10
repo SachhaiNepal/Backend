@@ -7,9 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Profile, ProfileImage
-from accounts.serializers.profile import (ProfileImagePostSerializer,
+from accounts.serializers.profile import (CoverImagePostSerializer,
+                                          ProfileImageSerializer,
                                           ProfilePOSTSerializer,
                                           ProfileSerializer)
+from accounts.sub_models.profile import CoverImage
 
 
 class UserProfile(APIView):
@@ -80,4 +82,11 @@ class ProfileImageViewSet(viewsets.ModelViewSet):
     queryset = ProfileImage.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = ProfileImagePostSerializer
+    serializer_class = ProfileImageSerializer
+
+
+class CoverImageViewSet(viewsets.ModelViewSet):
+    queryset = CoverImage.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = CoverImagePostSerializer

@@ -19,6 +19,7 @@ app_name = "accounts"
 
 router = DefaultRouter()
 router.register(r"profile-image", ProfileImageViewSet, basename="profile-image")
+router.register(r"cover-image", ProfileImageViewSet, basename="cover-image")
 router.register(r"member-branch", MemberBranchViewSet, basename="profile-image")
 urlpatterns = router.urls
 

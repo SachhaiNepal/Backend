@@ -15,7 +15,13 @@ from backend.settings import ALLOWED_IMAGES_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE
 def upload_profile_image_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    return f"users/{instance.pk}/profile_images/{filename}"
+    return f"users/{instance.profile.user.username}/profile_images/{filename}"
+
+
+def upload_cover_image_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"users/{instance.profile.user.username}/cover_images/{filename}"
 
 
 class Profile(models.Model):
@@ -85,6 +91,34 @@ class ProfileImage(models.Model):
     class Meta:
         verbose_name = "Follower Profile Image"
         verbose_name_plural = "Follower Profile Images"
+
+    def __str__(self):
+        return self.profile.user.username
+
+    def clean(self):
+        if self.image and self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
+            raise ValidationError("Image size exceeds max image upload size.")
+
+    def delete(self, using=None, keep_parents=False):
+        if self.image:
+            self.image.delete()
+        super().delete(using, keep_parents)
+
+
+class CoverImage(models.Model):
+    image = models.ImageField(
+        upload_to=upload_cover_image_to,
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
+    )
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="cover_images"
+    )
+
+    class Meta:
+        verbose_name = "Follower Cover Image"
+        verbose_name_plural = "Follower Cover Images"
 
     def __str__(self):
         return self.profile.user.username
