@@ -38,7 +38,7 @@ class MultimediaWithMediaListSerializer(serializers.Serializer):
         required=False,
     )
 
-    audio = serializers.ListField(
+    sound = serializers.ListField(
         child=serializers.FileField(
             allow_empty_file=False,
             use_url=False,
@@ -57,7 +57,7 @@ class MultimediaWithMediaListSerializer(serializers.Serializer):
         return obj
 
     @staticmethod
-    def validate_audio(obj):
+    def validate_sound(obj):
         check_audio_size_with_ext(obj)
         return obj
 
@@ -65,7 +65,7 @@ class MultimediaWithMediaListSerializer(serializers.Serializer):
         videos = data.get("video")
         images = data.get("image")
         url = data.get("video_url")
-        sound = data.get("audio")
+        sound = data.get("sound")
         if not videos and not images and not url and not sound:
             raise ValidationError("Please add at least a media for your multimedia.")
         if videos:

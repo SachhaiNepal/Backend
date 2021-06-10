@@ -5,12 +5,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (Multimedia, MultimediaAudio, MultimediaImage,
-                               MultimediaVideo)
+from multimedia.models import (Multimedia, Sound, Image,
+                               Video)
 from multimedia.serializers.list import MultimediaWithMediaListSerializer
 from multimedia.serializers.multimedia import (MultimediaPOSTSerializer,
                                                MultimediaSerializer)
-from multimedia.sub_models.media import MultimediaVideoUrl
+from multimedia.sub_models.media import VideoUrl
+from utils.helper import get_youtube_video_data
 
 
 class MultimediaViewSet(viewsets.ModelViewSet):
@@ -27,13 +28,13 @@ class MultimediaViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         multimedia = self.get_object()
-        multimedia_images = MultimediaImage.objects.filter(multimedia=multimedia)
+        multimedia_images = Image.objects.filter(multimedia=multimedia)
         for image in multimedia_images:
             image.delete()
-        multimedia_audios = MultimediaAudio.objects.filter(multimedia=multimedia)
+        multimedia_audios = Sound.objects.filter(multimedia=multimedia)
         for audio in multimedia_audios:
             audio.delete()
-        multimedia_videos = MultimediaVideo.objects.filter(multimedia=multimedia)
+        multimedia_videos = Video.objects.filter(multimedia=multimedia)
         for video in multimedia_videos:
             video.delete()
         multimedia.delete()
@@ -57,10 +58,8 @@ class MultimediaWithMediaListView(APIView):
             description = validated_data.get("description")
             videos = validated_data.get("video")
             video_urls = validated_data.get("video_url")
-            audios = validated_data.get("audio")
+            audios = validated_data.get("sound")
             images = validated_data.get("image")
-            print(title, description, videos, video_urls, audios, images)
-
             multimedia = Multimedia.objects.create(
                 title=title,
                 description=description,
@@ -68,30 +67,35 @@ class MultimediaWithMediaListView(APIView):
             )
             if videos:
                 for video in videos:
-                    MultimediaVideo.objects.create(
+                    Video.objects.create(
                         video=video,
                         multimedia=multimedia,
                     )
 
             if video_urls:
                 for video_url in video_urls:
-                    MultimediaVideoUrl.objects.create(
+                    yt_info = get_youtube_video_data(video_url)
+                    VideoUrl.objects.create(
                         video_url=video_url,
                         multimedia=multimedia,
+                        yt_info=yt_info
                     )
 
             if audios:
                 for audio in audios:
-                    MultimediaAudio.objects.create(
+                    Sound.objects.create(
                         audio=audio,
                         multimedia=multimedia,
                     )
 
             if images:
                 for image in images:
-                    MultimediaImage.objects.create(
+                    Image.objects.create(
                         image=image,
                         multimedia=multimedia,
                     )
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(
+                MultimediaSerializer(multimedia).data,
+                status=status.HTTP_201_CREATED
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

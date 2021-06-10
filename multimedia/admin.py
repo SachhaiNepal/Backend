@@ -2,16 +2,16 @@
 # from django.utils import timezone
 #
 # from multimedia.sub_models.article_media import ArticleImage
-# from multimedia.sub_models.multimedia_media import (MultimediaAudio,
-#                                                     MultimediaImage,
-#                                                     MultimediaVideo)
+# from multimedia.sub_models.multimedia_media import (Sound,
+#                                                     Image,
+#                                                     Video)
 # from multimedia.sub_models.multimedia import Article, Multimedia
 # from multimedia.sub_models.post_action import (BookmarkMedia, Comment, Love,
 #                                                PinMedia)
 #
 #
 # class MultimediaVideoAdmin(admin.StackedInline):
-#     model = MultimediaVideo
+#     model = Video
 #     fk_name = "multimedia"
 #     extra = 0
 #     min_num = 0
@@ -21,7 +21,7 @@
 #
 #
 # class MultimediaAudioAdmin(admin.StackedInline):
-#     model = MultimediaAudio
+#     model = Sound
 #     fk_name = "multimedia"
 #     extra = 0
 #     min_num = 0
@@ -31,7 +31,7 @@
 #
 #
 # class MultimediaImageAdmin(admin.StackedInline):
-#     model = MultimediaImage
+#     model = Image
 #     fk_name = "multimedia"
 #     extra = 0
 #     min_num = 0
@@ -102,15 +102,15 @@
 #         super().save_model(request, obj, form, change)
 #
 #     def delete_model(self, request, obj):
-#         images = MultimediaImage.objects.filter(multimedia=obj)
+#         images = Image.objects.filter(multimedia=obj)
 #         if images.count() > 0:
 #             for image in images:
 #                 image.delete()
-#         audios = MultimediaAudio.objects.filter(multimedia=obj)
+#         audios = Sound.objects.filter(multimedia=obj)
 #         if audios.count() > 0:
-#             for audio in audios:
-#                 audio.delete()
-#         videos = MultimediaVideo.objects.filter(multimedia=obj)
+#             for sound in audios:
+#                 sound.delete()
+#         videos = Video.objects.filter(multimedia=obj)
 #         if videos.count() > 0:
 #             for video in videos:
 #                 video.delete()
@@ -335,7 +335,7 @@
 #         obj.save()
 #
 #
-# admin.site.register(MultimediaImage)
-# admin.site.register(MultimediaVideo)
-# admin.site.register(MultimediaAudio)
+# admin.site.register(Image)
+# admin.site.register(Video)
+# admin.site.register(Sound)
 # admin.site.register(ArticleImage)
