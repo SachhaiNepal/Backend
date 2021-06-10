@@ -5,24 +5,16 @@ from multimedia.views.action import (ApprovalView, BookmarkView, LoveView,
                                      MultimediaStatusForMe, PinView)
 from multimedia.views.comment import CommentViewSet
 from multimedia.views.list import ListBookmarkedView, ListLovedView
-from multimedia.views.media import (SoundViewSet,
-                                    ImageViewSet,
-                                    VideoUrlViewSet,
-                                    VideoViewSet)
+from multimedia.views.media import (ImageViewSet, SoundViewSet,
+                                    VideoUrlViewSet, VideoViewSet)
 from multimedia.views.multimedia import (MultimediaViewSet,
                                          MultimediaWithMediaListView)
 
 router = DefaultRouter()
 router.register(r"multimedia", MultimediaViewSet, basename="multimedia")
-router.register(
-    r"multimedia-image", ImageViewSet, basename="multimedia-image"
-)
-router.register(
-    r"multimedia-sound", SoundViewSet, basename="multimedia-sound"
-)
-router.register(
-    r"multimedia-video", VideoViewSet, basename="multimedia-video"
-)
+router.register(r"multimedia-image", ImageViewSet, basename="multimedia-image")
+router.register(r"multimedia-sound", SoundViewSet, basename="multimedia-sound")
+router.register(r"multimedia-video", VideoViewSet, basename="multimedia-video")
 router.register(
     r"multimedia-video-url", VideoUrlViewSet, basename="multimedia-video-url"
 )

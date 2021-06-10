@@ -3,8 +3,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from multimedia.models import Sound, Image, Video
-from multimedia.serializers.media import VideoUrlSerializer, ImageSerializer, AudioSerializer, VideoSerializer
+from multimedia.models import Image, Sound, Video
+from multimedia.serializers.media import (AudioSerializer, ImageSerializer,
+                                          VideoSerializer, VideoUrlSerializer)
 from multimedia.sub_models.media import VideoUrl
 
 

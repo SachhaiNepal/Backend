@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from multimedia.sub_models.media import VideoUrl, Video, Sound, Image
+from multimedia.sub_models.media import Image, Sound, Video, VideoUrl
 from utils.helper import get_youtube_video_data
 
 
@@ -32,4 +32,3 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = "__all__"
-

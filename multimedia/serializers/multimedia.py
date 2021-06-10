@@ -2,10 +2,8 @@ from rest_framework import serializers
 
 from accounts.serializers.user import UserWithProfileSerializer
 from multimedia.models import Multimedia
-from multimedia.serializers.media import (
-    ImageSerializer,
-    AudioSerializer, VideoSerializer, VideoUrlSerializer
-)
+from multimedia.serializers.media import (AudioSerializer, ImageSerializer,
+                                          VideoSerializer, VideoUrlSerializer)
 
 
 class MultimediaPOSTSerializer(serializers.ModelSerializer):

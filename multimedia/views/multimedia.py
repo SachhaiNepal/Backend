@@ -5,8 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from multimedia.models import (Multimedia, Sound, Image,
-                               Video)
+from multimedia.models import Image, Multimedia, Sound, Video
 from multimedia.serializers.list import MultimediaWithMediaListSerializer
 from multimedia.serializers.multimedia import (MultimediaPOSTSerializer,
                                                MultimediaSerializer)
@@ -76,9 +75,7 @@ class MultimediaWithMediaListView(APIView):
                 for video_url in video_urls:
                     yt_info = get_youtube_video_data(video_url)
                     VideoUrl.objects.create(
-                        video_url=video_url,
-                        multimedia=multimedia,
-                        yt_info=yt_info
+                        video_url=video_url, multimedia=multimedia, yt_info=yt_info
                     )
 
             if audios:
@@ -95,7 +92,6 @@ class MultimediaWithMediaListView(APIView):
                         multimedia=multimedia,
                     )
             return Response(
-                MultimediaSerializer(multimedia).data,
-                status=status.HTTP_201_CREATED
+                MultimediaSerializer(multimedia).data, status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
