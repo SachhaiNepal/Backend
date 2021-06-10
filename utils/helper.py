@@ -1,7 +1,7 @@
+import json
 import os
 import random
 import string
-import json
 import urllib
 import urllib.request
 from urllib.parse import urlparse
@@ -37,11 +37,11 @@ def get_random_alphanumeric_string(length):
 
 
 def set_max_res_thumbnail(data):
-    slitted = data['thumbnail_url'].split("/")
+    slitted = data["thumbnail_url"].split("/")
     slitted.pop()
     slitted.append("maxresdefault.jpg")
     slitted = "/".join(slitted)
-    data['thumbnail_url'] = slitted
+    data["thumbnail_url"] = slitted
     return data
 
 
@@ -55,10 +55,7 @@ def get_id_of_youtube_url(video_url):
 def get_youtube_video_data(video_url):
     video_id = get_id_of_youtube_url(video_url)
 
-    params = {
-        "format": "json",
-        "url": "https://www.youtube.com/watch?v=%s" % video_id
-    }
+    params = {"format": "json", "url": "https://www.youtube.com/watch?v=%s" % video_id}
 
     url = "https://www.youtube.com/oembed"
 
