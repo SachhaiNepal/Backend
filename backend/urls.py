@@ -5,10 +5,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.static import serve
 
+from backend.views import ModelStatisticsView
+
 urlpatterns = [
     path("", admin.site.urls),
     path("select2/", include("django_select2.urls")),
     url(r"^api-auth/", include("rest_framework.urls")),
+    path("status", ModelStatisticsView.as_view()),
     path("api/", include("accounts.urls")),
     path("api/", include("branch.urls")),
     path("api/", include("multimedia.urls")),
