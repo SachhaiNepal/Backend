@@ -20,23 +20,31 @@ class ArticleApprovalView(APIView):
     @staticmethod
     def post(request, pk):
         article = get_object_or_404(Article, pk=pk)
-        article.is_approved = True
-        article.approved_by = request.user
-        article.approved_at = timezone.now()
-        article.save()
+        if not article.is_approved:
+            article.is_approved = True
+            article.approved_by = request.user
+            article.approved_at = timezone.now()
+            article.save()
+            return Response(
+                ArticleCreateSerializer(article).data, status=status.HTTP_201_CREATED
+            )
         return Response(
-            ArticleCreateSerializer(article).data, status=status.HTTP_204_NO_CONTENT
+            ArticleCreateSerializer(article).data, status=status.HTTP_200_OK
         )
 
     @staticmethod
     def delete(request, pk):
         article = get_object_or_404(Article, pk=pk)
-        article.is_approved = False
-        article.approved_by = None
-        article.approved_at = None
-        article.save()
+        if article.is_approved:
+            article.is_approved = False
+            article.approved_by = None
+            article.approved_at = None
+            article.save()
+            return Response(
+                ArticleCreateSerializer(article).data, status=status.HTTP_201_CREATED
+            )
         return Response(
-            ArticleCreateSerializer(article).data, status=status.HTTP_204_NO_CONTENT
+            ArticleCreateSerializer(article).data, status=status.HTTP_200_OK
         )
 
 
