@@ -21,4 +21,6 @@ urlpatterns += [
     path("load-countries", LoadCountriesView.as_view()),
     path("load-provinces", LoadProvincesView.as_view()),
     path("load-districts", LoadDistrictsView.as_view()),
+    path("load-municipalities", LoadMunicipalityView.as_view()),
+    path("load-vdcs", LoadVdcView.as_view()),
 ]

@@ -2,8 +2,12 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from location.models import Country, District, Province
-from utils.constants import COUNTRIES, DISTRICTS, PROVINCES
+from location.models import VDC, Country, District, Municipality, Province
+from utils.countries import COUNTRIES
+from utils.districts import DISTRICTS
+from utils.municipalities import MUNICIPALITIES
+from utils.provinces import PROVINCES
+from utils.vdcs import VDCS
 
 
 class LoadCountriesView(APIView):
@@ -38,6 +42,34 @@ class LoadDistrictsView(APIView):
                 name=district_name,
                 province=province,
             )
+            if created:
+                obj.save()
+        return Response({"success": True}, status=status.HTTP_200_OK)
+
+
+class LoadMunicipalityView(APIView):
+    @staticmethod
+    def post(request):
+        for name, district_name in MUNICIPALITIES:
+            print(district_name)
+            print(name)
+            district = District.objects.get(name=district_name.capitalize())
+            obj, created = Municipality.objects.get_or_create(
+                name=name, district=district
+            )
+            if created:
+                obj.save()
+        return Response({"success": True}, status=status.HTTP_200_OK)
+
+
+class LoadVdcView(APIView):
+    @staticmethod
+    def post(request):
+        for name, district_name in VDCS:
+            print(district_name)
+            print(name)
+            district = District.objects.get(name=district_name.capitalize())
+            obj, created = VDC.objects.get_or_create(name=name, district=district)
             if created:
                 obj.save()
         return Response({"success": True}, status=status.HTTP_200_OK)
