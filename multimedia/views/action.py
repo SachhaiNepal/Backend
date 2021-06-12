@@ -20,20 +20,22 @@ class ApprovalView(APIView):
     @staticmethod
     def post(request, pk):
         multimedia = get_object_or_404(Multimedia, pk=pk)
-        multimedia.is_approved = not multimedia.is_approved
         if not multimedia.is_approved:
             multimedia.is_approved = True
             multimedia.approved_by = request.user
             multimedia.approved_at = timezone.now()
             multimedia.save()
+            return Response(
+                MultimediaPOSTSerializer(multimedia).data,
+                status=status.HTTP_201_CREATED,
+            )
         return Response(
-            MultimediaPOSTSerializer(multimedia).data, status=status.HTTP_201_CREATED
+            MultimediaPOSTSerializer(multimedia).data, status=status.HTTP_200_OK
         )
 
     @staticmethod
     def delete(request, pk):
         multimedia = get_object_or_404(Multimedia, pk=pk)
-        multimedia.is_approved = not multimedia.is_approved
         if multimedia.is_approved:
             multimedia.is_approved = False
             multimedia.approved_by = None
