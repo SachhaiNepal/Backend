@@ -28,7 +28,7 @@ class ModelStatisticsView(APIView):
 
         return Response(
             {
-                "profiles": profiles.count(),
+                "followers": profiles.count(),
                 "members": members.count(),
                 "branches": branches.count(),
                 "articles": articles.count(),

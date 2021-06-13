@@ -1,7 +1,7 @@
 # from django.contrib import admin
 # from django.utils import timezone
 #
-# from multimedia.sub_models.article_media import ArticleImage
+# from multimedia.sub_models.article_media import Image
 # from multimedia.sub_models.multimedia_media import (Sound,
 #                                                     Image,
 #                                                     Video)
@@ -118,7 +118,7 @@
 #
 #
 # class ArticleImageAdmin(admin.StackedInline):
-#     model = ArticleImage
+#     model = Image
 #     fk_name = "article"
 #     extra = 0
 #     min_num = 0
@@ -182,7 +182,7 @@
 #         super().save_model(request, obj, form, change)
 #
 #     def delete_model(self, request, obj):
-#         images = ArticleImage.objects.filter(article=obj)
+#         images = Image.objects.filter(article=obj)
 #         if images.count() > 0:
 #             for image in images:
 #                 image.delete()
@@ -338,4 +338,4 @@
 # admin.site.register(Image)
 # admin.site.register(Video)
 # admin.site.register(Sound)
-# admin.site.register(ArticleImage)
+# admin.site.register(Image)

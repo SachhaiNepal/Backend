@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from article.serializers.article import ArticleSerializer
+from article.serializers.article import ListSerializer
 from article.sub_models.action import Bookmark, Comment, Love
 
 
@@ -11,7 +11,7 @@ class LoveThinSerializer(serializers.ModelSerializer):
 
 
 class LoveSerializer(serializers.ModelSerializer):
-    article = ArticleSerializer()
+    article = ListSerializer()
 
     class Meta:
         model = Love
@@ -26,7 +26,7 @@ class BookmarkThinSerializer(serializers.ModelSerializer):
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
-    article = ArticleSerializer()
+    article = ListSerializer()
 
     class Meta:
         model = Bookmark

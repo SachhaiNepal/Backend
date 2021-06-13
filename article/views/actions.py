@@ -8,9 +8,19 @@ from rest_framework.views import APIView
 
 from article.serializers.action import (BookmarkThinSerializer,
                                         LoveThinSerializer)
-from article.serializers.article import ArticleCreateSerializer
+from article.serializers.article import CreateSerializer
 from article.sub_models.action import Bookmark, Love
 from article.sub_models.article import Article
+
+
+def check_if_article_writer_has_completed_writing(article):
+    if not article.completed_writing:
+        return Response(
+            {"detail": "Article writer has not not completed writing."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    else:
+        return article
 
 
 class ArticleApprovalView(APIView):
@@ -20,32 +30,30 @@ class ArticleApprovalView(APIView):
     @staticmethod
     def post(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         if not article.is_approved:
             article.is_approved = True
             article.approved_by = request.user
             article.approved_at = timezone.now()
             article.save()
             return Response(
-                ArticleCreateSerializer(article).data, status=status.HTTP_201_CREATED
+                CreateSerializer(article).data, status=status.HTTP_201_CREATED
             )
-        return Response(
-            ArticleCreateSerializer(article).data, status=status.HTTP_200_OK
-        )
+        return Response(CreateSerializer(article).data, status=status.HTTP_200_OK)
 
     @staticmethod
     def delete(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         if article.is_approved:
             article.is_approved = False
             article.approved_by = None
             article.approved_at = None
             article.save()
             return Response(
-                ArticleCreateSerializer(article).data, status=status.HTTP_201_CREATED
+                CreateSerializer(article).data, status=status.HTTP_201_CREATED
             )
-        return Response(
-            ArticleCreateSerializer(article).data, status=status.HTTP_200_OK
-        )
+        return Response(CreateSerializer(article).data, status=status.HTTP_200_OK)
 
 
 class ArticleStatusForMe(APIView):
@@ -55,6 +63,7 @@ class ArticleStatusForMe(APIView):
     @staticmethod
     def get(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         love, created = Love.objects.get_or_create(article=article, lover=request.user)
         bookmark, created = Bookmark.objects.get_or_create(
             article=article, marker=request.user
@@ -80,21 +89,23 @@ class ArticlePinView(APIView):
     @staticmethod
     def post(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         article.is_pinned = True
         article.pinner = request.user
         article.save()
         return Response(
-            ArticleCreateSerializer(article).data, status=status.HTTP_204_NO_CONTENT
+            CreateSerializer(article).data, status=status.HTTP_204_NO_CONTENT
         )
 
     @staticmethod
     def delete(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         article.is_pinned = False
         article.pinner = None
         article.save()
         return Response(
-            ArticleCreateSerializer(article).data, status=status.HTTP_204_NO_CONTENT
+            CreateSerializer(article).data, status=status.HTTP_204_NO_CONTENT
         )
 
 
@@ -105,6 +116,7 @@ class BookmarkView(APIView):
     @staticmethod
     def post(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         bookmark, created = Bookmark.objects.get_or_create(
             article=article, marker=request.user
         )
@@ -117,6 +129,7 @@ class BookmarkView(APIView):
     @staticmethod
     def delete(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         bookmark, created = Bookmark.objects.get_or_create(
             article=article, marker=request.user
         )
@@ -134,6 +147,7 @@ class LoveView(APIView):
     @staticmethod
     def post(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         love, created = Love.objects.get_or_create(article=article, lover=request.user)
         love.is_loved = True
         love.save()
@@ -144,6 +158,7 @@ class LoveView(APIView):
     @staticmethod
     def delete(request, pk):
         article = get_object_or_404(Article, pk=pk)
+        article = check_if_article_writer_has_completed_writing(article)
         love, created = Love.objects.get_or_create(article=article, lover=request.user)
         love.is_loved = False
         love.save()
