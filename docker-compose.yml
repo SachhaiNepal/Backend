@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+  backend:
+    build:
+      context: .
+    volumes:
+      - .:/backend
+      - static:/backend/static
+      - media:/backend/media
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+
+#  postgres:
+#    build: ./docker/postgres
+#    restart: unless-stopped
+#    expose:
+#      - "5432"
+#    environment:
+#      LC_ALL: C.UTF-8
+#      POSTGRES_USER: sachchai
+#      POSTGRES_PASSWORD: sachchai
+#      POSTGRES_DB: sachchai
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data/
+
+  nginx:
+    restart: always
+    build: ./docker/nginx
+    volumes:
+      - ./logs/:/backend/logs
+      - static:/backend/static
+      - media:/backend/media
+    ports:
+      - "9000:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  media:
+  static:
