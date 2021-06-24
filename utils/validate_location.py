@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 
 def validate_location(serializer_data):
-    print(serializer_data)
     municipality = serializer_data.get("municipality")
     vdc = serializer_data.get("vdc")
     municipality_ward = serializer_data.get("municipality_ward")

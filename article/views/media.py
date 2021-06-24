@@ -16,6 +16,7 @@ class ArticleImageViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ImageSerializer
+    filterset_fields = ["article"]
     parser_classes = (
         MultiPartParser,
         FormParser,
@@ -35,6 +36,7 @@ class CoverImageViewSet(viewsets.ModelViewSet):
     queryset = CoverImage.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filterset_fields = ["article"]
     parser_classes = (
         MultiPartParser,
         FormParser,
@@ -56,6 +58,7 @@ class ArticleImageUrlViewSet(viewsets.ModelViewSet):
     queryset = ImageUrl.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filterset_fields = ["article"]
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve", "delete"]:

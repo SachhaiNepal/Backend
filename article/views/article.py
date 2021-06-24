@@ -45,7 +45,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    filterset_fields = ["is_approved", "created_by"]
+    filterset_fields = ["is_approved", "created_by", "completed_writing"]
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
