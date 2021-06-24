@@ -30,11 +30,11 @@ class Profile(models.Model):
     )
     bio = models.TextField(null=True, blank=True, max_length=1024)
     contact = PhoneNumberField(
-        unique=True, null=True, blank=True, help_text="valid nepali phone number"
+        unique=True, null=True, blank=True, help_text="Should be a registered Nepal phone number."
     )
     birth_date = models.DateField(null=True, blank=True)
-    current_city = models.CharField(max_length=512, blank=True, null=True)
-    home_town = models.CharField(max_length=512, blank=True, null=True)
+    current_city = models.CharField(max_length=64, blank=True, null=True)
+    home_town = models.CharField(max_length=64, blank=True, null=True)
     country = models.ForeignKey(
         "location.Country",
         on_delete=models.DO_NOTHING,
@@ -56,10 +56,51 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
+    municipality = models.ForeignKey(
+        "location.Municipality",
+        on_delete=models.DO_NOTHING,
+        related_name="followers",
+        null=True,
+        blank=True,
+    )
+    municipality_ward = models.ForeignKey(
+        "location.MunicipalityWard",
+        on_delete=models.DO_NOTHING,
+        related_name="followers",
+        null=True,
+        blank=True,
+    )
+    vdc = models.ForeignKey(
+        "location.VDC",
+        on_delete=models.DO_NOTHING,
+        related_name="followers",
+        null=True,
+        blank=True,
+    )
+    vdc_ward = models.OneToOneField(
+        "location.VDCWard",
+        on_delete=models.DO_NOTHING,
+        related_name="followers",
+        null=True,
+        blank=True,
+    )
     last_updated = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
         return self.user.username + " Profile"
+
+    def clean(self):
+        """
+        Require only vdc or municipality fields
+        """
+        if (self.vdc and self.municipality) or (self.vdc_ward and self.municipality_ward):
+            raise ValidationError(
+                "Both municipality and vdc fields cannot be selected."
+            )
+        elif self.municipality and self.vdc_ward:
+            raise ValidationError("Cannot assign vdc ward for a municipality.")
+        elif self.vdc and self.municipality_ward:
+            raise ValidationError("Cannot assign municipality ward for a vdc.")
 
     class Meta:
         verbose_name = "Follower Profile"
