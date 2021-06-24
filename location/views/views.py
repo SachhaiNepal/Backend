@@ -7,94 +7,69 @@ from location import models, serializers
 
 
 class CountryViewSet(viewsets.ModelViewSet):
-    queryset = models.Country.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter]
     search_fields = ["name"]
-
-    def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
-            return serializers.CountrySerializer
-        else:
-            return serializers.CountryPostSerializer
+    permission_classes = [IsAdminUser]
+    queryset = models.Country.objects.all()
+    filter_backends = [filters.SearchFilter]
+    authentication_classes = [TokenAuthentication]
+    serializer_class = serializers.CountrySerializer
 
 
 class ProvinceViewSet(viewsets.ModelViewSet):
-    queryset = models.Province.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
     filterset_fields = ["country"]
-
-    def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
-            return serializers.ProvinceSerializer
-        else:
-            return serializers.ProvincePostSerializer
+    permission_classes = [IsAdminUser]
+    queryset = models.Province.objects.all()
+    authentication_classes = [TokenAuthentication]
+    serializer_class = serializers.ProvinceSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
 
 
 class DistrictViewSet(viewsets.ModelViewSet):
     queryset = models.District.objects.all().order_by("-created_at")
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
     filterset_fields = ["province"]
-
-    def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
-            return serializers.DistrictSerializer
-        else:
-            return serializers.DistrictPostSerializer
+    serializer_class = serializers.DistrictSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
 
 
 class MunicipalityViewSet(viewsets.ModelViewSet):
     queryset = models.Municipality.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
     filterset_fields = ["district"]
-
-    def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
-            return serializers.MunicipalitySerializer
-        else:
-            return serializers.MunicipalityPostSerializer
+    permission_classes = [IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+    serializer_class = serializers.MunicipalitySerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
 
 
 class MunicipalityWardViewSet(viewsets.ModelViewSet):
-    queryset = models.MunicipalityWard.objects.all()
-    authentication_classes = [TokenAuthentication]
+    search_fields = ["name"]
     permission_classes = [IsAdminUser]
+    filterset_fields = ["municipality"]
+    authentication_classes = [TokenAuthentication]
+    queryset = models.MunicipalityWard.objects.all()
     serializer_class = serializers.MunicipalityWardSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ["name"]
-    filterset_fields = ["municipality"]
 
 
 class VDCViewSet(viewsets.ModelViewSet):
-    queryset = models.VDC.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
     filterset_fields = ["district"]
-
-    def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
-            return serializers.VDCSerializer
-        else:
-            return serializers.VDCPostSerializer
+    permission_classes = [IsAdminUser]
+    queryset = models.VDC.objects.all()
+    serializer_class = serializers.VDCSerializer
+    authentication_classes = [TokenAuthentication]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
 
 
 class VDCWardViewSet(viewsets.ModelViewSet):
-    queryset = models.VDCWard.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
-    serializer_class = serializers.VDCWardSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["name"]
     filterset_fields = ["vdc"]
+    permission_classes = [IsAdminUser]
+    queryset = models.VDCWard.objects.all()
+    authentication_classes = [TokenAuthentication]
+    serializer_class = serializers.VDCWardSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
