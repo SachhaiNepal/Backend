@@ -87,12 +87,9 @@ class UserDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {
-                    "message": "User updated successfully.",
-                    "data": UserWithProfileSerializer(
-                        self.get_object(pk), context=context
-                    ).data,
-                },
+                UserWithProfileSerializer(
+                    self.get_object(pk), context=context
+                ).data,
                 status=status.HTTP_204_NO_CONTENT,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -107,13 +104,10 @@ class UserDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {
-                    "message": "User patched successfully.",
-                    "data": UserWithProfileSerializer(
-                        self.get_object(pk), context=context
-                    ).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
+                UserWithProfileSerializer(
+                    self.get_object(pk), context=context
+                ).data,
+                status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
