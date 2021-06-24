@@ -5,6 +5,7 @@ from django.db import models
 class Article(models.Model):
     title = models.CharField(max_length=255, unique=True, null=True)
     description = models.CharField(blank=True, null=True, max_length=10000)
+    tags = models.CharField(blank=True, null=True, max_length=255)
     is_pinned = models.BooleanField(default=False, editable=False)
     pinner = models.ForeignKey(
         get_user_model(),
