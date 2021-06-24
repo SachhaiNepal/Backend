@@ -11,6 +11,7 @@ from accounts.serializers.profile import (CoverImagePostSerializer,
                                           ProfileImageSerializer,
                                           ProfilePOSTSerializer,
                                           ProfileSerializer)
+from accounts.serializers.user import UserWithProfileSerializer
 from accounts.sub_models.profile import CoverImage
 
 
@@ -41,7 +42,7 @@ class ProfileDetail(APIView):
         Returns particular profile
         """
         profile = self.get_object(pk)
-        return Response(ProfileSerializer(profile).data, status=status.HTTP_200_OK)
+        return Response(UserWithProfileSerializer(profile.user).data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         """
@@ -52,11 +53,8 @@ class ProfileDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {
-                    "message": "Profile updated successfully.",
-                    "data": ProfileSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
+                UserWithProfileSerializer(profile.user).data,
+                status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -69,11 +67,8 @@ class ProfileDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {
-                    "message": "Profile patched successfully.",
-                    "data": ProfileSerializer(self.get_object(pk)).data,
-                },
-                status=status.HTTP_204_NO_CONTENT,
+                UserWithProfileSerializer(profile.user).data,
+                status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -90,3 +85,49 @@ class CoverImageViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CoverImagePostSerializer
+
+
+class SetActiveProfileImage(APIView):
+
+    @staticmethod
+    def get_object(pk):
+        return get_object_or_404(ProfileImage, pk=pk)
+
+    @staticmethod
+    def unset_all_other_active(profile):
+        profile_images = ProfileImage.objects.filter(profile=profile, active=True)
+        if profile_images.count() > 0:
+            for img in profile_images:
+                img.active = False
+                img.save()
+
+    def put(self, request, pk):
+        profile_image = self.get_object(pk)
+        if not profile_image.active:
+            self.unset_all_other_active(profile_image.profile)
+            profile_image.active = True
+            profile_image.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SetActiveCoverImage(APIView):
+
+    @staticmethod
+    def get_object(pk):
+        return get_object_or_404(CoverImage, pk=pk)
+
+    @staticmethod
+    def unset_all_other_active(profile):
+        cover_images = CoverImage.objects.filter(profile=profile, active=True)
+        if cover_images.count() > 0:
+            for img in cover_images:
+                img.active = False
+                img.save()
+
+    def put(self, request, pk):
+        cover_image = self.get_object(pk)
+        if not cover_image.active:
+            self.unset_all_other_active(cover_image.profile)
+            cover_image.active = True
+            cover_image.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

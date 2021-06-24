@@ -119,6 +119,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class ProfileImage(models.Model):
+    active = models.BooleanField(default=False, editable=False)
     image = models.ImageField(
         upload_to=upload_profile_image_to,
         null=True,
@@ -147,6 +148,7 @@ class ProfileImage(models.Model):
 
 
 class CoverImage(models.Model):
+    active = models.BooleanField(default=False, editable=False)
     image = models.ImageField(
         upload_to=upload_cover_image_to,
         null=True,

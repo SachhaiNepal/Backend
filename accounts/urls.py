@@ -8,8 +8,10 @@ from accounts.views.member_branch import ListMemberBranch, MemberBranchViewSet
 from accounts.views.member_role import ListMemberRole, MemberRoleDetail
 from accounts.views.password import (ConfirmResetPassword,
                                      ResetPasswordRequestCode, UpdatePassword)
-from accounts.views.profile import (ProfileDetail, ProfileImageViewSet,
-                                    UserProfile)
+from accounts.views.profile import (
+    ProfileDetail, ProfileImageViewSet,
+    UserProfile, SetActiveProfileImage, SetActiveCoverImage
+)
 from accounts.views.register_follower import RegisterFollower
 from accounts.views.user_permission import (ListUserPermission,
                                             UserPermissionDetail)
@@ -59,4 +61,6 @@ urlpatterns += [
     path("magic/<int:pk>", UserPermissionDetail.as_view(), name="magic"),
     path("list-user", ListUsersView.as_view(), name="user-filter"),
     path("list-member", MemberFilterView.as_view(), name="member-filter"),
+    path("profile-image/%s/set-active", SetActiveProfileImage.as_view(), name="set-active-profile-image"),
+    path("profile-image/%s/set-active", SetActiveCoverImage.as_view(), name="set-active-profile-cover")
 ]
