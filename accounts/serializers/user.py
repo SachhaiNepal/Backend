@@ -7,9 +7,12 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from accounts.models import Profile, ProfileImage, CoverImage
+from location.models import Country, District, Province
+from article.serializers import article
+from multimedia.serializers import multimedia
+from event.serializers.event import EventSerializer
 from accounts.serializers.member import UserMemberSerializer
 from accounts.serializers.profile import ProfileSerializer
-from location.models import Country, District, Province
 
 
 class RegisterFollowerSerializer(serializers.Serializer):
@@ -93,6 +96,9 @@ class UserWithProfileSerializer(serializers.ModelSerializer):
     member = UserMemberSerializer()
     active_profile_image = serializers.SerializerMethodField()
     active_cover_image = serializers.SerializerMethodField()
+    my_articles = article.ListForMeSerializer(many=True, read_only=True)
+    my_multimedias = multimedia.ListForMeSerializer(many=True, read_only=True)
+    my_events = EventSerializer(many=True)
 
     @staticmethod
     def generate_url_for_media_resource(media_url):

@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from accounts.serializers.user import UserWithProfileSerializer
 from multimedia.models import Multimedia
 from multimedia.serializers.media import (AudioSerializer, ImageSerializer,
                                           VideoSerializer, VideoUrlSerializer)
+from utils.global_serializer import UserWithActiveProfileMediaSerializer
 
 
 class MultimediaPOSTSerializer(serializers.ModelSerializer):
@@ -18,13 +18,25 @@ class MultimediaPOSTSerializer(serializers.ModelSerializer):
         return branch
 
 
+class ListForMeSerializer(serializers.ModelSerializer):
+    multimedia_images = ImageSerializer(many=True, read_only=True)
+    multimedia_videos = VideoSerializer(many=True, read_only=True)
+    multimedia_video_urls = VideoUrlSerializer(many=True, read_only=True)
+    multimedia_audios = AudioSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Multimedia
+        exclude = ["uploaded_by"]
+        depth = 1
+
+
 class MultimediaSerializer(serializers.ModelSerializer):
     multimedia_images = ImageSerializer(many=True, read_only=True)
     multimedia_videos = VideoSerializer(many=True, read_only=True)
     multimedia_video_urls = VideoUrlSerializer(many=True, read_only=True)
     multimedia_audios = AudioSerializer(many=True, read_only=True)
 
-    uploaded_by = UserWithProfileSerializer()
+    uploaded_by = UserWithActiveProfileMediaSerializer()
 
     class Meta:
         model = Multimedia

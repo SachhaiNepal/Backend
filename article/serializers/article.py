@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from accounts.serializers.user import UserWithProfileSerializer
 from article.models import Article, Image
 from article.sub_models.media import CoverImage, ImageUrl
+from utils.global_serializer import UserWithActiveProfileMediaSerializer
 
 
 class CreateSerializer(serializers.ModelSerializer):
@@ -55,11 +55,22 @@ class ImageUrlCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ListForMeSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(many=True, read_only=True)
+    image_urls = ImageUrlSerializer(many=True, read_only=True)
+    cover_images = CoverImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Article
+        exclude = ['created_by']
+        depth = 1
+
+
 class ListSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
     image_urls = ImageUrlSerializer(many=True, read_only=True)
     cover_images = CoverImageSerializer(many=True, read_only=True)
-    created_by = UserWithProfileSerializer(allow_null=True)
+    created_by = UserWithActiveProfileMediaSerializer(allow_null=True)
 
     class Meta:
         model = Article

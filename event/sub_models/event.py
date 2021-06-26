@@ -79,7 +79,7 @@ class Event(models.Model):
     created_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
-        related_name="events_created",
+        related_name="my_events",
         null=True,
         blank=True,
         editable=False,
@@ -137,7 +137,7 @@ class Event(models.Model):
 
 
 class EventBannerImage(models.Model):
-    event = models.ForeignKey(
+    event = models.OneToOneField(
         "Event", on_delete=models.CASCADE, related_name="banner_images"
     )
     image = models.ImageField(
