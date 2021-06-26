@@ -18,9 +18,14 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "18.138.64.161",
+    "sachchaikendranepal.com",
+    "sachchaikendranepal.org.np",
+]
 
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
     "http://localhost:8080",
     "http://sachchaikendranepal.com",
     "http://sachchaikendranepal.org.np",
