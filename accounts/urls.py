@@ -10,7 +10,7 @@ from accounts.views.password import (ConfirmResetPassword,
                                      ResetPasswordRequestCode, UpdatePassword)
 from accounts.views.profile import (
     ProfileDetail, ProfileImageViewSet,
-    UserProfile, SetActiveProfileImage, SetActiveCoverImage
+    UserProfile, SetActiveProfileImage, SetActiveCoverImage, CoverImageViewSet
 )
 from accounts.views.register_follower import RegisterFollower
 from accounts.views.user_permission import (ListUserPermission,
@@ -21,11 +21,13 @@ app_name = "accounts"
 
 router = DefaultRouter()
 router.register(r"profile-image", ProfileImageViewSet, basename="profile-image")
-router.register(r"cover-image", ProfileImageViewSet, basename="cover-image")
-router.register(r"member-branch", MemberBranchViewSet, basename="profile-image")
+router.register(r"cover-image", CoverImageViewSet, basename="cover-image")
+router.register(r"member-branch", MemberBranchViewSet, basename="member-branch")
 urlpatterns = router.urls
 
 urlpatterns += [
+    path("profile-image/<int:pk>/set-active", SetActiveProfileImage.as_view()),
+    path("cover-image/<int:pk>/set-active", SetActiveCoverImage.as_view()),
     path("register-follower", RegisterFollower.as_view(), name="register-follower"),
     path("user", ListFollower.as_view(), name="users-list"),
     path("user/<int:pk>", UserDetail.as_view(), name="user-detail"),
@@ -36,7 +38,6 @@ urlpatterns += [
     path(
         "member/<int:pk>/branch", ListMemberBranch.as_view(), name="member-branch-list"
     ),
-    # path("member-branch/<int:pk>", MemberBranchDetail.as_view(), name="member-branch-detail"),
     path(
         "member/<int:pk>/toggle-approval",
         ToggleMemberApprovalView.as_view(),
@@ -61,6 +62,4 @@ urlpatterns += [
     path("magic/<int:pk>", UserPermissionDetail.as_view(), name="magic"),
     path("list-user", ListUsersView.as_view(), name="user-filter"),
     path("list-member", MemberFilterView.as_view(), name="member-filter"),
-    path("profile-image/%s/set-active", SetActiveProfileImage.as_view(), name="set-active-profile-image"),
-    path("profile-image/%s/set-active", SetActiveCoverImage.as_view(), name="set-active-profile-cover")
 ]
