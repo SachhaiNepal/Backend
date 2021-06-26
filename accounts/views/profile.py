@@ -79,6 +79,12 @@ class ProfileImageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ProfileImageSerializer
 
+    def destroy(self, request, *args, **kwargs):
+        profile_image = self.get_object()
+        profile_image.image.delete()
+        profile_image.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class CoverImageViewSet(viewsets.ModelViewSet):
     queryset = CoverImage.objects.all()
@@ -86,8 +92,16 @@ class CoverImageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CoverImagePostSerializer
 
+    def destroy(self, request, *args, **kwargs):
+        cover_image = self.get_object()
+        cover_image.image.delete()
+        cover_image.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class SetActiveProfileImage(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):
@@ -111,6 +125,8 @@ class SetActiveProfileImage(APIView):
 
 
 class SetActiveCoverImage(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @staticmethod
     def get_object(pk):
