@@ -25,7 +25,12 @@ ALLOWED_HOSTS = [
     "sachchaikendranepal.org.np",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://18.138.64.161",
+    "http://sachchaikendranepal.org.np",
+    "http://sachchaikendranepal.com",
+]
 
 # Application definition
 INSTALLED_APPS = [
