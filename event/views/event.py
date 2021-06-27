@@ -3,7 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.filters import SearchFilter
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,10 +16,6 @@ from event.sub_models.event import Event, EventBannerImage
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all().order_by("-created_at")
     serializer_class = EventSerializer
-    parser_classes = (
-        MultiPartParser,
-        FormParser,
-    )
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     filter_backends = [SearchFilter, DjangoFilterBackend]
@@ -27,7 +23,7 @@ class EventViewSet(viewsets.ModelViewSet):
     search_fields = ["title", "description", "created_by__username"]
 
     def get_serializer_class(self):
-        if self.action == "create" or self.action == "update":
+        if self.action not in ["list", "retrieve"]:
             return EventPostSerializer
         return super(EventViewSet, self).get_serializer_class()
 
@@ -37,29 +33,24 @@ class ToggleEventApprovalView(APIView):
     permission_classes = [IsAuthenticated]
 
     @staticmethod
-    def post(request, pk):
-        try:
-            event = Event.objects.get(pk=pk)
-        except Event.DoesNotExist:
-            return Response(
-                {"detail": "Event does not exist."}, status=status.HTTP_404_NOT_FOUND
-            )
-        event.is_approved = not event.is_approved
-        if event.is_approved:
+    def put(request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        if not event.is_approved:
+            event.is_approved = True
             event.approved_by = request.user
             event.approved_at = timezone.now()
-        else:
+            event.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @staticmethod
+    def delete(request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        if event.is_approved:
+            event.is_approved = False
             event.approved_by = None
             event.approved_at = None
-        event.save()
-        return Response(
-            {
-                "message": "Event {} successfully.".format(
-                    "approved" if event.is_approved else "rejected"
-                )
-            },
-            status=status.HTTP_204_NO_CONTENT,
-        )
+            event.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class EventBannerImageViewSet(viewsets.ModelViewSet):

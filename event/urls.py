@@ -24,7 +24,7 @@ router.register(r"event-comment", EventCommentViewSet, basename="event-comment")
 urlpatterns = router.urls
 
 urlpatterns += [
-    path("event/<int:pk>/toggle-approval", ToggleEventApprovalView.as_view()),
+    path("event/<int:pk>/approve", ToggleEventApprovalView.as_view()),
     path("event/<int:pk>/toggle-interested", ToggleEventInterestedStatus.as_view()),
     path("event/<int:pk>/toggle-going", ToggleEventGoingStatus.as_view()),
     path("event/<int:pk>/interest-statistics", EventStatistics.as_view()),

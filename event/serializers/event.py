@@ -42,7 +42,7 @@ class EventPostSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    banner_images = EventBannerImageSerializer(many=True, read_only=True)
+    banner_images = EventBannerImageSerializer(read_only=True)
     images = EventPhotoSerializer(many=True, read_only=True)
     video_urls = EventVideoListSerializer(many=True, read_only=True)
     videos = EventVideoSerializer(many=True, read_only=True)
