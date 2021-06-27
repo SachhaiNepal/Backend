@@ -3,8 +3,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from utilities.models import (AboutUs, AboutUsImage, Service, ShowcaseGallery,
-                              ShowcaseSlider)
+from utilities.models import (AboutUs, AboutUsImage, Service, ShowcaseGalleryImage,
+                              SliderImage)
 from utilities.serializers import (AboutUsImageSerializer,
                                    AboutUsListSerializer, AboutUsSerializer,
                                    ServiceSerializer,
@@ -13,13 +13,13 @@ from utilities.serializers import (AboutUsImageSerializer,
 
 
 class ShowcaseSliderViewSet(viewsets.ModelViewSet):
-    queryset = ShowcaseSlider.objects.all()
+    queryset = SliderImage.objects.all()
     serializer_class = ShowcaseSliderSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        if ShowcaseSlider.objects.count() >= 3:
+        if SliderImage.objects.count() >= 3:
             return Response(
                 {"message": "More than {} slider images cant be registered.".format(3)}
             )
@@ -36,13 +36,13 @@ class ShowcaseSliderViewSet(viewsets.ModelViewSet):
 
 
 class ShowcaseGalleryViewSet(viewsets.ModelViewSet):
-    queryset = ShowcaseGallery.objects.all()
+    queryset = ShowcaseGalleryImage.objects.all()
     serializer_class = ShowcaseGallerySerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        if ShowcaseSlider.objects.count() >= 3:
+        if SliderImage.objects.count() >= 3:
             return Response(
                 {"message": "More than {} gallery images cant be registered.".format(3)}
             )

@@ -1,34 +1,17 @@
-from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 
-def validate_location(serializer_data):
-    municipality = serializer_data.get("municipality")
-    vdc = serializer_data.get("vdc")
-    municipality_ward = serializer_data.get("municipality_ward")
-    vdc_ward = serializer_data.get("vdc_ward")
-
-    if not municipality and not vdc:
-        raise serializers.ValidationError(
-            "One of the municipality or vdc must be assigned."
+def validate_location(attrs):
+    vdc = attrs.get("vdc")
+    municipality = attrs.get("municipality")
+    vdc_ward = attrs.get("vdc_ward")
+    municipality_ward = attrs.get("municipality_ward")
+    if (vdc and municipality) or (vdc_ward and municipality_ward):
+        raise ValidationError(
+            "Both municipality and vdc fields cannot be selected."
         )
-    if municipality and vdc:
-        raise serializers.ValidationError(
-            "Both municipality and vdc cannot be assigned."
-        )
-    if not municipality_ward and not vdc_ward:
-        raise serializers.ValidationError(
-            "One of the municipality or vdc ward must be assigned."
-        )
-    if municipality_ward and vdc_ward:
-        raise serializers.ValidationError(
-            "Both municipality or vdc ward cannot be assigned."
-        )
-    if municipality and vdc_ward:
-        raise serializers.ValidationError(
-            "Municipality and vdc ward is not an expected location combination."
-        )
-    if vdc and municipality_ward:
-        raise serializers.ValidationError(
-            "Vdc and municipality ward is not an expected location combination."
-        )
-    return serializer_data
+    elif municipality and vdc_ward:
+        raise ValidationError("Cannot assign vdc ward for a municipality.")
+    elif vdc and municipality_ward:
+        raise ValidationError("Cannot assign municipality ward for a vdc.")
+    return attrs

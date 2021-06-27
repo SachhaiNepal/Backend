@@ -1,18 +1,18 @@
 from rest_framework import serializers
 
-from utilities.models import (AboutUs, AboutUsImage, Service, ShowcaseGallery,
-                              ShowcaseSlider)
+from utilities.models import (AboutUs, AboutUsImage, Service, ShowcaseGalleryImage,
+                              SliderImage)
 
 
 class ShowcaseSliderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ShowcaseSlider
+        model = SliderImage
         fields = "__all__"
 
 
 class ShowcaseGallerySerializer(serializers.ModelSerializer):
     class Meta:
-        model = ShowcaseGallery
+        model = ShowcaseGalleryImage
         fields = "__all__"
 
 
