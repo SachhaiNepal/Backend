@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 
 from backend.settings import MAX_SHOWCASE_GALLERY_IMAGES
+
 from utilities.models import (
     AboutUs, AboutUsImage, Service,
     SliderImage, ShowcaseGalleryImage, ServiceImage, Feedback, FeedbackFile
@@ -25,12 +26,14 @@ class SliderImageAdmin(admin.ModelAdmin):
     )
     ordering = ("image", "title", "context", "subtitle")
 
-    def save_model(self, *args, **kwargs):
-        if SliderImage.objects.count() >= 3:
-            raise ValidationError(
-                "Only {} slider images are allowed to save.".format(3)
-            )
-        super(SliderImageAdmin, self).save_model(*args, **kwargs)
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if SliderImage.objects.count() >= 1:
+                raise ValidationError(
+                    "Only one slider image can be created. Please update the existing"
+                    " one. You can also delete existing item to add a new one."
+                )
+        super(SliderImageAdmin, self).save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
         obj.image.delete()
@@ -55,14 +58,16 @@ class ShowcaseGalleryImageAdmin(admin.ModelAdmin):
     )
     ordering = ("timestamp",)
 
-    def save_model(self, *args, **kwargs):
-        if ShowcaseGalleryImage.objects.count() >= MAX_SHOWCASE_GALLERY_IMAGES:
-            raise ValidationError(
-                "Only {} images are allowed to save.".format(
-                    MAX_SHOWCASE_GALLERY_IMAGES
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if ShowcaseGalleryImage.objects.count() >= MAX_SHOWCASE_GALLERY_IMAGES:
+                raise ValidationError(
+                    "Maximum instance count reached."
+                    f" Only ${MAX_SHOWCASE_GALLERY_IMAGES} items can be created for this model." +
+                    " Please update the existing ones."
+                    " You can also delete existing item to add a new one."
                 )
-            )
-        super(ShowcaseGalleryImageAdmin, self).save_model(*args, **kwargs)
+        super().save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
         obj.image.delete()
@@ -84,9 +89,14 @@ class ServiceAdmin(admin.ModelAdmin):
                 ),
             },
         ),
-        ("Service Media", {"classes": ("wide", "extrapretty"), "fields": ("video_urls",)}),
+        ("Service Media", {"classes": ("wide", "extrapretty"), "fields": ("video_url",)}),
     )
     ordering = ("timestamp",)
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.writer = request.user
+        super().save_model(request, obj, form, change)
 
 
 class ServiceImageAdmin(admin.ModelAdmin):
@@ -110,14 +120,18 @@ class AboutUsImageAdmin(admin.ModelAdmin):
 
 
 class AboutUsAdmin(admin.ModelAdmin):
-    list_display = ["about_us", "video_urls", "timestamp"]
+    list_display = ["about_us", "video_url", "timestamp"]
     list_filter = ["timestamp"]
     date_hierarchy = "timestamp"
 
-    def save_model(self, *args, **kwargs):
-        if AboutUs.objects.count() >= 1:
-            raise ValidationError("Single object model. Multiple instance not allowed")
-        super(AboutUsAdmin, self).save_model(*args, **kwargs)
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if AboutUs.objects.count() >= 1:
+                raise ValidationError(
+                    "Only one item can be created. Please update the existing"
+                    " one. You can also delete existing item to add a new one."
+                )
+        super().save_model(request, obj, form, change)
 
 
 class FeedbackAdmin(admin.ModelAdmin):

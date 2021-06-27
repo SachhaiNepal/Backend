@@ -37,7 +37,7 @@ def upload_showcase_gallery_image_to(instance, filename):
 def upload_services_images_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    return f"utilities/services/{instance.id}/{filename}"
+    return f"utilities/services/{instance.service.title}/{filename}"
 
 
 def upload_about_us_images_to(instance, filename):
@@ -63,6 +63,7 @@ class SliderImage(models.Model):
     def clean(self):
         if self.image and self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
+        validate_only_number_of_instances(self, 1)
 
     def delete(self, using=None, keep_parents=False):
         if self.image:
@@ -87,6 +88,7 @@ class ShowcaseGalleryImage(models.Model):
     def clean(self):
         if self.image and self.image.size / 1000 > MAX_UPLOAD_IMAGE_SIZE:
             raise ValidationError("Image size exceeds max image upload size.")
+        validate_only_number_of_instances(self, 15)
 
     def delete(self, using=None, keep_parents=False):
         if self.image:
@@ -95,12 +97,14 @@ class ShowcaseGalleryImage(models.Model):
 
 
 class Service(models.Model):
-    title = models.CharField(max_length=16)
-    description = models.TextField(max_length=1024)
-    video_urls = ArrayField(
-        models.URLField(unique=True),
-        size=3,
-        null=True, blank=True
+    title = models.CharField(max_length=16, unique=True)
+    description = models.TextField(max_length=1024, unique=True)
+    video_url = models.URLField(unique=True, null=True, blank=True)
+    writer = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="my_services",
+        editable=False
     )
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -130,12 +134,8 @@ class ServiceImage(models.Model):
 
 class AboutUs(models.Model):
     about_us = models.TextField(max_length=10000)
+    video_url = models.URLField(unique=True, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    video_urls = ArrayField(
-        models.URLField(unique=True),
-        size=3,
-        null=True, blank=True
-    )
 
     def __str__(self):
         return "About Us"
@@ -187,6 +187,9 @@ class Feedback(models.Model):
         blank=True
     )
     timestamp = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("-timestamp",)
 
     def __str__(self):
         return self.subject
