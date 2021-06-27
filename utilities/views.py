@@ -6,14 +6,18 @@ from rest_framework.response import Response
 from backend.settings import MAX_SHOWCASE_GALLERY_IMAGES
 from utilities.models import (
     AboutUs, AboutUsImage, Service, ShowcaseGalleryImage,
-    SliderImage, Feedback, FeedbackFile, ServiceImage
+    SliderImage, Feedback, FeedbackFile, ServiceImage, ContactUs
 )
 from utilities.serializers import (
     AboutUsImageSerializer,
     AboutUsListSerializer, AboutUsSerializer,
     ServiceSerializer, ShowcaseGallerySerializer,
-    SliderImageSerializer, ServiceListSerializer, FeedbackListSerializer, ServiceImageSerializer, FeedbackSerializer
+    SliderImageSerializer, ServiceListSerializer, FeedbackListSerializer, ServiceImageSerializer, FeedbackSerializer,
+    ContactUsListSerializer, ContactUsSerializer
 )
+message = "Only one item can be created." \
+          " Please update the existing one." \
+          " You can also delete existing item to add a new one."
 
 
 class SliderImageViewSet(viewsets.ModelViewSet):
@@ -102,9 +106,6 @@ class AboutUsViewSet(viewsets.ModelViewSet):
         return AboutUsSerializer
 
     def create(self, request, *args, **kwargs):
-        message = "Only one item can be created." \
-                  " Please update the existing one." \
-                  " You can also delete existing item to add a new one."
         if AboutUs.objects.count() >= 1:
             return Response(
                 {"detail": message}, status=status.HTTP_403_FORBIDDEN
@@ -162,3 +163,22 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         feedback_file = self.get_object()
         feedback_file.file.delete()
         return super().destroy(request, *args, **kwargs)
+
+
+class ContactUsViewSet(viewsets.ModelViewSet):
+    queryset = ContactUs.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return ContactUsListSerializer
+        else:
+            return ContactUsSerializer
+
+    def create(self, request, *args, **kwargs):
+        if ContactUs.objects.count() >= 1:
+            return Response(
+                { "detail": message }, status=status.HTTP_403_FORBIDDEN
+            )
+        return super().create(request, *args, **kwargs)

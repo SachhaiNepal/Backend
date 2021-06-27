@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from utilities.models import (
     AboutUs, AboutUsImage, Service, ShowcaseGalleryImage,
-    SliderImage, ServiceImage, Feedback, FeedbackFile
+    SliderImage, ServiceImage, Feedback, FeedbackFile, ContactUs
 )
 from utils.global_serializer import UserWithActiveProfileMediaSerializer
 
@@ -87,6 +87,37 @@ class FeedbackReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         exclude = ["reply_to"]
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = "__all__"
+
+
+class ContactUsListSerializer(serializers.ModelSerializer):
+    contacts = serializers.SerializerMethodField()
+    emails = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_contacts(obj):
+        if obj.contacts:
+            if "," in obj.contacts:
+                return obj.contacts.split(",")
+            else:
+                return [obj.contacts]
+
+    @staticmethod
+    def get_emails(obj):
+        if obj.emails:
+            if "," in obj.emails:
+                return obj.emails.split(",")
+            else:
+                return [obj.emails]
+
+    class Meta:
+        model = ContactUs
+        fields = "__all__"
 
 
 class FeedbackListSerializer(serializers.ModelSerializer):

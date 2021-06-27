@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from utilities.views import (
     AboutUsImageViewSet, AboutUsViewSet,
     ServiceViewSet, ShowcaseGalleryViewSet,
-    SliderImageViewSet, ServiceImageViewSet, FeedbackViewSet, FeedbackFileViewSet
+    SliderImageViewSet, ServiceImageViewSet, FeedbackViewSet, FeedbackFileViewSet, ContactUsViewSet
 )
 
 router = DefaultRouter()
@@ -17,5 +17,6 @@ router.register(r"about-us", AboutUsViewSet, basename="about-us")
 router.register(r"about-us-image", AboutUsImageViewSet, basename="about-us-image")
 router.register(r"feedback", FeedbackViewSet, basename="feedback")
 router.register(r"feedback-file", FeedbackFileViewSet, basename="feedback-file")
+router.register(r"contact-us", ContactUsViewSet, basename="contact-us")
 
 urlpatterns = router.urls

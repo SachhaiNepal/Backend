@@ -5,7 +5,7 @@ from backend.settings import MAX_SHOWCASE_GALLERY_IMAGES
 
 from utilities.models import (
     AboutUs, AboutUsImage, Service,
-    SliderImage, ShowcaseGalleryImage, ServiceImage, Feedback, FeedbackFile
+    SliderImage, ShowcaseGalleryImage, ServiceImage, Feedback, FeedbackFile, ContactUs
 )
 
 
@@ -158,6 +158,19 @@ class FeedbackFileAdmin(admin.ModelAdmin):
         super().delete_model(request, obj)
 
 
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ["contacts", "emails", "timestamp"]
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if AboutUs.objects.count() >= 1:
+                raise ValidationError(
+                    "Only one item can be created. Please update the existing"
+                    " one. You can also delete existing item to add a new one."
+                )
+        super().save_model(request, obj, form, change)
+
+
 admin.site.register(SliderImage, SliderImageAdmin)
 admin.site.register(ShowcaseGalleryImage, ShowcaseGalleryImageAdmin)
 admin.site.register(Service, ServiceAdmin)
@@ -166,3 +179,4 @@ admin.site.register(AboutUs, AboutUsAdmin)
 admin.site.register(AboutUsImage, AboutUsImageAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(FeedbackFile, FeedbackFileAdmin)
+admin.site.register(ContactUs, ContactUsAdmin)

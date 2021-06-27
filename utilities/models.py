@@ -2,7 +2,6 @@ import os
 import random
 
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import ArrayField
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from rest_framework.exceptions import ValidationError
@@ -213,3 +212,15 @@ class FeedbackFile(models.Model):
     def delete(self, using=None, keep_parents=False):
         self.file.delete()
         super().delete(using, keep_parents)
+
+
+class ContactUs(models.Model):
+    contacts = models.CharField(max_length=255, help_text="Separate more with a comma")
+    emails = models.CharField(max_length=255, help_text="Separate more with a comma")
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Our Public Contacts"
+
+    def clean(self):
+        validate_only_number_of_instances(self, 1)
