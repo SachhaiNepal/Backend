@@ -117,22 +117,22 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-#     }
-# }
 DATABASES = {
-    'default': {
-        'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
-        'NAME'    : os.getenv("DB_NAME"),
-        'USER'    : os.getenv("DB_USER"),
-        'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST'    : 'localhost',
-        'PORT'    : '',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
+#         'NAME'    : os.getenv("DB_NAME"),
+#         'USER'    : os.getenv("DB_USER"),
+#         'PASSWORD': os.getenv("DB_PASSWORD"),
+#         'HOST'    : 'localhost',
+#         'PORT'    : '',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -215,6 +215,7 @@ EMAIL_HOST_USER = "foo@bar.com"
 MAX_UPLOAD_VIDEO_SIZE = 500000
 MAX_UPLOAD_AUDIO_SIZE = 100000
 MAX_UPLOAD_IMAGE_SIZE = 70000
+MAX_UPLOAD_FILE_SIZE = 500000
 
 MAX_SHOWCASE_GALLERY_IMAGES = 15
 
@@ -222,5 +223,6 @@ MAX_SHOWCASE_GALLERY_IMAGES = 15
 ALLOWED_IMAGES_EXTENSIONS = ["png", "jpg", "jpeg", "gif", "bmp", "tiff", "JPG"]
 ALLOWED_AUDIO_EXTENSIONS = ["mp3", "wav"]
 ALLOWED_VIDEO_EXTENSIONS = ["webm", "mp4", "mpeg", "flv"]
+ALLOWED_FILES_EXTENSIONS = ["pdf", "docx", "txt", "zip"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

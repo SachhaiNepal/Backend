@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from event.serializers.event import (EventBannerImageSerializer,
                                      EventPostSerializer, EventSerializer)
 from event.sub_models.event import Event, EventBannerImage
+from event.sub_models.event_media import EventPhoto, EventVideo
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -26,6 +27,16 @@ class EventViewSet(viewsets.ModelViewSet):
         if self.action not in ["list", "retrieve"]:
             return EventPostSerializer
         return super(EventViewSet, self).get_serializer_class()
+
+    def destroy(self, request, *args, **kwargs):
+        event = self.get_object()
+        event_banner = EventBannerImage.objects.filter(event=event)
+        [image.delete() for image in event_banner]
+        event_images = EventPhoto.objects.filter(event=event)
+        [image.delete() for image in event_images]
+        event_videos = EventVideo.objects.filter(event=event)
+        [video.delete() for video in event_videos]
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ToggleEventApprovalView(APIView):
@@ -59,6 +70,12 @@ class EventBannerImageViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     filterset_fields = ["event"]
+
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def destroy(self, request, *args, **kwargs):
         event_banner = self.get_object()

@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from article.models import Article, Image
 from article.sub_models.media import CoverImage, ImageUrl
+from utils.file import check_image_size_with_ext
 from utils.global_serializer import UserWithActiveProfileMediaSerializer
 
 
@@ -26,6 +27,11 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class ImageCreateSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = Image
         exclude = ["article"]
@@ -38,6 +44,11 @@ class CoverImageSerializer(serializers.ModelSerializer):
 
 
 class CoverImageCreateSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = CoverImage
         fields = "__all__"
@@ -62,7 +73,7 @@ class ListForMeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        exclude = ['created_by']
+        exclude = ["created_by"]
         depth = 1
 
 

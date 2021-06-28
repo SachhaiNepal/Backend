@@ -4,20 +4,23 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from backend.settings import MAX_SHOWCASE_GALLERY_IMAGES
-from utilities.models import (
-    AboutUs, AboutUsImage, Service, ShowcaseGalleryImage,
-    SliderImage, Feedback, FeedbackFile, ServiceImage, ContactUs
+from utilities.models import (AboutUs, AboutUsImage, ContactUs, Feedback,
+                              FeedbackFile, Service, ServiceImage,
+                              ShowcaseGalleryImage, SliderImage)
+from utilities.serializers import (AboutUsImageSerializer,
+                                   AboutUsListSerializer, AboutUsSerializer,
+                                   ContactUsListSerializer,
+                                   ContactUsSerializer, FeedbackListSerializer,
+                                   FeedbackSerializer, ServiceImageSerializer,
+                                   ServiceListSerializer, ServiceSerializer,
+                                   ShowcaseGallerySerializer,
+                                   SliderImageSerializer)
+
+message = (
+    "Only one item can be created."
+    " Please update the existing one."
+    " You can also delete existing item to add a new one."
 )
-from utilities.serializers import (
-    AboutUsImageSerializer,
-    AboutUsListSerializer, AboutUsSerializer,
-    ServiceSerializer, ShowcaseGallerySerializer,
-    SliderImageSerializer, ServiceListSerializer, FeedbackListSerializer, ServiceImageSerializer, FeedbackSerializer,
-    ContactUsListSerializer, ContactUsSerializer
-)
-message = "Only one item can be created." \
-          " Please update the existing one." \
-          " You can also delete existing item to add a new one."
 
 
 class SliderImageViewSet(viewsets.ModelViewSet):
@@ -28,12 +31,12 @@ class SliderImageViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if SliderImage.objects.count() >= 1:
-            message = "Only one item can be created." \
-                      " Please update the existing one." \
-                      " You can also delete existing item to add a new one."
-            return Response(
-                {"detail": message}, status=status.HTTP_403_FORBIDDEN
+            message = (
+                "Only one item can be created."
+                " Please update the existing one."
+                " You can also delete existing item to add a new one."
             )
+            return Response({"detail": message}, status=status.HTTP_403_FORBIDDEN)
         return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
@@ -49,13 +52,13 @@ class ShowcaseGalleryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        message = f"Only ${MAX_SHOWCASE_GALLERY_IMAGES} items can be created." \
-                  " Please update the existing one." \
-                  " You can also delete an existing item to add a new one."
+        message = (
+            f"Only ${MAX_SHOWCASE_GALLERY_IMAGES} items can be created."
+            " Please update the existing one."
+            " You can also delete an existing item to add a new one."
+        )
         if ShowcaseGalleryImage.objects.count() >= MAX_SHOWCASE_GALLERY_IMAGES:
-            return Response(
-                {"detail": message}, status=status.HTTP_403_FORBIDDEN
-            )
+            return Response({"detail": message}, status=status.HTTP_403_FORBIDDEN)
         return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
@@ -107,9 +110,7 @@ class AboutUsViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if AboutUs.objects.count() >= 1:
-            return Response(
-                {"detail": message}, status=status.HTTP_403_FORBIDDEN
-            )
+            return Response({"detail": message}, status=status.HTTP_403_FORBIDDEN)
         return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
@@ -178,7 +179,5 @@ class ContactUsViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if ContactUs.objects.count() >= 1:
-            return Response(
-                { "detail": message }, status=status.HTTP_403_FORBIDDEN
-            )
+            return Response({"detail": message}, status=status.HTTP_403_FORBIDDEN)
         return super().create(request, *args, **kwargs)

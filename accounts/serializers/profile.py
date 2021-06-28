@@ -3,15 +3,26 @@ from rest_framework.exceptions import ValidationError
 
 from accounts.models import Profile, ProfileImage
 from accounts.sub_models.profile import CoverImage
+from utils.file import check_image_size_with_ext
 
 
 class CoverImagePostSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = CoverImage
         fields = "__all__"
 
 
 class ProfileImageSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = ProfileImage
         fields = "__all__"

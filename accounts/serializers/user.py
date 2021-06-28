@@ -6,13 +6,13 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from accounts.models import Profile, ProfileImage, CoverImage
-from location.models import Country, District, Province
-from article.serializers import article
-from multimedia.serializers import multimedia
-from event.serializers.event import EventSerializer
+from accounts.models import CoverImage, Profile, ProfileImage
 from accounts.serializers.member import UserMemberSerializer
 from accounts.serializers.profile import ProfileSerializer
+from article.serializers import article
+from event.serializers.event import EventSerializer
+from location.models import Country, District, Province
+from multimedia.serializers import multimedia
 
 
 class RegisterFollowerSerializer(serializers.Serializer):
@@ -103,22 +103,24 @@ class UserWithProfileSerializer(serializers.ModelSerializer):
     @staticmethod
     def generate_url_for_media_resource(media_url):
         front = "http" if os.getenv("IS_SECURE") else "https"
-        return "{}://{}{}".format(
-            front, os.getenv("BASE_URL"), media_url
-        )
+        return "{}://{}{}".format(front, os.getenv("BASE_URL"), media_url)
 
     def get_active_profile_image(self, obj):
         profile = obj.profile
         active_profile_image = ProfileImage.objects.filter(active=True, profile=profile)
         if active_profile_image.count() > 0:
-            return self.generate_url_for_media_resource(active_profile_image.first().image.url)
+            return self.generate_url_for_media_resource(
+                active_profile_image.first().image.url
+            )
         return None
 
     def get_active_cover_image(self, obj):
         profile = obj.profile
         active_cover_image = CoverImage.objects.filter(active=True, profile=profile)
         if active_cover_image.count() > 0:
-            return self.generate_url_for_media_resource(active_cover_image.first().image.url)
+            return self.generate_url_for_media_resource(
+                active_cover_image.first().image.url
+            )
         return None
 
     class Meta:

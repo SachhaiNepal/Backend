@@ -6,7 +6,7 @@ from rest_framework.validators import UniqueValidator
 
 from event.sub_models.event import Event
 from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
-from utils.file import check_image_size_with_ext, check_video_size_with_ext
+from utils.file import check_images_size_with_ext, check_videos_size_with_ext
 
 
 class AddEventImageListSerializer(serializers.Serializer):
@@ -15,7 +15,7 @@ class AddEventImageListSerializer(serializers.Serializer):
     )
 
     def validate_images(self, obj):
-        check_image_size_with_ext(obj)
+        check_images_size_with_ext(obj)
         return obj
 
     def create(self, validated_data):
@@ -62,7 +62,7 @@ class AddEventVideoListSerializer(serializers.Serializer):
     )
 
     def validate_videos(self, obj):
-        check_video_size_with_ext(obj)
+        check_videos_size_with_ext(obj)
         return obj
 
     def create(self, validated_data):

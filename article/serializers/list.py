@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from article.models import Article
-from utils.file import check_image_size_with_ext
+from utils.file import check_images_size_with_ext
 
 
 class ArticleWithImageListSerializer(serializers.Serializer):
@@ -26,5 +26,5 @@ class ArticleWithImageListSerializer(serializers.Serializer):
 
     @staticmethod
     def validate_image(obj):
-        check_image_size_with_ext(obj)
+        check_images_size_with_ext(obj)
         return obj

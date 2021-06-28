@@ -1,6 +1,5 @@
 from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -17,19 +16,18 @@ class ArticleImageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ImageSerializer
     filterset_fields = ["article"]
-    parser_classes = (
-        MultiPartParser,
-        FormParser,
-    )
 
-    def delete(self, request, pk):
-        article_image = self.get_object(pk)
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def delete(self, request, *args, **kwargs):
+        article_image = self.get_object()
         article_image.image.delete()
         article_image.delete()
-        return Response(
-            {"success": True},
-            status=status.HTTP_204_NO_CONTENT,
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CoverImageViewSet(viewsets.ModelViewSet):
@@ -37,10 +35,12 @@ class CoverImageViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     filterset_fields = ["article"]
-    parser_classes = (
-        MultiPartParser,
-        FormParser,
-    )
+
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
@@ -64,3 +64,9 @@ class ArticleImageUrlViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve", "delete"]:
             return ImageUrlSerializer
         return ImageUrlCreateSerializer
+
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

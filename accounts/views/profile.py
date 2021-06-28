@@ -42,7 +42,9 @@ class ProfileDetail(APIView):
         Returns particular profile
         """
         profile = self.get_object(pk)
-        return Response(UserWithProfileSerializer(profile.user).data, status=status.HTTP_200_OK)
+        return Response(
+            UserWithProfileSerializer(profile.user).data, status=status.HTTP_200_OK
+        )
 
     def put(self, request, pk):
         """
@@ -79,6 +81,12 @@ class ProfileImageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ProfileImageSerializer
 
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def destroy(self, request, *args, **kwargs):
         profile_image = self.get_object()
         profile_image.image.delete()
@@ -91,6 +99,12 @@ class CoverImageViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CoverImagePostSerializer
+
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def partial_update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def destroy(self, request, *args, **kwargs):
         cover_image = self.get_object()

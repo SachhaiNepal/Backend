@@ -53,7 +53,7 @@ load-fresh-migrations:
 	make make-migrations APP=utilities
 	make migrate
 
-super-fresh: clean-db-with-migration load-fresh-migrations create-admin serve
+super-fresh: clean-db-with-migration load-fresh-migrations create-admin
 
 clean-db-with-migration: clean-db clean-migrations
 

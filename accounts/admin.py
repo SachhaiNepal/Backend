@@ -47,9 +47,13 @@ class ProfileAdmin(admin.ModelAdmin):
         "district__province__country__name",
     )
     autocomplete_fields = [
-        "country", "province", "district",
-        "municipality", "municipality_ward",
-        "vdc", "vdc_ward"
+        "country",
+        "province",
+        "district",
+        "municipality",
+        "municipality_ward",
+        "vdc",
+        "vdc_ward",
     ]
 
     fieldsets = (
@@ -65,10 +69,15 @@ class ProfileAdmin(admin.ModelAdmin):
             {
                 "classes": ("wide", "extrapretty"),
                 "fields": (
-                    "current_city", "home_town",
-                    "country", "province", "district",
-                    "municipality", "municipality_ward",
-                    "vdc", "vdc_ward"
+                    "current_city",
+                    "home_town",
+                    "country",
+                    "province",
+                    "district",
+                    "municipality",
+                    "municipality_ward",
+                    "vdc",
+                    "vdc_ward",
                 ),
             },
         ),
