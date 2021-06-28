@@ -6,13 +6,16 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from rest_framework.exceptions import ValidationError
 
-from backend.settings import MAX_UPLOAD_IMAGE_SIZE, ALLOWED_VIDEO_EXTENSIONS, ALLOWED_IMAGES_EXTENSIONS
+from backend.settings import (ALLOWED_IMAGES_EXTENSIONS,
+                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE)
 
 
 def validate_only_number_of_instances(obj, count):
     model = obj.__class__
     if model.objects.count() >= count:
-        raise ValidationError("Can only create {} {} instance".format(model.name, count))
+        raise ValidationError(
+            "Can only create {} {} instance".format(model.name, count)
+        )
 
 
 def upload_feedback_file_to(instance, filename):
@@ -103,7 +106,7 @@ class Service(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="my_services",
-        editable=False
+        editable=False,
     )
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -117,7 +120,9 @@ class Service(models.Model):
 
 
 class ServiceImage(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='images')
+    service = models.ForeignKey(
+        Service, on_delete=models.CASCADE, related_name="images"
+    )
     image = models.ImageField(upload_to=upload_services_images_to)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -175,15 +180,11 @@ class Feedback(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="my_feedbacks",
-        editable=False
+        editable=False,
     )
     seen = models.BooleanField(default=False, editable=False)
     reply_to = models.ForeignKey(
-        "self",
-        on_delete=models.CASCADE,
-        related_name="replies",
-        null=True,
-        blank=True
+        "self", on_delete=models.CASCADE, related_name="replies", null=True, blank=True
     )
     timestamp = models.DateTimeField(auto_now=True)
 
@@ -195,14 +196,20 @@ class Feedback(models.Model):
 
 
 class FeedbackFile(models.Model):
-    feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE, related_name="files")
+    feedback = models.ForeignKey(
+        Feedback, on_delete=models.CASCADE, related_name="files"
+    )
     file = models.FileField(
-        validators=[FileExtensionValidator(
-            ALLOWED_VIDEO_EXTENSIONS + ALLOWED_IMAGES_EXTENSIONS + ["pdf", "docx", "txt", "zip"]
-        )],
+        validators=[
+            FileExtensionValidator(
+                ALLOWED_VIDEO_EXTENSIONS
+                + ALLOWED_IMAGES_EXTENSIONS
+                + ["pdf", "docx", "txt", "zip"]
+            )
+        ],
         upload_to=upload_feedback_file_to,
         unique=True,
-        help_text="File to upload with feedback. Can be image, video, pdf, documents or zip files."
+        help_text="File to upload with feedback. Can be image, video, pdf, documents or zip files.",
     )
     timestamp = models.DateTimeField(auto_now=True)
 

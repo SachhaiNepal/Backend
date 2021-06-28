@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from accounts.serializers.user import (UserCreateSerializer,
                                        UserUpdateSerializer,
                                        UserWithProfileSerializer)
+from accounts.sub_models.profile import CoverImage, ProfileImage
 
 
 class ListUsersView(generics.ListAPIView):
@@ -87,9 +88,7 @@ class UserDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                UserWithProfileSerializer(
-                    self.get_object(pk), context=context
-                ).data,
+                UserWithProfileSerializer(self.get_object(pk), context=context).data,
                 status=status.HTTP_204_NO_CONTENT,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -104,16 +103,17 @@ class UserDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                UserWithProfileSerializer(
-                    self.get_object(pk), context=context
-                ).data,
+                UserWithProfileSerializer(self.get_object(pk), context=context).data,
                 status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         user = self.get_object(pk)
+        profile = user.profile
+        profile_images = ProfileImage.objects.filter(profile=profile)
+        cover_images = CoverImage.objects.filter(profile=profile)
+        [image.delete() for image in profile_images]
+        [image.delete() for image in cover_images]
         user.delete()
-        return Response(
-            {"message": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)

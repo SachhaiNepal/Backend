@@ -62,7 +62,7 @@ class ListForMeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        exclude = ['created_by']
+        exclude = ["created_by"]
         depth = 1
 
 

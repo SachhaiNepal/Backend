@@ -2,11 +2,9 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 
 from backend.settings import MAX_SHOWCASE_GALLERY_IMAGES
-
-from utilities.models import (
-    AboutUs, AboutUsImage, Service,
-    SliderImage, ShowcaseGalleryImage, ServiceImage, Feedback, FeedbackFile, ContactUs
-)
+from utilities.models import (AboutUs, AboutUsImage, ContactUs, Feedback,
+                              FeedbackFile, Service, ServiceImage,
+                              ShowcaseGalleryImage, SliderImage)
 
 
 class SliderImageAdmin(admin.ModelAdmin):
@@ -46,14 +44,11 @@ class ShowcaseGalleryImageAdmin(admin.ModelAdmin):
     date_hierarchy = "timestamp"
     fieldsets = (
         (
-            "Slider Image", {
-                "classes": (
-                    "wide", "extrapretty"
-                ),
-                "fields": (
-                    "image", "heading", "content"
-                )
-            }
+            "Slider Image",
+            {
+                "classes": ("wide", "extrapretty"),
+                "fields": ("image", "heading", "content"),
+            },
         ),
     )
     ordering = ("timestamp",)
@@ -63,8 +58,8 @@ class ShowcaseGalleryImageAdmin(admin.ModelAdmin):
             if ShowcaseGalleryImage.objects.count() >= MAX_SHOWCASE_GALLERY_IMAGES:
                 raise ValidationError(
                     "Maximum instance count reached."
-                    f" Only ${MAX_SHOWCASE_GALLERY_IMAGES} items can be created for this model." +
-                    " Please update the existing ones."
+                    f" Only ${MAX_SHOWCASE_GALLERY_IMAGES} items can be created for this model."
+                    + " Please update the existing ones."
                     " You can also delete existing item to add a new one."
                 )
         super().save_model(request, obj, form, change)
@@ -89,7 +84,10 @@ class ServiceAdmin(admin.ModelAdmin):
                 ),
             },
         ),
-        ("Service Media", {"classes": ("wide", "extrapretty"), "fields": ("video_url",)}),
+        (
+            "Service Media",
+            {"classes": ("wide", "extrapretty"), "fields": ("video_url",)},
+        ),
     )
     ordering = ("timestamp",)
 

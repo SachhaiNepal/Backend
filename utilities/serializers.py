@@ -1,9 +1,8 @@
 from rest_framework import serializers
 
-from utilities.models import (
-    AboutUs, AboutUsImage, Service, ShowcaseGalleryImage,
-    SliderImage, ServiceImage, Feedback, FeedbackFile, ContactUs
-)
+from utilities.models import (AboutUs, AboutUsImage, ContactUs, Feedback,
+                              FeedbackFile, Service, ServiceImage,
+                              ShowcaseGalleryImage, SliderImage)
 from utils.global_serializer import UserWithActiveProfileMediaSerializer
 
 

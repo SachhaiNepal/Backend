@@ -32,12 +32,16 @@ class MultimediaViewSet(viewsets.ModelViewSet):
             image.delete()
         multimedia_audios = Sound.objects.filter(multimedia=multimedia)
         for audio in multimedia_audios:
+            if audio.poster:
+                audio.poster.delete()
             audio.delete()
         multimedia_videos = Video.objects.filter(multimedia=multimedia)
         for video in multimedia_videos:
-            video.delete()
+            if video.poster:
+                video.poster.delete()
+            video.video.delete()
         multimedia.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return super(MultimediaViewSet, self).destroy(request, *args, **kwargs)
 
 
 class MultimediaWithMediaListView(APIView):
@@ -57,7 +61,7 @@ class MultimediaWithMediaListView(APIView):
             description = validated_data.get("description")
             videos = validated_data.get("video")
             video_urls = validated_data.get("video_url")
-            audios = validated_data.get("sound")
+            sounds = validated_data.get("sound")
             images = validated_data.get("image")
             multimedia = Multimedia.objects.create(
                 title=title,
@@ -78,10 +82,10 @@ class MultimediaWithMediaListView(APIView):
                         video_url=video_url, multimedia=multimedia, yt_info=yt_info
                     )
 
-            if audios:
-                for audio in audios:
+            if sounds:
+                for sound in sounds:
                     Sound.objects.create(
-                        audio=audio,
+                        sound=sound,
                         multimedia=multimedia,
                     )
 

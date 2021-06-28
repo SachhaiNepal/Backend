@@ -33,6 +33,7 @@ class ListForMeSerializer(serializers.ModelSerializer):
 class MultimediaSerializer(serializers.ModelSerializer):
     multimedia_images = ImageSerializer(many=True, read_only=True)
     multimedia_videos = VideoSerializer(many=True, read_only=True)
+    multimedia_sounds = AudioSerializer(many=True, read_only=True)
     multimedia_video_urls = VideoUrlSerializer(many=True, read_only=True)
     multimedia_audios = AudioSerializer(many=True, read_only=True)
 

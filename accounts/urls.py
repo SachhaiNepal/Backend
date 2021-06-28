@@ -8,10 +8,9 @@ from accounts.views.member_branch import ListMemberBranch, MemberBranchViewSet
 from accounts.views.member_role import ListMemberRole, MemberRoleDetail
 from accounts.views.password import (ConfirmResetPassword,
                                      ResetPasswordRequestCode, UpdatePassword)
-from accounts.views.profile import (
-    ProfileDetail, ProfileImageViewSet,
-    UserProfile, SetActiveProfileImage, SetActiveCoverImage, CoverImageViewSet
-)
+from accounts.views.profile import (CoverImageViewSet, ProfileDetail,
+                                    ProfileImageViewSet, SetActiveCoverImage,
+                                    SetActiveProfileImage, UserProfile)
 from accounts.views.register_follower import RegisterFollower
 from accounts.views.user_permission import (ListUserPermission,
                                             UserPermissionDetail)
@@ -39,7 +38,7 @@ urlpatterns += [
         "member/<int:pk>/branch", ListMemberBranch.as_view(), name="member-branch-list"
     ),
     path(
-        "member/<int:pk>/toggle-approval",
+        "member/<int:pk>/approve",
         ToggleMemberApprovalView.as_view(),
         name="member-toggle-approval",
     ),

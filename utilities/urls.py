@@ -1,10 +1,10 @@
 from rest_framework.routers import DefaultRouter
 
-from utilities.views import (
-    AboutUsImageViewSet, AboutUsViewSet,
-    ServiceViewSet, ShowcaseGalleryViewSet,
-    SliderImageViewSet, ServiceImageViewSet, FeedbackViewSet, FeedbackFileViewSet, ContactUsViewSet
-)
+from utilities.views import (AboutUsImageViewSet, AboutUsViewSet,
+                             ContactUsViewSet, FeedbackFileViewSet,
+                             FeedbackViewSet, ServiceImageViewSet,
+                             ServiceViewSet, ShowcaseGalleryViewSet,
+                             SliderImageViewSet)
 
 router = DefaultRouter()
 router.register(r"slider-image", SliderImageViewSet, basename="slider-image")

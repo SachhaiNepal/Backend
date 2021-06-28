@@ -15,19 +15,31 @@ from multimedia.sub_models.multimedia import Multimedia
 def upload_video_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    return f"multimedias/videos/{instance.multimedia.pk}/{filename}"
+    return f"multimedias/{instance.multimedia.pk}/videos/{filename}"
+
+
+def upload_audio_poster_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"multimedias/{instance.multimedia.pk}/audios/poster/{filename}"
+
+
+def upload_video_poster_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"multimedias/{instance.multimedia.pk}/videos/poster/{filename}"
 
 
 def upload_audio_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    return f"multimedias/audios/{instance.multimedia.pk}/{filename}"
+    return f"multimedias/{instance.multimedia.pk}/audios/{filename}"
 
 
 def upload_image_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
-    return f"multimedias/images/{instance.multimedia.pk}/{filename}"
+    return f"multimedias/{instance.multimedia.pk}/images/{filename}"
 
 
 class VideoUrl(models.Model):
@@ -49,9 +61,11 @@ class Video(models.Model):
     video = models.FileField(
         upload_to=upload_video_to,
         validators=[FileExtensionValidator(ALLOWED_VIDEO_EXTENSIONS)],
-        unique=True,
         verbose_name="Multimedia Video File",
     )
+    title = models.CharField(max_length=64, null=True, blank=True)
+    subtitle = models.CharField(max_length=255, null=True, blank=True)
+    poster = models.ImageField(upload_to=upload_video_poster_to, null=True, blank=True)
     multimedia = models.ForeignKey(
         Multimedia, on_delete=models.CASCADE, related_name="multimedia_videos"
     )
@@ -64,6 +78,8 @@ class Video(models.Model):
             raise ValidationError("Video size exceeds max image upload size.")
 
     def delete(self, using=None, keep_parents=False):
+        if self.poster:
+            self.poster.delete()
         self.video.delete()
         super().delete(using, keep_parents)
 
@@ -76,9 +92,11 @@ class Sound(models.Model):
     sound = models.FileField(
         upload_to=upload_audio_to,
         validators=[FileExtensionValidator(ALLOWED_AUDIO_EXTENSIONS)],
-        unique=True,
         verbose_name="Multimedia Audio File",
     )
+    title = models.CharField(max_length=64, null=True, blank=True)
+    artist = models.CharField(max_length=64, null=True, blank=True)
+    poster = models.ImageField(upload_to=upload_audio_poster_to, null=True, blank=True)
     multimedia = models.ForeignKey(
         Multimedia, on_delete=models.CASCADE, related_name="multimedia_sounds"
     )
@@ -91,6 +109,8 @@ class Sound(models.Model):
             raise ValidationError("Audio size exceeds max image upload size.")
 
     def delete(self, using=None, keep_parents=False):
+        if self.poster:
+            self.poster.delete()
         self.sound.delete()
         super().delete(using, keep_parents)
 
@@ -104,6 +124,7 @@ class Image(models.Model):
         upload_to=upload_image_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
+    subtitle = models.CharField(max_length=255, null=True, blank=True)
     multimedia = models.ForeignKey(
         Multimedia, on_delete=models.CASCADE, related_name="multimedia_images"
     )

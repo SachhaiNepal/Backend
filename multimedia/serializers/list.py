@@ -4,8 +4,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
 from multimedia.models import Multimedia
-from utils.file import (check_audio_size_with_ext, check_image_size_with_ext,
-                        check_video_size_with_ext)
+from utils.file import (check_audios_size_with_ext, check_images_size_with_ext,
+                        check_videos_size_with_ext)
 
 
 class MultimediaWithMediaListSerializer(serializers.Serializer):
@@ -48,17 +48,17 @@ class MultimediaWithMediaListSerializer(serializers.Serializer):
 
     @staticmethod
     def validate_image(obj):
-        check_image_size_with_ext(obj)
+        check_images_size_with_ext(obj)
         return obj
 
     @staticmethod
     def validate_video(obj):
-        check_video_size_with_ext(obj)
+        check_videos_size_with_ext(obj)
         return obj
 
     @staticmethod
     def validate_sound(obj):
-        check_audio_size_with_ext(obj)
+        check_audios_size_with_ext(obj)
         return obj
 
     def validate(self, data):

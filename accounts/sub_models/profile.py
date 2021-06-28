@@ -30,7 +30,10 @@ class Profile(models.Model):
     )
     bio = models.TextField(null=True, blank=True, max_length=1024)
     contact = PhoneNumberField(
-        unique=True, null=True, blank=True, help_text="Should be a registered Nepal phone number."
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="Should be a registered Nepal phone number.",
     )
     birth_date = models.DateField(null=True, blank=True)
     current_city = models.CharField(max_length=64, blank=True, null=True)
@@ -93,7 +96,9 @@ class Profile(models.Model):
         """
         Require only vdc or municipality fields
         """
-        if (self.vdc and self.municipality) or (self.vdc_ward and self.municipality_ward):
+        if (self.vdc and self.municipality) or (
+            self.vdc_ward and self.municipality_ward
+        ):
             raise ValidationError(
                 "Both municipality and vdc fields cannot be selected."
             )

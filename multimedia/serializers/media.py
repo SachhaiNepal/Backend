@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from multimedia.sub_models.media import Image, Sound, Video, VideoUrl
+from utils.file import check_image_size_with_ext, check_video_size_with_ext
 from utils.helper import get_youtube_video_data
 
 
@@ -17,6 +18,18 @@ class VideoUrlSerializer(serializers.ModelSerializer):
 
 
 class VideoSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_poster(obj):
+        if obj:
+            check_image_size_with_ext(obj)
+        return obj
+
+    @staticmethod
+    def validate_video(obj):
+        if obj:
+            check_video_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = Video
         fields = "__all__"

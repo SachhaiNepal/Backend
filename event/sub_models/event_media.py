@@ -17,6 +17,12 @@ def upload_event_video_to(instance, filename):
     return f"events/{instance.event.pk}/video/{filename}"
 
 
+def upload_event_video_poster_to(instance, filename):
+    _, file_extension = os.path.splitext(filename)
+    filename = str(random.getrandbits(64)) + file_extension
+    return f"events/{instance.event.pk}/video/poster/{filename}"
+
+
 def upload_event_image_to(instance, filename):
     _, file_extension = os.path.splitext(filename)
     filename = str(random.getrandbits(64)) + file_extension
@@ -32,6 +38,14 @@ class EventVideo(models.Model):
     video = models.FileField(
         upload_to=upload_event_video_to,
         validators=[FileExtensionValidator(ALLOWED_VIDEO_EXTENSIONS)],
+    )
+    title = models.CharField(max_length=64, null=True, blank=True)
+    subtitle = models.CharField(max_length=255, null=True, blank=True)
+    poster = models.ImageField(
+        upload_to=upload_event_video_poster_to,
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
 
     class Meta:
@@ -60,6 +74,7 @@ class EventPhoto(models.Model):
         upload_to=upload_event_image_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
+    subtitle = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = "Event Image"
