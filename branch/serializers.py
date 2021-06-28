@@ -1,15 +1,14 @@
 from rest_framework import serializers
 
-from backend.settings import MAX_UPLOAD_IMAGE_SIZE
 from branch.models import Branch, BranchImage
-from utils.file import check_size
+from utils.file import check_image_size_with_ext
 from utils.validate_location import validate_location
 
 
 class BranchImageSerializer(serializers.ModelSerializer):
     @staticmethod
     def validate_image(obj):
-        check_size(obj, MAX_UPLOAD_IMAGE_SIZE)
+        check_image_size_with_ext(obj)
         return obj
 
     class Meta:

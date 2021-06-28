@@ -1,10 +1,8 @@
 from django.core.validators import RegexValidator
 from rest_framework import serializers
 
-from backend.settings import (ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE,
-                              MAX_UPLOAD_VIDEO_SIZE)
 from event.sub_models.event_media import EventPhoto, EventVideo, EventVideoUrl
-from utils.file import check_extension, check_size
+from utils.file import check_video_size_with_ext, check_image_size_with_ext
 from utils.helper import get_youtube_video_data
 
 
@@ -13,9 +11,9 @@ class EventVideoSerializer(serializers.ModelSerializer):
         model = EventVideo
         fields = "__all__"
 
-    def validate_video(self, obj):
-        check_size(obj, MAX_UPLOAD_VIDEO_SIZE)
-        check_extension(obj, ALLOWED_VIDEO_EXTENSIONS)
+    @staticmethod
+    def validate_video(obj):
+        check_video_size_with_ext(obj)
         return obj
 
 
@@ -24,8 +22,9 @@ class EventPhotoSerializer(serializers.ModelSerializer):
         model = EventPhoto
         fields = "__all__"
 
-    def validate_image(self, obj):
-        check_size(obj, MAX_UPLOAD_IMAGE_SIZE)
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
         return obj
 
 

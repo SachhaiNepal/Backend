@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
-from backend.settings import (ALLOWED_AUDIO_EXTENSIONS,
-                              ALLOWED_IMAGES_EXTENSIONS,
-                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
-                              MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE)
+from backend.settings import (
+    ALLOWED_AUDIO_EXTENSIONS,
+    ALLOWED_IMAGES_EXTENSIONS,
+    ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_AUDIO_SIZE,
+    MAX_UPLOAD_IMAGE_SIZE, MAX_UPLOAD_VIDEO_SIZE, ALLOWED_FILES_EXTENSIONS, MAX_UPLOAD_FILE_SIZE
+)
 
 
 def check_size(resource, max_size):
@@ -64,3 +66,14 @@ def check_videos_size_with_ext(videos):
 def check_video_size_with_ext(video):
     check_extension(video, ALLOWED_VIDEO_EXTENSIONS)
     check_size(video, MAX_UPLOAD_VIDEO_SIZE)
+
+
+def check_file_size_with_ext(file):
+    check_extension(
+        file,
+        ALLOWED_VIDEO_EXTENSIONS +
+        ALLOWED_AUDIO_EXTENSIONS +
+        ALLOWED_IMAGES_EXTENSIONS +
+        ALLOWED_FILES_EXTENSIONS
+    )
+    check_size(file, MAX_UPLOAD_FILE_SIZE)

@@ -3,22 +3,38 @@ from rest_framework import serializers
 from utilities.models import (AboutUs, AboutUsImage, ContactUs, Feedback,
                               FeedbackFile, Service, ServiceImage,
                               ShowcaseGalleryImage, SliderImage)
+from utils.file import check_image_size_with_ext
 from utils.global_serializer import UserWithActiveProfileMediaSerializer
 
 
 class SliderImageSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = SliderImage
         fields = "__all__"
 
 
 class ShowcaseGallerySerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = ShowcaseGalleryImage
         fields = "__all__"
 
 
 class ServiceImageSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = ServiceImage
         fields = "__all__"
@@ -50,6 +66,11 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
 
 class AboutUsImageSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
     class Meta:
         model = AboutUsImage
         fields = "__all__"
@@ -123,6 +144,11 @@ class FeedbackListSerializer(serializers.ModelSerializer):
     files = FeedbackFileSerializer(many=True, read_only=True)
     writer = UserWithActiveProfileMediaSerializer()
     replies = FeedbackReplySerializer(many=True, read_only=True)
+
+    @staticmethod
+    def validate_image(obj):
+        check_file_size_with_ext(obj)
+        return obj
 
     class Meta:
         model = Feedback

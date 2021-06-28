@@ -6,8 +6,10 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from rest_framework.exceptions import ValidationError
 
-from backend.settings import (ALLOWED_IMAGES_EXTENSIONS,
-                              ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE)
+from backend.settings import (
+    ALLOWED_IMAGES_EXTENSIONS,
+    ALLOWED_VIDEO_EXTENSIONS, MAX_UPLOAD_IMAGE_SIZE, ALLOWED_FILES_EXTENSIONS
+)
 
 
 def validate_only_number_of_instances(obj, count):
@@ -204,7 +206,7 @@ class FeedbackFile(models.Model):
             FileExtensionValidator(
                 ALLOWED_VIDEO_EXTENSIONS
                 + ALLOWED_IMAGES_EXTENSIONS
-                + ["pdf", "docx", "txt", "zip"]
+                + ALLOWED_FILES_EXTENSIONS
             )
         ],
         upload_to=upload_feedback_file_to,
