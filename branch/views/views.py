@@ -1,6 +1,7 @@
 from django.utils import timezone
 from rest_framework import status, viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -33,36 +34,44 @@ class BranchViewSet(viewsets.ModelViewSet):
             return BranchPOSTSerializer
         return super(BranchViewSet, self).get_serializer_class()
 
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = BranchPOSTSerializer(
+            instance,
+            data=request.data,
+            partial=True,
+            context={"request": request}
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ToggleBranchApprovalView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     @staticmethod
-    def post(request, pk):
-        try:
-            branch = Branch.objects.get(pk=pk)
-        except Branch.DoesNotExist:
-            return Response(
-                {"detail": "Branch does not exist."}, status=status.HTTP_404_NOT_FOUND
-            )
-        branch.is_approved = not branch.is_approved
-        if branch.is_approved:
+    def put(request, pk):
+        branch = get_object_or_404(Branch, pk=pk)
+        if not branch.is_approved:
+            branch.is_approved = True
             branch.approved_by = request.user
             branch.approved_at = timezone.now()
-        else:
+            branch.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @staticmethod
+    def delete(request, pk):
+        branch = get_object_or_404(Branch, pk=pk)
+        if branch.is_approved:
+            branch.is_approved = False
             branch.approved_by = None
             branch.approved_at = None
-        branch.save()
-        return Response(
-            {
-                "success": True,
-                "message": "Branch {} successfully.".format(
-                    "approved" if branch.is_approved else "rejected"
-                ),
-            },
-            status=status.HTTP_204_NO_CONTENT,
-        )
+            branch.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class BranchImageViewSet(viewsets.ModelViewSet):

@@ -19,74 +19,92 @@ def upload_branch_image_to(instance, filename):
 
 class Branch(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    slogan = models.TextField(blank=True, null=True, max_length=512)
+    slogan = models.TextField(max_length=512)
     country = models.ForeignKey(
-        "location.Country", on_delete=models.DO_NOTHING, related_name="BranchCountry"
+        "location.Country",
+        on_delete=models.DO_NOTHING,
+        related_name="branches",
+        null=True,
+        blank=True,
     )
     province = models.ForeignKey(
-        "location.Province", on_delete=models.DO_NOTHING, related_name="BranchProvince"
+        "location.Province",
+        on_delete=models.DO_NOTHING,
+        related_name="branches",
+        null=True,
+        blank=True,
     )
     district = models.ForeignKey(
-        "location.District", on_delete=models.DO_NOTHING, related_name="BranchDistrict"
+        "location.District",
+        on_delete=models.DO_NOTHING,
+        related_name="branches",
+        null=True,
+        blank=True,
     )
     municipality = models.ForeignKey(
         "location.Municipality",
         on_delete=models.DO_NOTHING,
-        related_name="BranchMunicipality",
+        related_name="branches",
         null=True,
         blank=True,
     )
-    # single branch for municipality_ward
     municipality_ward = models.OneToOneField(
         "location.MunicipalityWard",
         on_delete=models.DO_NOTHING,
-        related_name="BranchMunicipalityWardNumber",
+        related_name="branches",
         null=True,
         blank=True,
     )
     vdc = models.ForeignKey(
         "location.VDC",
         on_delete=models.DO_NOTHING,
-        related_name="BranchVdc",
+        related_name="branches",
         null=True,
         blank=True,
     )
-    # single branch for vdc_ward
     vdc_ward = models.OneToOneField(
         "location.VDCWard",
         on_delete=models.DO_NOTHING,
-        related_name="BranchVdcWardNumber",
+        related_name="branches",
         null=True,
         blank=True,
     )
     contact = PhoneNumberField(unique=True)
-    is_main = models.BooleanField(default=False, verbose_name="Is Main Branch")
+    is_main = models.BooleanField(
+        default=False,
+        editable=False,
+        verbose_name="Is Main Branch"
+    )
     is_approved = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.SET_NULL,
-        related_name="BranchApprover",
+        related_name="my_approved_branches",
         null=True,
         blank=True,
         editable=False,
     )
-    approved_at = models.DateTimeField(null=True, blank=True, editable=False)
+    approved_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        editable=False
+    )
     created_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
-        related_name="Creator",
+        related_name="my_branches",
         editable=False,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(
         get_user_model(),
         on_delete=models.DO_NOTHING,
-        related_name="Modifier",
+        related_name="my_updated_branches",
         null=True,
         blank=True,
         editable=False,
     )
-    updated_at = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     def clean(self):
         """
@@ -114,6 +132,7 @@ class Branch(models.Model):
             raise ValidationError("Cannot assign municipality ward for a vdc.")
 
     class Meta:
+        ordering = ["-timestamp"]
         verbose_name_plural = "Branches"
         permissions = [
             ("approve_branch", "Can toggle approval status of branch"),

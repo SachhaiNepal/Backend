@@ -16,9 +16,8 @@ class BranchAdmin(admin.ModelAdmin):
         "vdc",
         "vdc_ward",
         "created_by",
-        "created_at",
         "updated_by",
-        "updated_at",
+        "timestamp",
     )
     autocomplete_fields = (
         "country",
@@ -33,7 +32,6 @@ class BranchAdmin(admin.ModelAdmin):
         "name",
         "contact",
         "district__name",
-        "is_main",
         "municipality__name",
         "municipality_ward__name",
         "vdc__name",
@@ -46,7 +44,7 @@ class BranchAdmin(admin.ModelAdmin):
             "Branch Information",
             {
                 "classes": ("wide", "extrapretty"),
-                "fields": ("name", "contact", "is_main"),
+                "fields": ("name", "contact"),
             },
         ),
         (
@@ -77,9 +75,8 @@ class BranchAdmin(admin.ModelAdmin):
         "vdc",
         "vdc_ward",
         "created_by",
-        "created_at",
         "updated_by",
-        "updated_at",
+        "timestamp",
     )
 
     list_per_page = 10

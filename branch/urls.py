@@ -11,7 +11,7 @@ urlpatterns = router.urls
 
 urlpatterns += [
     path("branch/<int:pk>/member", ListBranchMembers.as_view(), name="branch-members"),
-    path("branch/<int:pk>/toggle-approval", ToggleBranchApprovalView.as_view()),
+    path("branch/<int:pk>/approve", ToggleBranchApprovalView.as_view()),
     path(
         "municipality/<int:pk>/branch",
         ListMunicipalityBranches.as_view(),

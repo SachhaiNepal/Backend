@@ -98,8 +98,8 @@ class ToggleMemberApprovalView(APIView):
     @staticmethod
     def put(request, pk):
         member = get_object_or_404(Member, pk=pk)
-        member.is_approved = not member.is_approved
         if not member.is_approved:
+            print("here")
             member.is_approved = True
             member.approved_by = request.user
             member.approved_at = timezone.now()
