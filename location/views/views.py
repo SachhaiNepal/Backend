@@ -8,27 +8,21 @@ from location import models, serializers
 
 class CountryViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
-    permission_classes = [IsAdminUser]
     queryset = models.Country.objects.all()
     filter_backends = [filters.SearchFilter]
-    authentication_classes = [TokenAuthentication]
     serializer_class = serializers.CountrySerializer
 
 
 class ProvinceViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     filterset_fields = ["country"]
-    permission_classes = [IsAdminUser]
     queryset = models.Province.objects.all()
-    authentication_classes = [TokenAuthentication]
     serializer_class = serializers.ProvinceSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
 
 
 class DistrictViewSet(viewsets.ModelViewSet):
     queryset = models.District.objects.all().order_by("-created_at")
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
     search_fields = ["name"]
     filterset_fields = ["province"]
     serializer_class = serializers.DistrictSerializer
