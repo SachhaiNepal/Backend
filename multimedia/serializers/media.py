@@ -54,3 +54,54 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = "__all__"
+
+
+class ImageForListSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_image(obj):
+        check_image_size_with_ext(obj)
+        return obj
+
+    class Meta:
+        model = Image
+        exclude = ["multimedia"]
+
+
+class VideoUrlForListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoUrl
+        exclude = ["multimedia"]
+
+    def create(self, validated_data):
+        video_url = validated_data.get("video_url")
+        yt_info = get_youtube_video_data(video_url)
+        validated_data["yt_info"] = yt_info
+        return super().create(validated_data)
+
+
+class SoundForListSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_sound(obj):
+        check_audio_size_with_ext(obj)
+        return obj
+
+    class Meta:
+        model = Sound
+        exclude = ["multimedia"]
+
+
+class VideoForListSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_poster(obj):
+        if obj:
+            check_image_size_with_ext(obj)
+        return obj
+
+    @staticmethod
+    def validate_video(obj):
+        check_video_size_with_ext(obj)
+        return obj
+
+    class Meta:
+        model = Video
+        exclude = ["multimedia"]
