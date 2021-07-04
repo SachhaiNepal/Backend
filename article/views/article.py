@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from article.serializers.article import CreateSerializer, ListSerializer
 from article.serializers.list import ArticleWithImageListSerializer
 from article.sub_models.article import Article
-from article.sub_models.media import Image
+from article.sub_models.media import Image, CoverImage
 
 
 # TODO: remove this endpoint
@@ -55,13 +55,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         article = self.get_object()
         article_images = Image.objects.filter(article=article)
-        for image in article_images:
-            image.delete()
+        article_cover = CoverImage.objects.filter(article=article)
+        [image.delete() for image in article_images]
+        [image.delete() for image in article_cover]
         article.delete()
-        return Response(
-            {"message": "Article deleted successfully."},
-            status=status.HTTP_204_NO_CONTENT,
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class StartWritingView(APIView):

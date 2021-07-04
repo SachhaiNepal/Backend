@@ -80,7 +80,7 @@ class ListForMeSerializer(serializers.ModelSerializer):
 class ListSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
     image_urls = ImageUrlSerializer(many=True, read_only=True)
-    cover_images = CoverImageSerializer(many=True, read_only=True)
+    cover_image = CoverImageSerializer(read_only=True)
     created_by = UserWithActiveProfileMediaSerializer(allow_null=True)
 
     class Meta:

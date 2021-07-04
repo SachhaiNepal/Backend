@@ -52,8 +52,8 @@ class CoverImage(models.Model):
         upload_to=upload_article_cover_image_to,
         validators=[FileExtensionValidator(ALLOWED_IMAGES_EXTENSIONS)],
     )
-    article = models.ForeignKey(
-        "Article", related_name="cover_images", on_delete=models.CASCADE
+    article = models.OneToOneField(
+        "Article", related_name="cover_image", on_delete=models.CASCADE
     )
     created_at = models.DateTimeField(auto_now=True)
 

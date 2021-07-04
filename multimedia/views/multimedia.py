@@ -28,20 +28,13 @@ class MultimediaViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         multimedia = self.get_object()
         multimedia_images = Image.objects.filter(multimedia=multimedia)
-        for image in multimedia_images:
-            image.delete()
         multimedia_audios = Sound.objects.filter(multimedia=multimedia)
-        for audio in multimedia_audios:
-            if audio.poster:
-                audio.poster.delete()
-            audio.delete()
         multimedia_videos = Video.objects.filter(multimedia=multimedia)
-        for video in multimedia_videos:
-            if video.poster:
-                video.poster.delete()
-            video.video.delete()
+        [image.image.delete() for image in multimedia_images]
+        [audio.delete() for audio in multimedia_audios]
+        [video.delete() for video in multimedia_videos]
         multimedia.delete()
-        return super(MultimediaViewSet, self).destroy(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MultimediaWithMediaListView(APIView):

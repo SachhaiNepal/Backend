@@ -48,6 +48,13 @@ class BranchViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request, *args, **kwargs):
+        branch = self.get_object()
+        images = BranchImage.objects.filter(branch=branch)
+        [image.delete() for image in images]
+        branch.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ToggleBranchApprovalView(APIView):
     authentication_classes = [TokenAuthentication]
