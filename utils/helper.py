@@ -64,5 +64,4 @@ def get_youtube_video_data(video_url):
 
     with urllib.request.urlopen(url) as response:
         response_text = response.read()
-        data = json.loads(response_text.decode())
-        return set_max_res_thumbnail(data)
+        return json.loads(response_text.decode())
