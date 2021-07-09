@@ -14,7 +14,7 @@ class MultimediaWithMediaListSerializer(serializers.Serializer):
         max_length=255,
         validators=[UniqueValidator(queryset=Multimedia.objects.all())],
     )
-    description = serializers.CharField(required=True, max_length=10000)
+    description = serializers.CharField(required=False, allow_null=True, max_length=10000)
     image = serializers.ListField(
         child=serializers.ImageField(
             allow_empty_file=False,
